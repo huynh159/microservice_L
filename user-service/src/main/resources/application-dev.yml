@@ -1,0 +1,11 @@
+# Development environment profile (localhost)
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+logging:
+  level:
+    com.example.userservice: DEBUG
+    org.springframework.security: INFO
+    org.flywaydb: INFO
