@@ -1,0 +1,26 @@
+# Target build directories
+target/
+**/target/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.classpath
+*.project
+*.settings/
+.factorypath
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+!.env.example
+
+# Subagent/Brain temporary files
+.antigravity/

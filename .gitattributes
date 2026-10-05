@@ -1,0 +1,2 @@
+# Line endings cho script chạy trong container Linux phải là LF
+*.sh text eol=lf
