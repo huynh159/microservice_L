@@ -469,11 +469,11 @@ Một bước chỉ hoàn thành khi: (1) mã biên dịch và chạy được; 
 
 ## 13. BẢNG THEO DÕI TIẾN ĐỘ
 
-- [ ] 0.1 Chốt thông số
-- [ ] 0.2 Kiểm tra môi trường
-- [ ] 0.3 Repo & parent POM
-- [ ] 1.1 Hạ tầng Docker
-- [ ] 2.1 common-lib
+- [x] 0.1 Chốt thông số
+- [x] 0.2 Kiểm tra môi trường
+- [x] 0.3 Repo & parent POM
+- [x] 1.1 Hạ tầng Docker
+- [x] 2.1 common-lib
 - [ ] 3.1 Khung user-service & DB
 - [ ] 3.2 Entity/Repo/DTO/Mapper
 - [ ] 3.3 Service: đăng ký & profile
