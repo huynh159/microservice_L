@@ -477,7 +477,7 @@ Một bước chỉ hoàn thành khi: (1) mã biên dịch và chạy được; 
 - [x] 3.1 Khung user-service & DB
 - [x] 3.2 Entity/Repo/DTO/Mapper
 - [x] 3.3 Service: đăng ký & profile
-- [ ] 3.4 Controller & lỗi
+- [x] 3.4 Controller & lỗi
 - [ ] 3.5 Xác thực JWT (login/refresh/logout)
 - [ ] 3.6 Cache Redis
 - [ ] 3.7 Outbox + Kafka producer
