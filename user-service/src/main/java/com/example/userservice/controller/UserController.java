@@ -88,6 +88,7 @@ public class UserController {
      * XEM HỒ SƠ CỦA BẢN THÂN (Yêu cầu đăng nhập)
      */
     @GetMapping("/me")
+    @org.springframework.security.access.prepost.PreAuthorize("isAuthenticated()")
     @Operation(summary = "Xem thông tin hồ sơ của chính mình (Current User)",
             description = "Lấy thông tin người dùng đang đăng nhập thông qua Authentication Context hoặc Header X-User-Id.")
     @ApiResponses({
@@ -108,6 +109,7 @@ public class UserController {
      * CẬP NHẬT HỒ SƠ CỦA BẢN THÂN (Yêu cầu đăng nhập)
      */
     @PutMapping("/me")
+    @org.springframework.security.access.prepost.PreAuthorize("isAuthenticated()")
     @Operation(summary = "Cập nhật thông tin hồ sơ cá nhân",
             description = "Cho phép người dùng sửa đổi họ tên, số điện thoại hoặc ảnh đại diện (avatar).")
     @ApiResponses({
@@ -130,6 +132,7 @@ public class UserController {
      */
     @PutMapping("/me/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @org.springframework.security.access.prepost.PreAuthorize("isAuthenticated()")
     @Operation(summary = "Đổi mật khẩu tài khoản cá nhân",
             description = "Xác minh mật khẩu cũ và đổi sang mật khẩu mới. Trả về HTTP 204 No Content.")
     @ApiResponses({
@@ -151,6 +154,7 @@ public class UserController {
      * QUẢN TRỊ VIÊN: TÌM KIẾM DANH SÁCH NGƯỜI DÙNG CÓ PHÂN TRANG (ADMIN)
      */
     @GetMapping
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Tìm kiếm danh sách người dùng có phân trang (ADMIN)",
             description = "Hỗ trợ lọc theo từ khóa (email, họ tên, sđt), theo trạng thái tài khoản, phân trang và sắp xếp.")
     @ApiResponses({
@@ -180,6 +184,7 @@ public class UserController {
      * QUẢN TRỊ VIÊN: XEM CHI TIẾT NGƯỜI DÙNG THEO ID (ADMIN)
      */
     @GetMapping("/{id}")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Xem thông tin chi tiết người dùng theo ID (ADMIN)",
             description = "Lấy thông tin tài khoản người dùng dựa trên định danh UUID.")
     @ApiResponses({
@@ -198,6 +203,7 @@ public class UserController {
      * QUẢN TRỊ VIÊN: KHÓA / MỞ KHÓA TÀI KHOẢN (ADMIN)
      */
     @PatchMapping("/{id}/status")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Cập nhật trạng thái tài khoản người dùng (Khóa/Mở khóa) (ADMIN)",
             description = "Cho phép quản trị viên chuyển đổi trạng thái người dùng (ACTIVE / LOCKED / DELETED).")
     @ApiResponses({
@@ -219,6 +225,7 @@ public class UserController {
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Xóa mềm người dùng (Soft Delete) (ADMIN)",
             description = "Chuyển trạng thái người dùng thành DELETED để vô hiệu hóa tài khoản mà vẫn bảo toàn tính toàn vẹn dữ liệu.")
     @ApiResponses({
@@ -237,9 +244,12 @@ public class UserController {
     // HÀM TIỆN ÍCH TRÍCH XUẤT USER ID CỦA NGƯỜI DÙNG HIỆN TẠI
     // =========================================================================
     private UUID resolveUserId(Authentication authentication, String headerUserId) {
-        // 1. Kiểm tra từ Spring Security Context (nếu đã xác thực qua JWT ở Bước 3.5)
+        // 1. Kiểm tra từ Spring Security Context (nạp từ JWT qua JwtAuthenticationFilter ở Bước 3.5)
         if (authentication != null && authentication.isAuthenticated()
                 && !(authentication instanceof AnonymousAuthenticationToken)) {
+            if (authentication.getPrincipal() instanceof com.example.userservice.security.UserPrincipal principal) {
+                return principal.getId();
+            }
             try {
                 return UUID.fromString(authentication.getName());
             } catch (IllegalArgumentException ignored) {

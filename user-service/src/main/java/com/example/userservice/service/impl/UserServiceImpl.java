@@ -13,6 +13,7 @@ import com.example.userservice.entity.Role;
 import com.example.userservice.entity.User;
 import com.example.userservice.entity.UserStatus;
 import com.example.userservice.mapper.UserMapper;
+import com.example.userservice.repository.RefreshTokenRepository;
 import com.example.userservice.repository.RoleRepository;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.service.UserService;
@@ -54,17 +55,20 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public UserServiceImpl(
             UserRepository userRepository,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
-            UserMapper userMapper
+            UserMapper userMapper,
+            RefreshTokenRepository refreshTokenRepository
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     /**
@@ -158,6 +162,9 @@ public class UserServiceImpl implements UserService {
         // Mã hóa mật khẩu mới và cập nhật
         user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
+
+        // BƯỚC 3.5: Thu hồi toàn bộ Refresh Token cũ của người dùng (Bắt buộc đăng nhập lại trên mọi thiết bị)
+        refreshTokenRepository.revokeAllByUserId(userId);
     }
 
     /**

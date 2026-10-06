@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -59,7 +60,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * ==============================================================================
  */
 @WebMvcTest(UserController.class)
-@Import({SecurityConfig.class, GlobalExceptionHandler.class})
+@Import({
+        SecurityConfig.class,
+        GlobalExceptionHandler.class,
+        com.example.userservice.security.JwtAuthenticationFilter.class,
+        com.example.userservice.security.JwtService.class,
+        com.example.userservice.security.CustomAuthenticationEntryPoint.class,
+        com.example.userservice.security.CustomAccessDeniedHandler.class
+})
 class UserControllerTest {
 
     @Autowired
@@ -71,12 +79,13 @@ class UserControllerTest {
     @MockitoBean
     private UserService userService;
 
+    private static final String USER_ID_STR = "11111111-1111-1111-1111-111111111111";
     private UUID sampleUserId;
     private UserProfileResponse sampleProfile;
 
     @BeforeEach
     void setUp() {
-        sampleUserId = UUID.randomUUID();
+        sampleUserId = UUID.fromString(USER_ID_STR);
         sampleProfile = UserProfileResponse.builder()
                 .id(sampleUserId)
                 .email("test@example.com")
@@ -163,12 +172,12 @@ class UserControllerTest {
     // =========================================================================
 
     @Test
-    @DisplayName("GET /api/v1/users/me: Thành công khi có Header X-User-Id trả về HTTP 200 OK")
+    @WithMockUser(username = USER_ID_STR, roles = "USER")
+    @DisplayName("GET /api/v1/users/me: Thành công khi đã xác thực trả về HTTP 200 OK")
     void getCurrentUserProfile_Success() throws Exception {
         when(userService.getProfile(sampleUserId)).thenReturn(sampleProfile);
 
-        mockMvc.perform(get("/api/v1/users/me")
-                        .header("X-User-Id", sampleUserId.toString()))
+        mockMvc.perform(get("/api/v1/users/me"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(sampleUserId.toString()))
                 .andExpect(jsonPath("$.email").value("test@example.com"));
@@ -184,6 +193,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = USER_ID_STR, roles = "USER")
     @DisplayName("PUT /api/v1/users/me: Cập nhật profile thành công trả về HTTP 200 OK")
     void updateCurrentUserProfile_Success() throws Exception {
         UserUpdateRequest updateRequest = new UserUpdateRequest("Nguyen Van Updated", "0999888777", "https://img.com/a.png");
@@ -191,7 +201,6 @@ class UserControllerTest {
         when(userService.updateProfile(eq(sampleUserId), any(UserUpdateRequest.class))).thenReturn(sampleProfile);
 
         mockMvc.perform(put("/api/v1/users/me")
-                        .header("X-User-Id", sampleUserId.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk())
@@ -203,6 +212,7 @@ class UserControllerTest {
     // =========================================================================
 
     @Test
+    @WithMockUser(username = USER_ID_STR, roles = "USER")
     @DisplayName("PUT /api/v1/users/me/password: Đổi mật khẩu thành công trả về HTTP 204 No Content")
     void changePassword_Success() throws Exception {
         ChangePasswordRequest request = new ChangePasswordRequest("OldPassword123@", "NewPassword456@");
@@ -210,13 +220,13 @@ class UserControllerTest {
         doNothing().when(userService).changePassword(eq(sampleUserId), any(ChangePasswordRequest.class));
 
         mockMvc.perform(put("/api/v1/users/me/password")
-                        .header("X-User-Id", sampleUserId.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent());
     }
 
     @Test
+    @WithMockUser(username = USER_ID_STR, roles = "USER")
     @DisplayName("PUT /api/v1/users/me/password: Mật khẩu cũ sai trả về HTTP 400 Bad Request")
     void changePassword_WrongOldPassword() throws Exception {
         ChangePasswordRequest request = new ChangePasswordRequest("WrongPassword123@", "NewPassword456@");
@@ -225,7 +235,6 @@ class UserControllerTest {
                 .when(userService).changePassword(eq(sampleUserId), any(ChangePasswordRequest.class));
 
         mockMvc.perform(put("/api/v1/users/me/password")
-                        .header("X-User-Id", sampleUserId.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -234,10 +243,30 @@ class UserControllerTest {
     }
 
     // =========================================================================
-    // 4. KIỂM THỬ ADMIN: TÌM KIẾM, CHI TIẾT, STATUS, XÓA MỀM
+    // 4. KIỂM THỬ ADMIN: TÌM KIẾM, CHI TIẾT, STATUS, XÓA MỀM & PHÂN QUYỀN RBAC
     // =========================================================================
 
     @Test
+    @DisplayName("GET /api/v1/users: Không có Token/chưa xác thực trả về HTTP 401 Unauthorized")
+    void searchUsers_Unauthenticated_Returns401() throws Exception {
+        mockMvc.perform(get("/api/v1/users"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status").value(401))
+                .andExpect(jsonPath("$.code").value("UNAUTHORIZED"));
+    }
+
+    @Test
+    @WithMockUser(username = USER_ID_STR, roles = "USER")
+    @DisplayName("GET /api/v1/users: USER thường gọi API của ADMIN trả về HTTP 403 Forbidden")
+    void searchUsers_ForbiddenForUserRole_Returns403() throws Exception {
+        mockMvc.perform(get("/api/v1/users"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.status").value(403))
+                .andExpect(jsonPath("$.code").value("FORBIDDEN"));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
     @DisplayName("GET /api/v1/users: Tìm kiếm người dùng phân trang trả về HTTP 200 OK với PageResponse")
     void searchUsers_Success() throws Exception {
         PageResponse<UserProfileResponse> pageResponse = PageResponse.<UserProfileResponse>builder()
@@ -262,6 +291,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     @DisplayName("GET /api/v1/users/{id}: Lấy thông tin user theo ID thành công")
     void getUserById_Success() throws Exception {
         when(userService.getUserById(sampleUserId)).thenReturn(sampleProfile);
@@ -273,6 +303,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     @DisplayName("GET /api/v1/users/{id}: Không tìm thấy user trả về HTTP 404 Not Found")
     void getUserById_NotFound() throws Exception {
         when(userService.getUserById(sampleUserId))
@@ -285,6 +316,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     @DisplayName("PATCH /api/v1/users/{id}/status: Cập nhật trạng thái người dùng thành công")
     void updateStatus_Success() throws Exception {
         UserStatusUpdateRequest request = new UserStatusUpdateRequest(UserStatus.LOCKED);
@@ -308,6 +340,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     @DisplayName("DELETE /api/v1/users/{id}: Xóa mềm người dùng trả về HTTP 204 No Content")
     void deleteUser_Success() throws Exception {
         doNothing().when(userService).deleteUser(sampleUserId);
@@ -319,6 +352,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     @DisplayName("GET /api/v1/users/{id}: Truyền chuỗi không phải UUID vào path trả về HTTP 400 TYPE_MISMATCH")
     void getUserById_TypeMismatch() throws Exception {
         mockMvc.perform(get("/api/v1/users/{id}", "not-a-valid-uuid"))

@@ -67,6 +67,9 @@ class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private com.example.userservice.repository.RefreshTokenRepository refreshTokenRepository;
+
     private final UserMapper userMapper = new UserMapper();
 
     private UserServiceImpl userService;
@@ -77,7 +80,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserServiceImpl(userRepository, roleRepository, passwordEncoder, userMapper);
+        userService = new UserServiceImpl(userRepository, roleRepository, passwordEncoder, userMapper, refreshTokenRepository);
 
         userRole = new Role(1, "ROLE_USER");
 
@@ -214,6 +217,7 @@ class UserServiceTest {
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository).save(userCaptor.capture());
         assertThat(userCaptor.getValue().getPasswordHash()).isEqualTo("new_hashed_pw");
+        verify(refreshTokenRepository).revokeAllByUserId(sampleUserId);
     }
 
     @Test

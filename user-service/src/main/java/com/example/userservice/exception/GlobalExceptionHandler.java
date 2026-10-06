@@ -117,6 +117,30 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Xử lý lỗi từ chối truy cập từ Spring Security (@PreAuthorize / Method Security) (HTTP 403)
+     */
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleSpringAccessDeniedException(
+            org.springframework.security.access.AccessDeniedException ex,
+            HttpServletRequest request
+    ) {
+        log.warn("AccessDeniedException tại URI [{}]: {}", request.getRequestURI(), ex.getMessage());
+        return buildErrorResponse(HttpStatus.FORBIDDEN, "FORBIDDEN", "Bạn không có quyền truy cập tài nguyên này", request, null);
+    }
+
+    /**
+     * Xử lý lỗi chưa xác thực từ Spring Security (HTTP 401)
+     */
+    @ExceptionHandler(org.springframework.security.core.AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleSpringAuthenticationException(
+            org.springframework.security.core.AuthenticationException ex,
+            HttpServletRequest request
+    ) {
+        log.warn("AuthenticationException tại URI [{}]: {}", request.getRequestURI(), ex.getMessage());
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Yêu cầu đăng nhập hoặc token không hợp lệ", request, null);
+    }
+
+    /**
      * Xử lý ngoại lệ nghiệp vụ chung kế thừa từ BusinessException
      */
     @ExceptionHandler(BusinessException.class)

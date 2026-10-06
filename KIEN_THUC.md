@@ -13,7 +13,11 @@ Tài liệu này tổng hợp toàn bộ các kiến thức lập trình, kiến
 6. [Tầng REST Controller & Chuẩn HTTP Status Code](#6-tầng-rest-controller--chuẩn-http-status-code)
 7. [Xử lý Ngoại lệ Toàn cục (Global Exception Handling) & traceId](#7-xử-lý-ngoại-lệ-toàn-cục-global-exception-handling--traceid)
 8. [Phương pháp Kiểm thử Phần mềm: Unit Test vs Web Slice Test](#8-phương-pháp-kiểm-thử-phần-mềm-unit-test-vs-web-slice-test)
-9. [HƯỚNG DẪN CHẠY DỰ ÁN TRÊN LAPTOP Ở NHÀ](#9-hướng-dẫn-chạy-dự-án-trên-laptop-ở-nhà)
+9. [Xác thực Stateless với JWT (Access Token vs Refresh Token)](#9-xác-thực-stateless-với-jwt-access-token-vs-refresh-token)
+10. [Cơ chế Xoay vòng Refresh Token & Lưu chuỗi băm SHA-256](#10-cơ-chế-xoay-vòng-refresh-token--lưu-chuỗi-băm-sha-256)
+11. [Chống Brute-force Đăng nhập với Redis (HTTP 429)](#11-chống-brute-force-đăng-nhập-với-redis-http-429)
+12. [Phân quyền RBAC & Thu hồi Token khi Đổi mật khẩu](#12-phân-quyền-rbac--thu-hồi-token-khi-đổi-mật-khẩu)
+13. [HƯỚNG DẪN CHẠY DỰ ÁN TRÊN LAPTOP Ở NHÀ](#13-hướng-dẫn-chạy-dự-án-trên-laptop-ở-nhà)
 
 ---
 
@@ -157,7 +161,87 @@ Trong dự án, chúng ta đã áp dụng 2 trường phái kiểm thử hiện 
 
 ---
 
-## 9. HƯỚNG DẪN CHẠY DỰ ÁN TRÊN LAPTOP Ở NHÀ
+## 9. Xác thực Stateless với JWT (Access Token vs Refresh Token)
+
+### 9.1 Khái niệm Stateless Authentication
+* **Stateful (Session truyền thống):** Máy chủ lưu session ID trong RAM/DB. Khi scale nhiều instance, cần đồng bộ session (Sticky Session hoặc Redis Session), gây nghẽn cổ chai.
+* **Stateless (JWT - JSON Web Token):** Máy chủ **không lưu Access Token**. Mọi thông tin danh tính được đóng gói ngay trong chuỗi Token và ký bằng Secret Key (`HMAC-SHA256`). Mọi instance của microservice đều có thể tự giải mã và xác thực chữ ký mà không cần gọi DB.
+
+### 9.2 Cấu trúc 3 phần của JSON Web Token
+Chuỗi JWT gồm: `Header.Payload.Signature`
+1. **Header:** `{"alg": "HS256", "typ": "JWT"}`
+2. **Payload (Claims):** Chứa dữ liệu định danh theo chuẩn RFC 7519:
+   - `sub` (Subject): UUID của người dùng (`userId`).
+   - `email`: Địa chỉ email của người dùng.
+   - `roles`: Danh sách quyền hạn (`["ROLE_USER", "ROLE_ADMIN"]`).
+   - `iat` (Issued At): Thời điểm tạo token.
+   - `exp` (Expiration): Thời điểm hết hạn (15 phút).
+   - `jti` (JWT ID): Mã UUID duy nhất chống tấn công phát lại (*Replay Attack*).
+3. **Signature:** Chữ ký số tạo từ `HMACSHA256(base64(Header) + "." + base64(Payload), SecretKey)`. Nếu kẻ gian sửa đổi bất kỳ ký tự nào trong Payload, chữ ký sẽ không khớp và token bị từ chối ngay lập tức.
+
+### 9.3 Tại sao cần phân tách Cặp Token: Access Token & Refresh Token?
+* **Access Token (Hạn ngắn - 15 phút):** Dùng để gọi các API nghiệp vụ (`Authorization: Bearer <token>`). Do có hạn ngắn, nếu lỡ bị lộ thì kẻ gian cũng chỉ lợi dụng được tối đa 15 phút.
+* **Refresh Token (Hạn dài - 7 ngày):** Dùng để đổi lấy cặp Access Token + Refresh Token mới mà không bắt người dùng phải đăng nhập lại liên tục.
+
+---
+
+## 10. Cơ chế Xoay vòng Refresh Token & Lưu chuỗi băm SHA-256
+
+### 10.1 Tại sao KHÔNG lưu token thô trong Database? (Nguyên lý Zero-Knowledge)
+* **Quy tắc an ninh:** Giống như mật khẩu, Refresh Token thô gửi về Client, còn trong DB chỉ lưu **chuỗi băm SHA-256** (`token_hash`).
+* Nếu hacker xâm nhập được cơ sở dữ liệu, chúng **chỉ thấy chuỗi hash một chiều** và không thể dùng nó để gọi API `/auth/refresh`!
+* **Tại sao dùng SHA-256 thay vì BCrypt cho Token Hash?**
+  - BCrypt có salt ngẫu nhiên nên không thể tra cứu trực tiếp bằng câu lệnh `SELECT ... WHERE token_hash = ?`.
+  - SHA-256 là hàm băm tất định (Deterministic - cùng đầu vào luôn ra 64 ký tự hex cố định), cho phép tìm kiếm tức thì `O(1)` qua Database Index mà vẫn đảm bảo tính bảo mật một chiều không thể đảo ngược.
+
+### 10.2 Cơ chế Xoay vòng Token (Refresh Token Rotation)
+1. Khi Client gửi Refresh Token cũ lên `/api/v1/auth/refresh`:
+   - Server băm SHA-256 token gửi lên và tìm trong bảng `refresh_tokens`.
+   - Nếu token **đã bị thu hồi trước đó** (`isRevoked() == true`): **CẢNH BÁO NGUY HIỂM!** Token này có thể đã bị kẻ gian đánh cắp và tái sử dụng. Hệ thống từ chối ngay lập tức (`401 Unauthorized`).
+   - Nếu token hợp lệ: Đánh dấu token cũ là ĐÃ THU HỒI (`revoked_at = now()`, `replaced_by = hash_token_mới`).
+   - Sinh Refresh Token mới, băm và lưu vào DB.
+   - Cấp cặp Access Token mới + Refresh Token mới cho Client.
+
+---
+
+## 11. Chống Brute-force Đăng nhập với Redis (HTTP 429)
+
+### 11.1 Ngăn chặn tấn công vét cạn mật khẩu
+* Kẻ gian có thể dùng bot chạy thử hàng ngàn mật khẩu mỗi phút.
+* Để ngăn chặn, hệ thống áp dụng cơ chế đếm số lần sai bằng Redis:
+  - Khóa: `login:attempts:<email>`
+  - TTL (Thời gian hết hạn): 15 phút (900 giây).
+  - Khi nhập sai: Tăng bộ đếm (`increment`). Ở lần sai đầu tiên, đặt TTL 15 phút.
+  - Khi số lần sai ≥ 5: Từ chối ngay lập tức với mã HTTP `429 Too Many Requests`.
+  - Khi đăng nhập thành công: Xóa ngay khóa trên Redis.
+
+### 11.2 Bảo mật chống Dò tìm tài khoản (Zero User Enumeration)
+* **Quy tắc vàng:** Dù không tìm thấy email hay nhập sai mật khẩu, hệ thống **luôn trả về một thông báo duy nhất**:
+  > `"Email hoặc mật khẩu không chính xác"` (HTTP 401 Unauthorized).
+* **Tuyệt đối không phân biệt** *"Email không tồn tại"* hay *"Mật khẩu sai"*, vì điều đó sẽ giúp kẻ tấn công biết email nào đã đăng ký trên hệ thống.
+
+---
+
+## 12. Phân quyền RBAC & Thu hồi Token khi Đổi mật khẩu
+
+### 12.1 Phân quyền dựa trên vai trò (Role-Based Access Control)
+* Sử dụng `@EnableMethodSecurity(prePostEnabled = true)` và `@PreAuthorize`:
+  - Public: Đăng ký (`POST /api/v1/users`), Đăng nhập (`POST /api/v1/auth/login`), Làm mới token (`POST /api/v1/auth/refresh`), Swagger UI, Actuator Health.
+  - Yêu cầu đăng nhập (`@PreAuthorize("isAuthenticated()")`): Xem & sửa profile cá nhân (`/api/v1/users/me`), Đổi mật khẩu (`/api/v1/users/me/password`), Đăng xuất (`/api/v1/auth/logout`).
+  - Quản trị viên (`@PreAuthorize("hasRole('ADMIN')")`): Tra cứu danh sách (`GET /api/v1/users`), Xem theo ID, Khóa/mở khóa (`PATCH /status`), Xóa mềm (`DELETE`).
+* Bộ xử lý tập trung:
+  - Chưa đăng nhập gọi API bảo vệ -> `CustomAuthenticationEntryPoint` trả `HTTP 401 UNAUTHORIZED`.
+  - User thường gọi API của Admin -> `CustomAccessDeniedHandler` trả `HTTP 403 FORBIDDEN`.
+
+### 12.2 Thu hồi Token toàn diện khi Đổi mật khẩu
+* Khi người dùng đổi mật khẩu thành công (`PUT /api/v1/users/me/password`):
+* Hệ thống kích hoạt câu lệnh `refreshTokenRepository.revokeAllByUserId(userId)`:
+  - Mọi Refresh Token đang hoạt động của người dùng trên mọi thiết bị/trình duyệt khác lập tức bị thu hồi (`revoked_at = CURRENT_TIMESTAMP`).
+  - Buộc tất cả các phiên đăng nhập khác phải kết thúc, bảo vệ an toàn tối đa cho tài khoản.
+
+---
+
+## 13. HƯỚNG DẪN CHẠY DỰ ÁN TRÊN LAPTOP Ở NHÀ
 
 Khi bạn về nhà và mở laptop, hãy làm theo các bước sau:
 
