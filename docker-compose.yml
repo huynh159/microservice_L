@@ -1,0 +1,231 @@
+# ==============================================================================
+# DOCKER COMPOSE ĐẦY ĐỦ (HẠ TẦNG + USER-SERVICE + NOTIFICATION-SERVICE + CHAT-SERVICE) - BƯỚC 5.1
+# ==============================================================================
+services:
+  # ----------------------------------------------------------------------------
+  # 1. HẠ TẦNG CƠ SỞ DỮ LIỆU POSTGRESQL 16
+  # ----------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: microservice_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      USER_DB_NAME: ${USER_DB_NAME}
+      USER_DB_USER: ${USER_DB_USER}
+      USER_DB_PASSWORD: ${USER_DB_PASSWORD}
+      NOTIFICATION_DB_NAME: ${NOTIFICATION_DB_NAME}
+      NOTIFICATION_DB_USER: ${NOTIFICATION_DB_USER}
+      NOTIFICATION_DB_PASSWORD: ${NOTIFICATION_DB_PASSWORD}
+      CHAT_DB_NAME: ${CHAT_DB_NAME:-chat_db}
+      CHAT_DB_USER: ${CHAT_DB_USER:-chat_service_db_user}
+      CHAT_DB_PASSWORD: ${CHAT_DB_PASSWORD:-chat_service_db_pass}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      - microservice_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ----------------------------------------------------------------------------
+  # 2. HẠ TẦNG BỘ ĐỆM CACHE REDIS 7
+  # ----------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: microservice_redis
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - microservice_net
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a ${REDIS_PASSWORD} ping | grep PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ----------------------------------------------------------------------------
+  # 3. HẠ TẦNG MESSAGE BROKER APACHE KAFKA (KRAFT MODE)
+  # ----------------------------------------------------------------------------
+  kafka:
+    image: apache/kafka:3.9.0
+    container_name: microservice_kafka
+    restart: unless-stopped
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_LISTENERS: 'PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092,CONTROLLER://localhost:9093'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@localhost:9093'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 3
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - microservice_net
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  # ----------------------------------------------------------------------------
+  # 4. HẠ TẦNG MOCK SMTP MAILPIT
+  # ----------------------------------------------------------------------------
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: microservice_mailpit
+    restart: unless-stopped
+    ports:
+      - "8025:8025" # Web UI
+      - "1025:1025" # SMTP server
+    networks:
+      - microservice_net
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 1025 || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ----------------------------------------------------------------------------
+  # 5. USER MICROSERVICE (CỔNG 8081)
+  # ----------------------------------------------------------------------------
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    container_name: microservice_user_service
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      USER_DB_NAME: "${USER_DB_NAME}"
+      USER_DB_USER: "${USER_DB_USER}"
+      USER_DB_PASSWORD: "${USER_DB_PASSWORD}"
+      REDIS_HOST: "redis"
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:29092"
+      JWT_SECRET: "${JWT_SECRET}"
+      JWT_EXPIRATION_MS: "${JWT_EXPIRATION_MS}"
+      JWT_REFRESH_EXPIRATION_MS: "${JWT_REFRESH_EXPIRATION_MS}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - microservice_net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8081/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ----------------------------------------------------------------------------
+  # 6. NOTIFICATION MICROSERVICE (CỔNG 8082)
+  # ----------------------------------------------------------------------------
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
+    container_name: microservice_notification_service
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      NOTIFICATION_DB_NAME: "${NOTIFICATION_DB_NAME}"
+      NOTIFICATION_DB_USER: "${NOTIFICATION_DB_USER}"
+      NOTIFICATION_DB_PASSWORD: "${NOTIFICATION_DB_PASSWORD}"
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:29092"
+      MAIL_HOST: "mailpit"
+      MAIL_PORT: "1025"
+      MAIL_FROM: "${MAIL_FROM:-no-reply@example.com}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      mailpit:
+        condition: service_healthy
+    networks:
+      - microservice_net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8082/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ----------------------------------------------------------------------------
+  # 7. CHAT MICROSERVICE (CỔNG 8083)
+  # ----------------------------------------------------------------------------
+  chat-service:
+    build:
+      context: .
+      dockerfile: chat-service/Dockerfile
+    container_name: microservice_chat_service
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      CHAT_DB_NAME: "${CHAT_DB_NAME:-chat_db}"
+      CHAT_DB_USER: "${CHAT_DB_USER:-chat_service_db_user}"
+      CHAT_DB_PASSWORD: "${CHAT_DB_PASSWORD:-chat_service_db_pass}"
+      JWT_SECRET: "${JWT_SECRET}"
+      USER_SERVICE_URL: "http://user-service:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
+    networks:
+      - microservice_net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8083/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+# ------------------------------------------------------------------------------
+# MẠNG & VOLUME DÙNG CHUNG
+# ------------------------------------------------------------------------------
+networks:
+  microservice_net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  kafka_data:
