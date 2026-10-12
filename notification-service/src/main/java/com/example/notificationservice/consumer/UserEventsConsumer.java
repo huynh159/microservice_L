@@ -1,6 +1,11 @@
 package com.example.notificationservice.consumer;
 
 import com.example.common.dto.event.UserCreatedEvent;
+import com.example.notificationservice.entity.NotificationLog;
+import com.example.notificationservice.entity.NotificationStatus;
+import com.example.notificationservice.entity.NotificationType;
+import com.example.notificationservice.repository.NotificationLogRepository;
+import com.example.notificationservice.service.EmailService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -11,17 +16,22 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.util.UUID;
+
 /**
  * ==============================================================================
- * UserEventsConsumer - Lắng nghe topic `user-events` (BƯỚC 4.1)
+ * UserEventsConsumer - Lắng nghe topic `user-events` (BƯỚC 4.1 & BƯỚC 4.2)
  * ==============================================================================
- * Nhiệm vụ:
- * 1. Lắng nghe và tiêu thụ message từ topic `user-events` với group-id cố định.
- * 2. Phân tích envelope của sự kiện (eventId, eventType, payload).
- * 3. Chỉ lọc và xử lý `UserCreatedEvent` (để gửi email chào mừng ở bước 4.2).
- * 4. Bỏ qua các sự kiện khác (UserUpdatedEvent, UserDeletedEvent, v.v.) có log rõ ràng.
- * 5. Khi gặp message sai định dạng (malformed JSON hoặc thiếu envelope), ném ngoại lệ
- *    để DefaultErrorHandler tự động chuyển sang Dead Letter Topic `user-events.DLT`.
+ * 1. Lắng nghe topic `user-events` (group `notification-service-group`).
+ * 2. Phân tích envelope của message (eventId, eventType, payload).
+ * 3. Khi nhận `UserCreatedEvent`:
+ *    - Ghi nhận `notification_log` trạng thái PENDING.
+ *    - Gửi email chào mừng qua EmailService (Thymeleaf welcome.html + SMTP Mailpit).
+ *    - Cập nhật trạng thái `notification_log` thành SENT (hoặc FAILED nếu lỗi).
+ * 4. Bỏ qua các sự kiện khác (UserUpdatedEvent, UserDeletedEvent) có log đầy đủ.
+ * 5. Khi gặp message lỗi cú pháp / schema: ném exception để Kafka ErrorHandler
+ *    tự động chuyển hướng sang Dead Letter Topic `user-events.DLT`.
  * ==============================================================================
  */
 @Component
@@ -30,9 +40,22 @@ public class UserEventsConsumer {
     private static final Logger log = LoggerFactory.getLogger(UserEventsConsumer.class);
 
     private final ObjectMapper objectMapper;
+    private final EmailService emailService;
+    private final NotificationLogRepository notificationLogRepository;
 
     public UserEventsConsumer(ObjectMapper objectMapper) {
+        this(objectMapper, null, null);
+    }
+
+    @org.springframework.beans.factory.annotation.Autowired
+    public UserEventsConsumer(
+            ObjectMapper objectMapper,
+            EmailService emailService,
+            NotificationLogRepository notificationLogRepository
+    ) {
         this.objectMapper = objectMapper;
+        this.emailService = emailService;
+        this.notificationLogRepository = notificationLogRepository;
     }
 
     @KafkaListener(
@@ -96,7 +119,34 @@ public class UserEventsConsumer {
     }
 
     protected void handleUserCreated(String eventId, UserCreatedEvent event) {
-        // Móc nối logic xử lý (ở bước 4.2 sẽ gọi EmailService và lưu notification_log)
-        log.debug("Sẵn sàng gửi email chào mừng cho email [{}] với eventId [{}]", event.getEmail(), eventId);
+        if (emailService == null || notificationLogRepository == null) {
+            log.debug("EmailService hoặc NotificationLogRepository chưa được thiết lập. Bỏ qua ghi log & gửi mail.");
+            return;
+        }
+
+        NotificationLog logEntry = NotificationLog.builder()
+                .id(UUID.randomUUID())
+                .eventId(eventId)
+                .recipient(event.getEmail())
+                .type(NotificationType.WELCOME_EMAIL)
+                .status(NotificationStatus.PENDING)
+                .createdAt(Instant.now())
+                .build();
+
+        notificationLogRepository.save(logEntry);
+
+        try {
+            emailService.sendWelcomeEmail(event.getEmail(), event.getFullName());
+            logEntry.setStatus(NotificationStatus.SENT);
+            notificationLogRepository.save(logEntry);
+            log.info("Đã cập nhật notification_log thành công trạng thái SENT cho eventId [{}]", eventId);
+        } catch (Exception e) {
+            logEntry.setStatus(NotificationStatus.FAILED);
+            logEntry.setError(e.getMessage());
+            notificationLogRepository.save(logEntry);
+            log.error("Gửi email thất bại cho eventId [{}]. Đã lưu trạng thái FAILED vào notification_log: {}",
+                    eventId, e.getMessage());
+            throw e;
+        }
     }
 }

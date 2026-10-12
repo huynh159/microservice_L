@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chào mừng bạn đến với hệ thống</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #333333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #0066cc;
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .user-info {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0066cc;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 13px;
+            color: #888888;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Chào mừng thành viên mới!</h1>
+        </div>
+        <div class="content">
+            <p>Xin chào <strong th:text="${fullName}">Quý khách</strong>,</p>
+            <p>Tài khoản của bạn đã được khởi tạo thành công trên hệ thống của chúng tôi.</p>
+            <div class="user-info">
+                <p><strong>Họ và tên:</strong> <span th:text="${fullName}">Nguyễn Văn A</span></p>
+                <p><strong>Email đăng nhập:</strong> <span th:text="${email}">user@example.com</span></p>
+            </div>
+            <p>Bạn có thể đăng nhập vào hệ thống ngay bây giờ để bắt đầu trải nghiệm dịch vụ.</p>
+            <p>Nếu bạn không thực hiện yêu cầu đăng ký này, vui lòng bỏ qua email hoặc liên hệ với bộ phận hỗ trợ.</p>
+        </div>
+        <div class="footer">
+            <p>Email này được gửi tự động từ hệ thống Microservice Notification Platform.</p>
+            <p>&copy; 2026 Microservice Platform. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
