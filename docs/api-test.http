@@ -1,0 +1,111 @@
+### ==============================================================================
+### BỘ TEST API TOÀN DIỆN CHO MICROSERVICE PLATFORM (BƯỚC 5.2 / E2E TEST)
+### Sử dụng được với VS Code REST Client, IntelliJ HTTP Client hoặc Postman
+### ==============================================================================
+
+@userServiceUrl = http://localhost:8081
+@chatServiceUrl = http://localhost:8083
+@mailpitUrl = http://localhost:8025
+
+### ------------------------------------------------------------------------------
+### 1. KIỂM TRA SỨC KHỎE (ACTUATOR HEALTH)
+### ------------------------------------------------------------------------------
+
+### 1.1 Kiểm tra User Service Health
+GET {{userServiceUrl}}/actuator/health
+
+### 1.2 Kiểm tra Notification Service Health
+GET http://localhost:8082/actuator/health
+
+### 1.3 Kiểm tra Chat Service Health
+GET {{chatServiceUrl}}/actuator/health
+
+
+### ------------------------------------------------------------------------------
+### 2. LUỒNG XÁC THỰC & NGƯỜI DÙNG (USER SERVICE)
+### ------------------------------------------------------------------------------
+
+### 2.1 Đăng ký tài khoản mới (Kích hoạt gửi email chào mừng qua Kafka)
+# @name register
+POST {{userServiceUrl}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "huynh.le@example.com",
+  "password": "Password123@",
+  "fullName": "Lê Huỳnh",
+  "phone": "0901234567"
+}
+
+### 2.2 Kiểm tra hòm thư Mailpit xem có nhận được Email chào mừng không
+GET {{mailpitUrl}}/api/v1/messages
+
+### 2.3 Đăng nhập (Lấy JWT Access Token & Refresh Token)
+# @name login
+POST {{userServiceUrl}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "huynh.le@example.com",
+  "password": "Password123@"
+}
+
+### Lưu token từ phản hồi đăng nhập
+@accessToken = {{login.response.body.accessToken}}
+@refreshToken = {{login.response.body.refreshToken}}
+
+### 2.4 Lấy thông tin cá nhân (Profile - Có cache Redis)
+GET {{userServiceUrl}}/api/v1/users/me
+Authorization: Bearer {{accessToken}}
+
+### 2.5 Đổi mật khẩu
+POST {{userServiceUrl}}/api/v1/users/change-password
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "oldPassword": "Password123@",
+  "newPassword": "NewPassword123@"
+}
+
+### 2.6 Đăng nhập lại với mật khẩu mới
+# @name loginNew
+POST {{userServiceUrl}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "huynh.le@example.com",
+  "password": "NewPassword123@"
+}
+
+### 2.7 Làm mới Access Token (Refresh Token)
+POST {{userServiceUrl}}/api/v1/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{loginNew.response.body.refreshToken}}"
+}
+
+### 2.8 Đăng xuất (Thu hồi Refresh Token)
+POST {{userServiceUrl}}/api/v1/auth/logout
+Authorization: Bearer {{loginNew.response.body.accessToken}}
+Content-Type: application/json
+
+{
+  "refreshToken": "{{loginNew.response.body.refreshToken}}"
+}
+
+
+### ------------------------------------------------------------------------------
+### 3. LUỒNG CHAT REALTIME (CHAT SERVICE)
+### ------------------------------------------------------------------------------
+
+### 3.1 Tạo phòng chat hỗ trợ mới
+# @name createRoom
+POST {{chatServiceUrl}}/api/v1/chat/rooms
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+### 3.2 Lấy danh sách phòng chat đang hoạt động
+GET {{chatServiceUrl}}/api/v1/chat/rooms
+Authorization: Bearer {{accessToken}}

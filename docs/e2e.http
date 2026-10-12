@@ -1,0 +1,95 @@
+### ==============================================================================
+### KỊCH BẢN KIỂM THỬ END-TO-END (E2E) - BƯỚC 5.2
+### Hệ thống Microservices đang chạy trên Docker Compose
+### ==============================================================================
+
+@baseUrl = http://localhost:8081
+@mailpitUrl = http://localhost:8025
+
+### ------------------------------------------------------------------------------
+### BƯỚC 1: ĐĂNG KÝ TÀI KHOẢN MỚI
+### ------------------------------------------------------------------------------
+# @name registerUser
+POST {{baseUrl}}/api/v1/users
+Content-Type: application/json
+
+{
+  "email": "e2e.user@example.com",
+  "password": "Password123@",
+  "fullName": "E2E Test User",
+  "phone": "0912345678"
+}
+
+### ------------------------------------------------------------------------------
+### BƯỚC 2: KIỂM TRA EMAIL CHÀO MỪNG TRONG MAILPIT
+### ------------------------------------------------------------------------------
+GET {{mailpitUrl}}/api/v1/messages
+
+### ------------------------------------------------------------------------------
+### BƯỚC 3: ĐĂNG NHẬP LẤY JWT TOKEN (ACCESS + REFRESH)
+### ------------------------------------------------------------------------------
+# @name login
+POST {{baseUrl}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "e2e.user@example.com",
+  "password": "Password123@"
+}
+
+### Lưu token từ phản hồi đăng nhập
+@accessToken = {{login.response.body.accessToken}}
+@refreshToken = {{login.response.body.refreshToken}}
+
+### ------------------------------------------------------------------------------
+### BƯỚC 4: XEM THÔNG TIN CÁ NHÂN (GET /api/v1/users/me)
+### ------------------------------------------------------------------------------
+GET {{baseUrl}}/api/v1/users/me
+Authorization: Bearer {{accessToken}}
+
+### ------------------------------------------------------------------------------
+### BƯỚC 5: ĐỔI MẬT KHẨU (PUT /api/v1/users/me/password)
+### ------------------------------------------------------------------------------
+PUT {{baseUrl}}/api/v1/users/me/password
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "oldPassword": "Password123@",
+  "newPassword": "NewPassword456@"
+}
+
+### ------------------------------------------------------------------------------
+### BƯỚC 6: ĐĂNG NHẬP LẠI VỚI MẬT KHẨU MỚI
+### ------------------------------------------------------------------------------
+# @name loginNewPassword
+POST {{baseUrl}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "e2e.user@example.com",
+  "password": "NewPassword456@"
+}
+
+### Lưu token mới
+@newRefreshToken = {{loginNewPassword.response.body.refreshToken}}
+
+### ------------------------------------------------------------------------------
+### BƯỚC 7: ĐĂNG XUẤT (THU HỒI REFRESH TOKEN)
+### ------------------------------------------------------------------------------
+POST {{baseUrl}}/api/v1/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "{{newRefreshToken}}"
+}
+
+### ------------------------------------------------------------------------------
+### BƯỚC 8: THỬ LÀM MỚI TOKEN (KẾT QUẢ MONG ĐỢI: 401 UNAUTHORIZED VÌ ĐÃ BỊ THU HỒI)
+### ------------------------------------------------------------------------------
+POST {{baseUrl}}/api/v1/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{newRefreshToken}}"
+}
