@@ -1,0 +1,19 @@
+# ==============================================================================
+# CẤU HÌNH NOTIFICATION-SERVICE TRONG MÔI TRƯỜNG DOCKER CONTAINER
+# ==============================================================================
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:postgres}:${DB_PORT:5432}/${NOTIFICATION_DB_NAME:notification_db}
+    username: ${NOTIFICATION_DB_USER:notification_service_db_user}
+    password: ${NOTIFICATION_DB_PASSWORD:notification_service_db_pass}
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:29092}
+
+  mail:
+    host: ${MAIL_HOST:mailpit}
+    port: ${MAIL_PORT:1025}

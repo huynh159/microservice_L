@@ -482,7 +482,7 @@ Một bước chỉ hoàn thành khi: (1) mã biên dịch và chạy được; 
 - [x] 3.6 Cache Redis
 - [x] 3.7 Outbox + Kafka producer
 - [x] 3.8 Dockerfile user-service
-- [ ] 4.1 Khung notification & consumer
+- [x] 4.1 Khung notification & consumer
 - [ ] 4.2 Gửi email chào mừng
 - [ ] 4.3 Idempotent, retry, DLT
 - [ ] 4.4 Dockerfile notification-service
