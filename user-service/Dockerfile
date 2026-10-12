@@ -8,6 +8,7 @@ WORKDIR /workspace
 # Sao chép Maven wrapper và các file pom.xml để tận dụng Docker cache layer
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
+RUN sed -i 's/\r$//' mvnw && chmod +x mvnw
 COPY common-lib/pom.xml common-lib/
 COPY user-service/pom.xml user-service/
 COPY notification-service/pom.xml notification-service/

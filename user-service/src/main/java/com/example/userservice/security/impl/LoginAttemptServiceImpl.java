@@ -28,6 +28,7 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
 
     private final org.springframework.data.redis.core.RedisOperations<String, String> redisOperations;
 
+    @org.springframework.beans.factory.annotation.Autowired
     public LoginAttemptServiceImpl(ObjectProvider<StringRedisTemplate> redisTemplateProvider) {
         this.redisOperations = redisTemplateProvider.getIfAvailable();
     }
