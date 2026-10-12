@@ -1,0 +1,16 @@
+# ==============================================================================
+# CẤU HÌNH CHAT-SERVICE TRONG MÔI TRƯỜNG DOCKER CONTAINER
+# ==============================================================================
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:postgres}:${DB_PORT:5432}/${CHAT_DB_NAME:chat_db}
+    username: ${CHAT_DB_USER:chat_service_db_user}
+    password: ${CHAT_DB_PASSWORD:chat_service_db_pass}
+
+services:
+  user-service:
+    url: ${USER_SERVICE_URL:http://user-service:8081}
