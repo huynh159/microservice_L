@@ -366,17 +366,17 @@ Mỗi bước: **Mục tiêu → Việc cần làm → DoD (tiêu chí hoàn th�
 
 ## 7. CHECKLIST CHẤT LƯỢNG & BẢO MẬT
 
-- [ ] Không có mật khẩu/secret thật trong Git.
-- [ ] Mật khẩu băm BCrypt; không log mật khẩu, token, email đầy đủ ở mức log nhạy cảm.
-- [ ] Refresh token lưu dưới dạng hash; xoay vòng; thu hồi khi đổi mật khẩu/logout.
-- [ ] Mọi endpoint (trừ danh sách public) yêu cầu xác thực và kiểm tra quyền.
-- [ ] Validate đầu vào; không trả Entity; không lộ `password_hash`.
-- [ ] Mỗi service có DB riêng; giao tiếp chỉ qua Kafka.
-- [ ] Sự kiện qua Outbox; consumer idempotent; có DLT.
-- [ ] Thông báo lỗi đăng nhập không lộ email có tồn tại hay không.
-- [ ] Test pass trên CI; coverage service layer ≥ 80%.
-- [ ] Image Docker chạy bằng user không phải root.
-- [ ] README đủ để người khác chạy lại.
+- [x] Không có mật khẩu/secret thật trong Git.
+- [x] Mật khẩu băm BCrypt; không log mật khẩu, token, email đầy đủ ở mức log nhạy cảm.
+- [x] Refresh token lưu dưới dạng hash; xoay vòng; thu hồi khi đổi mật khẩu/logout.
+- [x] Mọi endpoint (trừ danh sách public) yêu cầu xác thực và kiểm tra quyền.
+- [x] Validate đầu vào; không trả Entity; không lộ `password_hash`.
+- [x] Mỗi service có DB riêng; giao tiếp chỉ qua Kafka.
+- [x] Sự kiện qua Outbox; consumer idempotent; có DLT.
+- [x] Thông báo lỗi đăng nhập không lộ email có tồn tại hay không.
+- [x] Test pass trên CI; coverage service layer ≥ 80%.
+- [x] Image Docker chạy bằng user không phải root.
+- [x] README đủ để người khác chạy lại.
 
 ---
 
@@ -490,4 +490,4 @@ Một bước chỉ hoàn thành khi: (1) mã biên dịch và chạy được; 
 - [x] 5.2 E2E
 - [x] 6.1 Quan sát cơ bản
 - [x] 6.2 CI
-- [ ] 6.3 Tài liệu & rà soát
+- [x] 6.3 Tài liệu & rà soát

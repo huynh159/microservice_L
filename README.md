@@ -1,185 +1,163 @@
-# 🚀 Microservice Platform: User & Notification System
+# 🚀 Microservice Platform: User, Notification & Chat System
 
-Hệ thống Microservices hướng sự kiện (Event-Driven Architecture) gồm 2 dịch vụ độc lập:
-* **`user-service`** (Port `8081`): Quản lý người dùng, hồ sơ cá nhân, phân quyền, xác thực (JWT), bộ nhớ đệm (Redis), phát sự kiện qua mô hình Transactional Outbox.
-* **`notification-service`** (Port `8082`): Nhận sự kiện từ Apache Kafka (`user-events`), đảm bảo tính Idempotent chống xử lý trùng và gửi email chào mừng qua Mailpit SMTP.
-* **`common-lib`**: Thư viện dùng chung chứa DTOs, Event Envelopes, mã phản hồi chuẩn (`ErrorResponse`, `PageResponse`) và các Ngoại lệ nghiệp vụ (`BusinessException`).
+Hệ thống Microservices hướng sự kiện (**Event-Driven Architecture - EDA**) chuẩn sản xuất (Production-Ready) được xây dựng bằng **Spring Boot 3.4.3**, **Java 21 LTS**, **Apache Kafka**, **PostgreSQL**, **Redis**, và **Docker Compose**.
 
----
-
-## 🏛️ Sơ đồ Kiến trúc Hệ thống
-
-```
-[ Client / Postman / Web ]
-             │
-        HTTPS / REST
-             ▼
-     ┌───────────────┐
-     │ user-service  │ ────▶ PostgreSQL (user_db trên cổng 5433)
-     │ (Port 8081)   │ ────▶ Redis (Cache & chống Brute-force cổng 6379)
-     └───────┬───────┘
-             │  (Transactional Outbox Pattern)
-             ▼
-       [ Apache Kafka: topic 'user-events' ]
-             │
-             ▼
-     ┌──────────────────────┐
-     │ notification-service │ ────▶ PostgreSQL (notification_db trên cổng 5433)
-     │ (Port 8082)          │ ────▶ Mailpit SMTP Mock Email (Web UI cổng 8025)
-     └──────────────────────┘
-```
+Hệ thống bao gồm các dịch vụ độc lập:
+* **`user-service`** (Port `8081`): Quản lý người dùng, hồ sơ cá nhân, phân quyền RBAC, xác thực JWT (Access Token 15m + Refresh Token Rotation 7d), bộ nhớ đệm Redis, và phát sự kiện qua **Transactional Outbox Pattern**.
+* **`notification-service`** (Port `8082`): Lắng nghe sự kiện Kafka (`user-events`), đảm bảo tính **Idempotent** chống xử lý trùng, cơ chế Retry & **Dead Letter Topic (DLT)**, và gửi email chào mừng qua Mailpit SMTP.
+* **`chat-service`** (Port `8083`): Quản lý phòng chat và tin nhắn thời gian thực qua giao thức **WebSocket STOMP**, xác thực Token tại kênh Handshake Channel Interceptor.
+* **`common-lib`**: Thư viện dùng chung chứa DTOs, Event Envelopes (`EventEnvelope<T>`), chuẩn phản hồi API (`ErrorResponse`, `PageResponse`) và ngoại lệ nghiệp vụ (`BusinessException`).
 
 ---
 
-## 📋 Yêu cầu Hệ thống
+## 🏛️ Sơ Đồ Kiến Trúc Hệ Thống (Architecture)
 
-Trước khi chạy, máy tính của bạn cần cài đặt:
-* **Hệ điều hành**: Windows 10/11, macOS hoặc Linux.
-* **Docker & Docker Compose**: Bản mới nhất (khuyến nghị Docker Desktop).
-* **Java SDK**: Bản 21 LTS trở lên (hoặc Java 25).
-* **Git**: Để quản lý và đồng bộ mã nguồn.
+```
+[ Client / Web / Postman / Mobile ]
+               │
+        HTTPS REST / WebSocket
+               ▼
+  ┌───────────────────────────────┐
+  │         user-service          │ ────▶ PostgreSQL (user_db :5433)
+  │          (Port 8081)          │ ────▶ Redis Cache & Rate-limit (:6379)
+  └───────────────┬───────────────┘
+                  │  (Transactional Outbox Pattern - At-least-once)
+                  ▼
+      [ Apache Kafka (KRaft :9092) ]
+                  │
+        topic: 'user-events'
+                  │
+                  ▼
+  ┌───────────────────────────────┐
+  │     notification-service      │ ────▶ PostgreSQL (notification_db :5433)
+  │          (Port 8082)          │ ────▶ Mailpit SMTP Mock Email (:1025)
+  └───────────────────────────────┘
+                  │ (Poison Message Fallback)
+                  ▼
+     [ topic: 'user-events.DLT' ]
+
+  ┌───────────────────────────────┐
+  │         chat-service          │ ────▶ PostgreSQL (chat_db :5433)
+  │   (Port 8083 - STOMP /ws/chat)│
+  └───────────────────────────────┘
+```
+
+> 📖 **Xem chi tiết tài liệu kiến trúc kỹ thuật:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)  
+> 📖 **Xem quy trình vận hành và xử lý sự cố:** [docs/RUNBOOK.md](docs/RUNBOOK.md)
 
 ---
 
-## ⚡ Hướng dẫn Khởi chạy Từng Bước (Quick Start)
+## 📌 Bảng Cổng & Đường Dẫn Kết Nối (Port Mapping)
 
-### Bước 1: Tải mã nguồn về máy
-```bash
-git clone https://github.com/<tai-khoan-cua-ban>/<ten-repo>.git
-cd <ten-repo>
-```
+| Dịch vụ / Container | Cổng Host | Cổng Container | Mục đích / Đường dẫn |
+| :--- | :--- | :--- | :--- |
+| **user-service** | `8081` | `8081` | REST API, Swagger: [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html) |
+| **notification-service** | `8082` | `8082` | REST API, Swagger: [http://localhost:8082/swagger-ui.html](http://localhost:8082/swagger-ui.html) |
+| **chat-service** | `8083` | `8083` | REST API, Swagger: [http://localhost:8083/swagger-ui.html](http://localhost:8083/swagger-ui.html), WS: `/ws/chat` |
+| **PostgreSQL 16** | `5433` | `5432` | `user_db`, `notification_db`, `chat_db` |
+| **Redis 7** | `6379` | `6379` | Cache & Rate Limiting (`redis_dev_pass`) |
+| **Apache Kafka (KRaft)** | `9092` | `9092` | Message Broker: `localhost:9092` |
+| **Mailpit Web UI** | `8025` | `8025` | Hòm thư giao diện Web: [http://localhost:8025](http://localhost:8025) |
+| **Mailpit SMTP** | `1025` | `1025` | Cổng gửi email SMTP |
 
-### Bước 2: Thiết lập biến môi trường
-Tạo file `.env` từ file mẫu `.env.example`:
-* **Trên Windows (Command Prompt / PowerShell):**
+> **LƯU Ý VỀ CỔNG POSTGRESQL (5433):**  
+> Cổng PostgreSQL trên máy Host được cấu hình là **`5433`** để tránh xung đột với các phiên bản PostgreSQL chạy cổng mặc định `5432` trên máy của bạn.
+
+---
+
+## ⚡ Hướng Dẫn Khởi Chạy Nhanh (≤ 15 Phút)
+
+### 1. Yêu cầu môi trường
+* **Docker & Docker Compose**: Đã cài đặt và đang chạy Docker Desktop.
+* **Java SDK**: Bản 21 LTS trở lên.
+* **Git**: Đã cài đặt.
+
+### 2. Thiết lập cấu hình môi trường
+Tạo file cấu hình bí mật `.env` từ file mẫu:
+* **Windows (PowerShell / Command Prompt):**
   ```powershell
   copy .env.example .env
   ```
-* **Trên macOS / Linux:**
+* **Linux / macOS:**
   ```bash
   cp .env.example .env
   ```
 
-### Bước 3: Khởi động Hạ tầng Docker (PostgreSQL, Redis, Kafka, Mailpit)
-Tại thư mục gốc dự án, chạy lệnh:
-```bash
-docker compose -f docker-compose.infra.yml up -d
-```
-
-Kiểm tra trạng thái các container (phải có chữ `healthy` hoặc `running`):
-```bash
-docker compose -f docker-compose.infra.yml ps
-```
-
-| Dịch vụ | Địa chỉ cổng (Host Port) | Thông tin kết nối |
-| :--- | :--- | :--- |
-| **PostgreSQL** | `localhost:5433` | User: `postgres` / Mật khẩu: trong `.env` |
-| **Redis** | `localhost:6379` | Mật khẩu: `redis_dev_pass` |
-| **Kafka (KRaft)** | `localhost:9092` | Bootstrap server: `localhost:9092` |
-| **Mailpit Web UI** | `http://localhost:8025` | Giao diện hòm thư xem email test |
-| **Mailpit SMTP** | `localhost:1025` | Cổng gửi mail SMTP cho backend |
-
-> **LƯU Ý QUAN TRỌNG VỀ CỔNG POSTGRESQL (5433):**  
-> Dự án map cổng PostgreSQL ra ngoài máy host là **`5433`** (thay vì `5432` mặc định) để tránh xung đột với các phiên bản PostgreSQL đã cài sẵn trên máy tính Windows.
-
----
-
-### Bước 4: Khởi chạy Ứng dụng Backend
-
-Bạn có thể chọn 1 trong 2 cách sau:
-
-#### CÁCH A: Chạy trực tiếp bằng Maven Wrapper (Khuyên dùng khi Dev)
-* **Chạy toàn bộ bài kiểm thử Unit Test:**
-  ```powershell
-  # Windows
-  ./mvnw.cmd clean test
-
-  # Linux / macOS
-  ./mvnw clean test
-  ```
-
-* **Khởi động `user-service`:**
-  ```powershell
-  # Windows
-  ./mvnw.cmd -pl user-service spring-boot:run
-
-  # Linux / macOS
-  ./mvnw -pl user-service spring-boot:run
-  ```
-
-#### CÁCH B: Đóng gói và chạy bằng Docker Container
-Dự án đã có sẵn Dockerfile tối ưu Multi-stage build với Eclipse Temurin JRE 21:
+### 3. Khởi chạy toàn bộ hệ thống bằng 1 lệnh duy nhất
+Tại thư mục gốc dự án:
 ```powershell
-# 1. Đóng gói ứng dụng thành file jar
-./mvnw.cmd -pl user-service clean package -DskipTests
+docker compose up -d --build
+```
+*Lệnh trên sẽ tự động khởi động 4 dịch vụ hạ tầng (Postgres, Redis, Kafka, Mailpit) và build image, khởi chạy cả 3 microservice.*
 
-# 2. Xây dựng Docker Image (Kích thước nén chỉ ~99MB)
-docker build -t user-service:latest -f user-service/Dockerfile .
+Kiểm tra trạng thái các container:
+```powershell
+docker compose ps
+```
+*Tất cả container đều phải hiển thị `healthy` hoặc `Up`.*
 
-# 3. Chạy container user-service gắn vào mạng hạ tầng
-docker run -d --name user-service -p 8081:8081 --network microservice-network user-service:latest
+---
+
+## 🧪 Kiểm Thử Hệ Thống (Testing)
+
+### 1. Chạy toàn bộ Unit & Integration Test (Testcontainers)
+```powershell
+# Chạy toàn bộ test suite trên toàn bộ 4 module
+./mvnw.cmd clean test
+
+# Hoặc trên Linux / macOS:
+./mvnw clean test
+```
+
+### 2. Chạy kịch bản kiểm thử End-to-End tự động (E2E Test)
+Dự án cung cấp sẵn kịch bản PowerShell tự động hóa 8 bước E2E nghiêm ngặt:
+1. Đăng ký tài khoản người dùng mới (`POST /api/v1/users`).
+2. Kiểm tra email chào mừng được gửi tới Mailpit (`http://localhost:8025/api/v1/messages`).
+3. Đăng nhập hệ thống bằng mật khẩu vừa tạo (`POST /api/v1/auth/login`).
+4. Xem thông tin hồ sơ cá nhân (`GET /api/v1/users/me`) kèm xác thực Bearer token.
+5. Đổi mật khẩu (`PUT /api/v1/users/me/password`).
+6. Đăng nhập lại bằng mật khẩu mới.
+7. Đăng xuất thu hồi token (`POST /api/v1/auth/logout`).
+8. Kiểm tra từ chối refresh token đã bị thu hồi (`POST /api/v1/auth/refresh`).
+
+Chạy lệnh:
+```powershell
+powershell -ExecutionPolicy Bypass -File docs/test-e2e.ps1
+```
+*Kết quả: Toàn bộ 8/8 bước pass màu xanh lá (PASSED 100%).*
+
+### 3. Kiểm thử Distributed Tracing (Trace ID)
+Kiểm tra khả năng theo vết xuyên suốt qua User Service, Kafka và Notification Service:
+```powershell
+powershell -ExecutionPolicy Bypass -File docs/test-trace.ps1
 ```
 
 ---
 
-## 🌐 Các Đường Dẫn Kiểm Tra Dịch Vụ
+## 📊 Quan Sát Hệ Thống (Observability & Actuator)
 
-Khi `user-service` khởi chạy thành công trên cổng `8081`:
+Mỗi service cung cấp đầy đủ các cổng giám sát chuẩn Spring Boot Actuator:
 
-* 📖 **Tài liệu API tương tác trực tiếp (Swagger UI):**  
-  👉 [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
-* 📑 **Tài liệu OpenAPI dạng JSON (OpenAPI Spec):**  
-  👉 [http://localhost:8081/v3/api-docs](http://localhost:8081/v3/api-docs)
-* 💓 **Kiểm tra trạng thái sức khỏe dịch vụ (Actuator Health):**  
-  👉 [http://localhost:8081/actuator/health](http://localhost:8081/actuator/health)
-* 📬 **Hộp thư xem Email chào mừng giả lập (Mailpit Web UI):**  
-  👉 [http://localhost:8025](http://localhost:8025)
-
----
-
-## 🛠️ Gọi Thử API Mẫu (cURL)
-
-### 1. Đăng ký tài khoản mới (`POST /api/v1/users`)
-```bash
-curl -X POST http://localhost:8081/api/v1/users \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "SecurePassword123@",
-    "fullName": "Nguyen Van A",
-    "phone": "0987654321"
-  }'
-```
-* **Kết quả trả về:** `HTTP 201 Created` kèm Header `Location` và thông tin User Profile (không chứa mật khẩu).
-
-### 2. Xem hồ sơ cá nhân (`GET /api/v1/users/me`)
-```bash
-curl -X GET http://localhost:8081/api/v1/users/me \
-  -H "X-User-Id: <UUID_CUA_BAN>"
-```
-* **Kết quả trả về:** `HTTP 200 OK` với thông tin cá nhân.
-
-### 3. Đổi mật khẩu (`PUT /api/v1/users/me/password`)
-```bash
-curl -X PUT http://localhost:8081/api/v1/users/me/password \
-  -H "X-User-Id: <UUID_CUA_BAN>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "oldPassword": "SecurePassword123@",
-    "newPassword": "NewPassword456@"
-  }'
-```
-* **Kết quả trả về:** `HTTP 204 No Content`.
+* **Sức khỏe dịch vụ (Health Check):**
+  - `user-service`: [http://localhost:8081/actuator/health](http://localhost:8081/actuator/health)
+  - `notification-service`: [http://localhost:8082/actuator/health](http://localhost:8082/actuator/health)
+  - `chat-service`: [http://localhost:8083/actuator/health](http://localhost:8083/actuator/health)
+* **Số liệu hiệu năng (Metrics):**
+  - `user-service`: [http://localhost:8081/actuator/metrics](http://localhost:8081/actuator/metrics)
+  - `notification-service`: [http://localhost:8082/actuator/metrics](http://localhost:8082/actuator/metrics)
+* **Định dạng Log với Distributed Trace ID:**
+  ```
+  2026-10-12 17:11:27.399 INFO [scheduling-1] [trace-e2e-1621552424] c.e.u.scheduler.OutboxEventProcessor : Phát sự kiện Outbox lên Kafka thành công: traceId [trace-e2e-1621552424]
+  2026-10-12 17:11:28.850 INFO [ntainer#0-0-C-1] [trace-e2e-1621552424] c.e.n.service.impl.EmailServiceImpl : Gửi email chào mừng thành công tới [trace_demo@example.com]
+  ```
 
 ---
 
-## ❓ Xử Lý Sự Cố Thường Gặp (Troubleshooting)
+## 🔒 Danh Mục An Toàn & Bảo Mật Đã Triển Khai (Security Highlights)
 
-1. **Lỗi `Docker daemon is not running`:**  
-   ➡️ Hãy đảm bảo bạn đã bật ứng dụng Docker Desktop trên máy trước khi chạy lệnh docker compose.
-2. **Lỗi `Address already in use: bind` (Trùng cổng):**  
-   ➡️ Kiểm tra xem cổng `5433`, `6379`, `8081` hoặc `8025` có ứng dụng nào khác đang chiếm giữ không.
-3. **Xem toàn bộ lý thuyết và giải thích chi tiết:**  
-   ➡️ Đọc file [KIEN_THUC.md](KIEN_THUC.md) để ôn tập về kiến trúc, bảo mật BCrypt, `@Transactional`, `GlobalExceptionHandler`, và các mẫu thiết kế.
-4. **Xem kế hoạch lộ trình từng bước:**  
-   ➡️ Đọc file [KE_HOACH_USER_NOTIFICATION.md](KE_HOACH_USER_NOTIFICATION.md).
+1. **Không lưu trữ Secret trong Git**: Toàn bộ mật khẩu, thông tin kết nối và khóa JWT Secret được tách biệt hoàn toàn vào `.env` (file mẫu `.env.example`).
+2. **Mật khẩu & Token**: Mật khẩu băm an toàn qua `BCryptPasswordEncoder` (rounds 12). Refresh Token được băm SHA-256 trong Database và tự động xoay vòng (Rotation) khi sử dụng.
+3. **Bảo mật phản hồi xác thực**: Lỗi đăng nhập trả về thông báo chung để chống tấn công dò tìm tài khoản (User Enumeration).
+4. **Phân vùng dữ liệu an toàn**: Mỗi microservice sở hữu cơ sở dữ liệu riêng biệt (`user_db`, `notification_db`, `chat_db`), kết nối độc lập qua tài khoản người dùng DB riêng.
+5. **Docker Non-Root Security**: Mọi Dockerfile đều cấu hình chạy dưới người dùng bị giới hạn đặc quyền `appuser` (UID 1001).
+6. **Bảo vệ XSS & Injection**: Escape ký tự HTML trên template email (`HtmlUtils.htmlEscape`) và validate input qua Jakarta Validation.
