@@ -72,3 +72,8 @@ management:
   endpoint:
     health:
       show-details: always
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%15.15t] [%X{traceId:-}] %-40.40logger{39} : %m%n"
+

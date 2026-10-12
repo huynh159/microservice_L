@@ -8,17 +8,19 @@ public class EventEnvelope<T> {
     private int version = 1;
     private Instant occurredAt;
     private String source;
+    private String traceId;
     private T payload;
 
     public EventEnvelope() {
     }
 
-    public EventEnvelope(String eventId, String eventType, int version, Instant occurredAt, String source, T payload) {
+    public EventEnvelope(String eventId, String eventType, int version, Instant occurredAt, String source, String traceId, T payload) {
         this.eventId = eventId;
         this.eventType = eventType;
         this.version = version;
         this.occurredAt = occurredAt;
         this.source = source;
+        this.traceId = traceId;
         this.payload = payload;
     }
 
@@ -66,6 +68,14 @@ public class EventEnvelope<T> {
         this.source = source;
     }
 
+    public String getTraceId() {
+        return traceId;
+    }
+
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
+    }
+
     public T getPayload() {
         return payload;
     }
@@ -80,6 +90,7 @@ public class EventEnvelope<T> {
         private int version = 1;
         private Instant occurredAt;
         private String source;
+        private String traceId;
         private T payload;
 
         public Builder<T> eventId(String eventId) {
@@ -107,13 +118,18 @@ public class EventEnvelope<T> {
             return this;
         }
 
+        public Builder<T> traceId(String traceId) {
+            this.traceId = traceId;
+            return this;
+        }
+
         public Builder<T> payload(T payload) {
             this.payload = payload;
             return this;
         }
 
         public EventEnvelope<T> build() {
-            return new EventEnvelope<>(eventId, eventType, version, occurredAt, source, payload);
+            return new EventEnvelope<>(eventId, eventType, version, occurredAt, source, traceId, payload);
         }
     }
 }

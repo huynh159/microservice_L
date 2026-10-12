@@ -50,13 +50,19 @@ public class OutboxServiceImpl implements OutboxService {
         UUID eventId = UUID.randomUUID();
         Instant now = Instant.now();
 
-        // 1. Đóng gói vào Envelope chuẩn theo đặc tả Mục 3.5
+        String traceId = org.slf4j.MDC.get("traceId");
+        if (traceId == null || traceId.trim().isEmpty()) {
+            traceId = UUID.randomUUID().toString();
+        }
+
+        // 1. Đóng gói vào Envelope chuẩn theo đặc tả Mục 3.5 kèm traceId
         EventEnvelope<T> envelope = EventEnvelope.<T>builder()
                 .eventId(eventId.toString())
                 .eventType(eventType)
                 .version(EVENT_VERSION)
                 .occurredAt(now)
                 .source(SOURCE_SERVICE)
+                .traceId(traceId)
                 .payload(eventPayload)
                 .build();
 

@@ -4,6 +4,7 @@ import com.example.userservice.entity.OutboxEvent;
 import com.example.userservice.repository.OutboxEventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.KafkaOperations;
@@ -39,6 +40,7 @@ public class OutboxEventProcessor {
 
     private final OutboxEventRepository outboxEventRepository;
     private final KafkaOperations<String, String> kafkaTemplate;
+    private final com.fasterxml.jackson.databind.ObjectMapper objectMapper;
 
     @Value("${kafka.topics.user-events:user-events}")
     private String topicName;
@@ -50,8 +52,18 @@ public class OutboxEventProcessor {
             OutboxEventRepository outboxEventRepository,
             KafkaOperations<String, String> kafkaTemplate
     ) {
+        this(outboxEventRepository, kafkaTemplate, new com.fasterxml.jackson.databind.ObjectMapper());
+    }
+
+    @Autowired
+    public OutboxEventProcessor(
+            OutboxEventRepository outboxEventRepository,
+            KafkaOperations<String, String> kafkaTemplate,
+            com.fasterxml.jackson.databind.ObjectMapper objectMapper
+    ) {
         this.outboxEventRepository = outboxEventRepository;
         this.kafkaTemplate = kafkaTemplate;
+        this.objectMapper = objectMapper;
     }
 
     @Scheduled(fixedDelayString = "${outbox.polling.interval-ms:2000}")
@@ -67,8 +79,20 @@ public class OutboxEventProcessor {
                 unpublishedEvents.size(), topicName);
 
         for (OutboxEvent event : unpublishedEvents) {
+            String traceId = null;
             try {
-                // Đẩy message lên Kafka với key = aggregateId (userId)
+                com.fasterxml.jackson.databind.JsonNode rootNode = objectMapper.readTree(event.getPayload());
+                if (rootNode != null && rootNode.hasNonNull("traceId")) {
+                    traceId = rootNode.get("traceId").asText();
+                }
+            } catch (Exception ignored) {
+            }
+
+            if (traceId != null && !traceId.isEmpty()) {
+                org.slf4j.MDC.put("traceId", traceId);
+            }
+
+            try {
                 kafkaTemplate.send(topicName, event.getAggregateId(), event.getPayload())
                         .get(5, TimeUnit.SECONDS);
 
@@ -76,13 +100,15 @@ public class OutboxEventProcessor {
                 event.markAsPublished();
                 outboxEventRepository.save(event);
 
-                log.info("Phát sự kiện Outbox lên Kafka thành công: id [{}], type [{}], key [{}]",
-                        event.getId(), event.getEventType(), event.getAggregateId());
+                log.info("Phát sự kiện Outbox lên Kafka thành công: id [{}], type [{}], key [{}], traceId [{}]",
+                        event.getId(), event.getEventType(), event.getAggregateId(), traceId);
             } catch (Exception e) {
                 log.error("Lỗi khi phát sự kiện Outbox id [{}], type [{}] lên Kafka. Giữ nguyên để thử lại sau. Chi tiết: {}",
                         event.getId(), event.getEventType(), e.getMessage());
                 // Dừng vòng lặp của batch này nếu Kafka có vấn đề để tránh timeout liên tiếp
                 break;
+            } finally {
+                org.slf4j.MDC.remove("traceId");
             }
         }
     }

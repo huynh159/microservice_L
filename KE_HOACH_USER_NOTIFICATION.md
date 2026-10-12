@@ -488,6 +488,6 @@ Một bước chỉ hoàn thành khi: (1) mã biên dịch và chạy được; 
 - [x] 4.4 Dockerfile notification-service
 - [x] 5.1 Compose đầy đủ
 - [x] 5.2 E2E
-- [ ] 6.1 Quan sát cơ bản
+- [x] 6.1 Quan sát cơ bản
 - [ ] 6.2 CI
 - [ ] 6.3 Tài liệu & rà soát

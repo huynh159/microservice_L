@@ -65,6 +65,16 @@ public class UserEventsConsumer {
      * - @Header(KafkaHeaders.RECEIVED_PARTITION): Số hiệu Partition chứa tin nhắn này.
      * - @Header(KafkaHeaders.OFFSET): Số thứ tự (vị trí trang sách) của tin nhắn trong Partition.
      */
+    public void consumeUserEvent(
+            String rawMessage,
+            String key,
+            String topic,
+            Integer partition,
+            Long offset
+    ) {
+        consumeUserEvent(rawMessage, key, topic, partition, offset, null);
+    }
+
     @KafkaListener(
             topics = "${kafka.topics.user-events:user-events}",
             groupId = "${spring.kafka.consumer.group-id:notification-service-group}",
@@ -75,12 +85,16 @@ public class UserEventsConsumer {
             @Header(value = KafkaHeaders.RECEIVED_KEY, required = false) String key,
             @Header(value = KafkaHeaders.RECEIVED_TOPIC, required = false) String topic,
             @Header(value = KafkaHeaders.RECEIVED_PARTITION, required = false) Integer partition,
-            @Header(value = KafkaHeaders.OFFSET, required = false) Long offset
+            @Header(value = KafkaHeaders.OFFSET, required = false) Long offset,
+            @Header(value = "X-Trace-Id", required = false) Object traceIdHeader
     ) {
-        log.debug("Nhận raw message từ topic [{}], partition [{}], offset [{}], key [{}]: {}",
-                topic, partition, offset, key, rawMessage);
+        String traceId = null;
+        if (traceIdHeader instanceof byte[]) {
+            traceId = new String((byte[]) traceIdHeader, java.nio.charset.StandardCharsets.UTF_8);
+        } else if (traceIdHeader instanceof String) {
+            traceId = (String) traceIdHeader;
+        }
 
-        // BƯỚC 1: Kiểm tra tính hợp lệ cơ bản (Message không được rỗng)
         if (rawMessage == null || rawMessage.trim().isEmpty()) {
             log.error("Nhận được message rỗng. Ném IllegalArgumentException để đẩy sang DLT.");
             throw new IllegalArgumentException("Kafka message body không được rỗng");
@@ -91,22 +105,31 @@ public class UserEventsConsumer {
         UserCreatedEvent userCreatedEvent = null;
 
         // BƯỚC 2: PHÂN TÍCH CÚ PHÁP (JSON PARSING & SCHEMA VALIDATION)
-        // ----------------------------------------------------------------------
-        // NGUYÊN TẮC QUAN TRỌNG:
-        // Nếu JSON sai cú pháp hoặc thiếu trường bắt buộc (eventId, eventType), đây là LỖI VĨNH VIỄN (Fatal).
-        // Ta cố tình ném ra `IllegalArgumentException` để DefaultErrorHandler bắt được và ĐẨY THẲNG SANG DLT,
-        // TUYỆT ĐỐI KHÔNG RETRY để tránh làm treo hoặc nghẽn hàng đợi Kafka!
         try {
             JsonNode rootNode = objectMapper.readTree(rawMessage);
 
-            // Kiểm tra phong bì (Envelope) có đủ eventId và eventType không
             if (rootNode == null || !rootNode.hasNonNull("eventId") || !rootNode.hasNonNull("eventType")) {
                 log.error("Message thiếu trường bắt buộc trong envelope (eventId hoặc eventType): {}", rawMessage);
                 throw new IllegalArgumentException("Sự kiện thiếu thông tin envelope bắt buộc: " + rawMessage);
             }
 
+            // Nếu chưa lấy được traceId từ Kafka Header, thử lấy từ Envelope JSON
+            if ((traceId == null || traceId.trim().isEmpty()) && rootNode.hasNonNull("traceId")) {
+                traceId = rootNode.get("traceId").asText();
+            }
+
+            if (traceId == null || traceId.trim().isEmpty()) {
+                traceId = java.util.UUID.randomUUID().toString();
+            }
+
+            // Thiết lập traceId vào MDC để mọi log tiếp theo đều in kèm traceId
+            org.slf4j.MDC.put("traceId", traceId);
+
             eventId = rootNode.get("eventId").asText();
             eventType = rootNode.get("eventType").asText();
+
+            log.debug("Nhận raw message từ topic [{}], partition [{}], offset [{}], key [{}], traceId [{}]: {}",
+                    topic, partition, offset, key, traceId, rawMessage);
 
             // Chỉ quan tâm sự kiện tạo người dùng mới để gửi email chào mừng
             if ("UserCreatedEvent".equals(eventType)) {
@@ -124,30 +147,27 @@ public class UserEventsConsumer {
                 }
             } else {
                 // Các sự kiện khác (UserUpdatedEvent, UserDeletedEvent...) hiện tại chưa cần gửi thông báo
-                log.info("Bỏ qua sự kiện không cần gửi thông báo: eventType [{}], eventId [{}]", eventType, eventId);
+                log.info("Bỏ qua sự kiện không cần gửi thông báo: eventType [{}], eventId [{}], traceId [{}]",
+                        eventType, eventId, traceId);
                 return;
             }
 
         } catch (IllegalArgumentException e) {
-            // Ném thẳng để ErrorHandler bắt và chuyển sang DLT
             throw e;
         } catch (Exception e) {
             log.error("Không thể phân tích cú pháp message JSON: {}. Chi tiết lỗi: {}", rawMessage, e.getMessage());
             throw new IllegalArgumentException("Lỗi phân tích cú pháp JSON message: " + e.getMessage(), e);
         }
 
-        // BƯỚC 3: XỬ LÝ NGHIỆP VỤ (GỬI EMAIL & LƯU DATABASE)
-        // ----------------------------------------------------------------------
-        // NGUYÊN TẮC:
-        // Đặt ngoài khối try-catch JSON ở trên để nếu có lỗi tạm thời (Transient) như:
-        // - Mạng chập chờn
-        // - Máy chủ gửi email (SMTP) khởi động lại
-        // Thì ngoại lệ sẽ được bung ra ngoài cho Spring Kafka ErrorHandler kích hoạt
-        // cơ chế Exponential Backoff RETRY (thử lại sau 500ms -> 1000ms -> 2000ms)!
-        log.info("Nhận sự kiện UserCreatedEvent thành công: eventId [{}], userId [{}], email [{}], fullName [{}]",
-                eventId, userCreatedEvent.getUserId(), userCreatedEvent.getEmail(), userCreatedEvent.getFullName());
+        // BƯỚC 3: XỬ LÝ NGHIỆP VỤ (GỬI EMAIL & LƯU DATABASE) KÈM MDC TRACE ID
+        try {
+            log.info("Nhận sự kiện UserCreatedEvent thành công: eventId [{}], userId [{}], email [{}], fullName [{}], traceId [{}]",
+                    eventId, userCreatedEvent.getUserId(), userCreatedEvent.getEmail(), userCreatedEvent.getFullName(), traceId);
 
-        handleUserCreated(eventId, userCreatedEvent);
+            handleUserCreated(eventId, userCreatedEvent);
+        } finally {
+            org.slf4j.MDC.remove("traceId");
+        }
     }
 
     /**
