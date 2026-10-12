@@ -36,6 +36,12 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
         this.redisOperations = redisOperations;
     }
 
+    /**
+     * KIỂM TRA TÀI KHOẢN CÓ ĐANG BỊ KHÓA TẠM THỜI HAY KHÔNG:
+     * - Đọc số lần nhập sai từ Redis key: "login:attempts:<email>".
+     * - Nếu số lần >= MAX_ATTEMPTS (5 lần), trả về true (đang bị khóa tạm thời).
+     * - Graceful degradation: Nếu Redis mất kết nối, log cảnh báo và trả về false để không làm gián đoạn người dùng.
+     */
     @Override
     public boolean isBlocked(String email) {
         if (redisOperations == null || email == null) {
@@ -54,6 +60,12 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
         return false;
     }
 
+    /**
+     * GHI NHẬN MỘT LẦN NHẬP SAI MẬT KHẨU:
+     * - Sử dụng lệnh nguyên tử (atomic) INCR của Redis để tăng số lần nhập sai.
+     * - Ở lần nhập sai đầu tiên (attempts == 1), đặt thời gian hết hạn (TTL) là 15 phút (LOCK_DURATION).
+     * - Sau 15 phút, Redis tự động giải phóng key này, tài khoản được mở khóa tự động.
+     */
     @Override
     public void recordFailedAttempt(String email) {
         if (redisOperations == null || email == null) {
@@ -61,7 +73,9 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
         }
         try {
             String key = buildKey(email);
+            // Tăng biến đếm nguyên tử trong Redis
             Long attempts = redisOperations.opsForValue().increment(key);
+            // Đặt hạn 15 phút ngay lần nhập sai đầu tiên
             if (attempts != null && attempts == 1) {
                 redisOperations.expire(key, LOCK_DURATION);
             }
@@ -71,6 +85,10 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
         }
     }
 
+    /**
+     * XÓA BỘ ĐẾM SỐ LẦN NHẬP SAI KHI ĐĂNG NHẬP THÀNH CÔNG:
+     * - Khi người dùng nhập đúng email và mật khẩu, xóa ngay key khỏi Redis để đặt lại từ đầu.
+     */
     @Override
     public void resetAttempts(String email) {
         if (redisOperations == null || email == null) {
@@ -84,6 +102,10 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
         }
     }
 
+    /**
+     * TẠO KEY REDIS CHUẨN HÓA:
+     * - Chuyển email về chữ thường và xóa khoảng trắng thừa: "login:attempts:user@example.com"
+     */
     private String buildKey(String email) {
         return KEY_PREFIX + email.toLowerCase().trim();
     }

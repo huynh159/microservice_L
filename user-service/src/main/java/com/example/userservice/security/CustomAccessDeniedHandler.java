@@ -38,15 +38,18 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             HttpServletResponse response,
             AccessDeniedException accessDeniedException
     ) throws IOException {
+        // Thiết lập HTTP Status 403 Forbidden và Content-Type là application/json
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
 
+        // Lấy Trace ID từ Header để theo dõi vết lỗi (Distributed Tracing), nếu không có thì tự sinh mới
         String traceId = request.getHeader("X-Trace-Id");
         if (traceId == null || traceId.isBlank()) {
             traceId = UUID.randomUUID().toString();
         }
 
+        // Tạo đối tượng ErrorResponse chuẩn chung của hệ thống Microservices
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(Instant.now())
                 .status(HttpStatus.FORBIDDEN.value())
@@ -57,6 +60,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                 .traceId(traceId)
                 .build();
 
+        // Chuyển đối tượng ErrorResponse thành chuỗi JSON và ghi thẳng ra response body
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 }

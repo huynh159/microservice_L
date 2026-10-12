@@ -41,10 +41,18 @@ public class UserPrincipal implements UserDetails {
         this.authorities = authorities != null ? authorities : Collections.emptyList();
     }
 
+    /**
+     * HÀM FACTORY TẠO NHANH USER PRINCIPAL TỪ CLAIMS CỦA TOKEN JWT:
+     * - Nhận vào User ID, Email và Set các chuỗi role (ví dụ: ["ROLE_USER", "ROLE_ADMIN"] hoặc ["USER", "ADMIN"]).
+     * - Chuẩn hóa đảm bảo mọi role đều có tiền tố "ROLE_" theo đúng chuẩn Spring Security quy định.
+     * - Chuyển đổi mỗi chuỗi role thành một đối tượng SimpleGrantedAuthority.
+     */
     public static UserPrincipal create(UUID id, String email, Set<String> roles) {
         Collection<GrantedAuthority> authorities = roles == null ? Collections.emptyList() :
                 roles.stream()
+                        // Đảm bảo tên vai trò luôn bắt đầu bằng "ROLE_" để tương thích với hasRole()
                         .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
+                        // Bọc thành đối tượng SimpleGrantedAuthority của Spring Security
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toSet());
         return new UserPrincipal(id, email, authorities);
@@ -58,16 +66,27 @@ public class UserPrincipal implements UserDetails {
         return email;
     }
 
+    /**
+     * Trả về định danh người dùng: Ở đây trả về UUID dạng String (hoặc Email nếu id null)
+     * Giúp khi gọi authentication.getName() sẽ nhận được chính xác User ID.
+     */
     @Override
     public String getUsername() {
         return id != null ? id.toString() : email;
     }
 
+    /**
+     * Trong kiến trúc JWT Stateless, password hash không được lưu trong Principal trên RAM
+     * nhằm tăng cường bảo mật và tiết kiệm tài nguyên.
+     */
     @Override
     public String getPassword() {
-        return null; // Không lưu password hash trong context của JWT stateless
+        return null;
     }
 
+    /**
+     * Trả về danh sách vai trò / quyền hạn để Spring Security dùng khi kiểm tra @PreAuthorize / hasRole()
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
@@ -75,21 +94,21 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return true; // Tài khoản không bị hết hạn
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return true; // Trạng thái khóa được kiểm tra chủ động lúc đăng nhập / gọi service
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return true; // Mật khẩu không hết hạn
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return true; // Tài khoản đang được kích hoạt
     }
 }

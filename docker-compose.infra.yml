@@ -14,6 +14,9 @@ services:
       NOTIFICATION_DB_NAME: ${NOTIFICATION_DB_NAME}
       NOTIFICATION_DB_USER: ${NOTIFICATION_DB_USER}
       NOTIFICATION_DB_PASSWORD: ${NOTIFICATION_DB_PASSWORD}
+      CHAT_DB_NAME: ${CHAT_DB_NAME:-chat_db}
+      CHAT_DB_USER: ${CHAT_DB_USER:-chat_service_db_user}
+      CHAT_DB_PASSWORD: ${CHAT_DB_PASSWORD:-chat_service_db_pass}
     ports:
       - "${POSTGRES_PORT:-5433}:5432"
     volumes:

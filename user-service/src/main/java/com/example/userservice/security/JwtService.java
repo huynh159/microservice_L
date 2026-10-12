@@ -55,7 +55,8 @@ public class JwtService {
             @Value("${jwt.expiration-ms:900000}") long expirationMs,
             @Value("${jwt.refresh-expiration-ms:604800000}") long refreshExpirationMs
     ) {
-        // Đảm bảo secret đủ độ dài cho thuật toán HMAC-SHA256 (ít nhất 256 bits = 32 bytes)
+        // Thuật toán HMAC-SHA256 yêu cầu khóa bí mật (Secret Key) có độ dài tối thiểu 256 bits (32 bytes).
+        // Nếu chuỗi cấu hình ngắn hơn 32 bytes, tự động đệm (pad) thêm byte 0 để tránh lỗi WeakKeyException khi khởi động.
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         if (keyBytes.length < 32) {
             byte[] padded = new byte[32];
@@ -69,12 +70,20 @@ public class JwtService {
     }
 
     /**
-     * Tạo Access Token (JWT) ngắn hạn (15 phút)
+     * TẠO ACCESS TOKEN (JWT) NGẮN HẠN:
+     * - Hạn dùng mặc định: 15 phút (900.000 ms).
+     * - Đóng gói các Claims thiết yếu:
+     *   + sub (Subject): UUID của người dùng.
+     *   + email: Địa chỉ email.
+     *   + roles: Danh sách vai trò quyền hạn (ví dụ ["ROLE_USER"]).
+     *   + jti (JWT ID): Chuỗi UUID ngẫu nhiên để chống tấn công phát lại (Replay Attack).
+     *   + iat & exp: Thời gian phát hành và thời gian hết hạn.
+     * - Ký số bằng khóa bí mật (signingKey) với thuật toán HMAC-SHA256.
      */
     public String generateAccessToken(UUID userId, String email, Set<String> roles) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationMs);
-        String jti = UUID.randomUUID().toString();
+        String jti = UUID.randomUUID().toString(); // Mã định danh duy nhất cho từng token
 
         return Jwts.builder()
                 .subject(userId.toString())
@@ -83,12 +92,15 @@ public class JwtService {
                 .id(jti)
                 .issuedAt(now)
                 .expiration(expiryDate)
-                .signWith(signingKey)
-                .compact();
+                .signWith(signingKey) // Ký số toàn vẹn dữ liệu
+                .compact();           // Đóng gói thành chuỗi Base64URL: Header.Payload.Signature
     }
 
     /**
-     * Sinh Refresh Token ngẫu nhiên (dạng chuỗi bảo mật cao 64 ký tự hex)
+     * SINH REFRESH TOKEN NGẪU NHIÊN:
+     * - Ghép 2 chuỗi UUID ngẫu nhiên và bỏ dấu gạch nối để tạo chuỗi Hex dài 64 ký tự.
+     * - Độ hỗn loạn (Entropy) cực cao, không thể đoán mò hay tấn công vét cạn.
+     * - Chuỗi thô này được gửi về cho Client giữ an toàn.
      */
     public String generateRefreshToken() {
         return UUID.randomUUID().toString().replace("-", "")
@@ -96,7 +108,11 @@ public class JwtService {
     }
 
     /**
-     * Băm chuỗi Refresh Token bằng thuật toán SHA-256 để lưu an toàn vào DB
+     * BĂM CHUỖI REFRESH TOKEN BẰNG THUẬT TOÁN SHA-256 ĐỂ LƯU DATABASE:
+     * - Tại sao dùng SHA-256?
+     *   1. Tốc độ tra cứu nhanh: Client liên tục gọi refresh token, SHA-256 giúp DB tìm theo index cực nhanh.
+     *   2. Bảo mật: Token là chuỗi ngẫu nhiên 64 ký tự hex nên không sợ bị vét cạn như mật khẩu ngắn.
+     *   3. Chống rò rỉ: Nếu Database bị lộ, hacker chỉ thấy chuỗi băm chứ không thể lấy chuỗi này gọi API được.
      */
     public static String hashToken(String rawToken) {
         if (rawToken == null || rawToken.isBlank()) {

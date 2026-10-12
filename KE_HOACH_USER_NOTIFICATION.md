@@ -479,7 +479,7 @@ Một bước chỉ hoàn thành khi: (1) mã biên dịch và chạy được; 
 - [x] 3.3 Service: đăng ký & profile
 - [x] 3.4 Controller & lỗi
 - [x] 3.5 Xác thực JWT (login/refresh/logout)
-- [ ] 3.6 Cache Redis
+- [x] 3.6 Cache Redis
 - [ ] 3.7 Outbox + Kafka producer
 - [ ] 3.8 Dockerfile user-service
 - [ ] 4.1 Khung notification & consumer

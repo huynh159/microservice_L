@@ -39,15 +39,18 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             HttpServletResponse response,
             AuthenticationException authException
     ) throws IOException {
+        // Thiết lập HTTP Status 401 Unauthorized và Content-Type là application/json
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
 
+        // Lấy Trace ID từ Header để truy vết lỗi xuyên suốt các microservice
         String traceId = request.getHeader("X-Trace-Id");
         if (traceId == null || traceId.isBlank()) {
             traceId = UUID.randomUUID().toString();
         }
 
+        // Tạo đối tượng phản hồi lỗi JSON theo format ErrorResponse thống nhất của dự án
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(Instant.now())
                 .status(HttpStatus.UNAUTHORIZED.value())
@@ -58,6 +61,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 .traceId(traceId)
                 .build();
 
+        // Serialize đối tượng Java thành JSON và ghi vào HttpServletResponse
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 }

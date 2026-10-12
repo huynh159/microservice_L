@@ -18,6 +18,7 @@ Tài liệu này tổng hợp toàn bộ các kiến thức lập trình, kiến
 11. [Chống Brute-force Đăng nhập với Redis (HTTP 429)](#11-chống-brute-force-đăng-nhập-với-redis-http-429)
 12. [Phân quyền RBAC & Thu hồi Token khi Đổi mật khẩu](#12-phân-quyền-rbac--thu-hồi-token-khi-đổi-mật-khẩu)
 13. [HƯỚNG DẪN CHẠY DỰ ÁN TRÊN LAPTOP Ở NHÀ](#13-hướng-dẫn-chạy-dự-án-trên-laptop-ở-nhà)
+14. [CHỨC NĂNG CHAT REALTIME VỚI WEBSOCKET STOMP & GIAO TIẾP MICROSERVICES](#14-chức-năng-chat-realtime-với-websocket-stomp--giao-tiếp-microservices)
 
 ---
 
@@ -321,3 +322,38 @@ docker build -t user-service:1.0.0 -f user-service/Dockerfile .
 # 3. Chạy container user-service kết nối vào mạng infra
 docker run -d --name user-service -p 8081:8081 --network microservice-network user-service:1.0.0
 ```
+
+---
+
+## 14. CHỨC NĂNG CHAT REALTIME VỚI WEBSOCKET STOMP & GIAO TIẾP MICROSERVICES
+
+### 14.1 Bản chất WebSocket vs HTTP Polling
+- **HTTP (Request-Response):** Muốn kiểm tra tin nhắn mới, client phải liên tục gửi request thăm dò (Polling). Tốn băng thông và tạo độ trễ lớn.
+- **WebSocket:** Nâng cấp từ kết nối HTTP thông qua cú bắt tay (Handshake: `Upgrade: websocket`). Tạo ra đường ống TCP 2 chiều (Full-Duplex) giữ mở liên tục. Server có thể chủ động đẩy (Push) dữ liệu xuống client ngay lập tức với độ trễ tính bằng mili-giây.
+
+### 14.2 Giao thức STOMP (Simple Text Oriented Messaging Protocol)
+- STOMP là giao thức con (sub-protocol) chạy trên WebSocket, bổ sung ngữ nghĩa gửi nhận tin nhắn:
+  - `CONNECT`: Bắt đầu phiên kết nối, gửi kèm Token xác thực.
+  - `SUBSCRIBE`: Lắng nghe kênh tin nhắn (`/topic/rooms.{roomId}` hoặc `/topic/admin/inbox`).
+  - `SEND`: Gửi tin nhắn đến địa chỉ đích (`/app/chat.sendMessage`).
+  - `MESSAGE`: Server chuyển tiếp tin nhắn đến người nhận.
+
+### 14.3 Xác thực Stateless JWT tại `ChannelInterceptor`
+- Client gửi Header `Authorization: Bearer <token>` trong frame STOMP `CONNECT`.
+- `WebSocketAuthChannelInterceptor` chặn frame, giải mã claims bằng khóa `JWT_SECRET`, tạo `UserPrincipal` và gán vào `accessor.setUser(authentication)`.
+- `chat-service` hoàn toàn không cần truy vấn Database của `user-service`, đảm bảo tính mở rộng cao (Stateless Microservices).
+
+### 14.4 Giao tiếp Microservices & Kỹ thuật Token Relay (RestClient)
+- Khi Admin mở xem chi tiết phòng chat, `chat-service` cần lấy thêm họ tên, avatar của khách hàng từ `user-service`.
+- `chat-service` sử dụng Spring `RestClient` gọi HTTP GET `http://localhost:8081/api/v1/users/{id}`, đồng thời **truyền tiếp (Relay)** token của Admin qua header `Authorization`.
+- Có xử lý chịu lỗi (Graceful degradation): Nếu `user-service` tạm thời không phản hồi, `chat-service` dùng thông tin dự phòng chứ không làm sập luồng chat của khách hàng.
+
+### 14.5 Cách mở giao diện Demo để thử nghiệm
+1. Khởi động `chat-service` trên cổng `8083`.
+2. Mở trình duyệt vào đường dẫn:
+   👉 `http://localhost:8083/chat-demo.html`
+3. Màn hình chia đôi:
+   - Cột trái: Khách hàng (User).
+   - Cột phải: Quản trị viên (Admin).
+   - Dán token của User và Admin để quan sát tin nhắn nhảy qua lại trong mili-giây!
+

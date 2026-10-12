@@ -1,0 +1,52 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: chat-service
+  profiles:
+    active: dev
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${CHAT_DB_NAME:chat_db}
+    username: ${CHAT_DB_USER:chat_service_db_user}
+    password: ${CHAT_DB_PASSWORD:chat_service_db_pass}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+# Cấu hình bảo mật JWT dùng chung với user-service (Được ký bởi IdP)
+jwt:
+  secret: ${JWT_SECRET:super_secret_jwt_key_that_is_at_least_256_bits_long_for_security_reasons}
+
+# Địa chỉ gọi REST sang user-service để lấy thêm thông tin chi tiết (Token Relay)
+services:
+  user-service:
+    url: ${USER_SERVICE_URL:http://localhost:8081}

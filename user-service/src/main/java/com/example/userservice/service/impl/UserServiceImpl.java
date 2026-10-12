@@ -17,6 +17,9 @@ import com.example.userservice.repository.RefreshTokenRepository;
 import com.example.userservice.repository.RoleRepository;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.service.UserService;
+import com.example.userservice.config.RedisConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -114,8 +117,17 @@ public class UserServiceImpl implements UserService {
 
     /**
      * XEM THÔNG TIN CÁ NHÂN (PROFILE)
+     * KIẾN THỨC CỐT LÕI: @Cacheable (Cache-Aside Pattern)
+     * - key = "#userId": Dùng ID người dùng làm định danh khóa trong Redis (ví dụ: "user_profiles::UUID").
+     * - Khi có request gọi vào:
+     *   1. Spring Cache tự động tìm trong Redis key này trước.
+     *   2. Nếu TÌM THẤY (Cache Hit): Trả ngay dữ liệu từ RAM của Redis về, hàm bên dưới KHÔNG ĐƯỢC CHẠY.
+     *      -> Giảm tải 100% truy vấn SELECT cho PostgreSQL Database!
+     *   3. Nếu KHÔNG THẤY (Cache Miss): Thực thi hàm bên dưới (truy vấn DB), lấy được dữ liệu xong
+     *      sẽ tự động ghi vào Redis với TTL là 10 phút, rồi mới trả về cho Client.
      */
     @Override
+    @Cacheable(value = RedisConfig.USER_PROFILE_CACHE, key = "#userId")
     public UserProfileResponse getProfile(UUID userId) {
         User user = findUserByIdOrThrow(userId);
         return userMapper.toProfileResponse(user);
@@ -123,9 +135,14 @@ public class UserServiceImpl implements UserService {
 
     /**
      * CẬP NHẬT THÔNG TIN CÁ NHÂN (Họ tên, SĐT, Avatar)
+     * KIẾN THỨC CỐT LÕI: @CacheEvict (Cache Invalidation)
+     * - Khi dữ liệu người dùng thay đổi trong Database, dữ liệu cũ trong Redis sẽ trở thành "dữ liệu thiu" (Stale Data).
+     * - @CacheEvict(key = "#userId"): Xóa ngay lập tức key của userId này khỏi Redis.
+     * - Lần gọi getProfile tiếp theo sẽ bị Cache Miss -> tự động đọc dữ liệu mới nhất từ Database và nạp lại vào Redis.
      */
     @Override
     @Transactional
+    @CacheEvict(value = RedisConfig.USER_PROFILE_CACHE, key = "#userId")
     public UserProfileResponse updateProfile(UUID userId, UserUpdateRequest request) {
         User user = findUserByIdOrThrow(userId);
 
@@ -141,9 +158,11 @@ public class UserServiceImpl implements UserService {
 
     /**
      * ĐỔI MẬT KHẨU
+     * - Xóa cache profile để đảm bảo tính an toàn dữ liệu và đồng bộ trạng thái.
      */
     @Override
     @Transactional
+    @CacheEvict(value = RedisConfig.USER_PROFILE_CACHE, key = "#userId")
     public void changePassword(UUID userId, ChangePasswordRequest request) {
         User user = findUserByIdOrThrow(userId);
 
@@ -169,8 +188,10 @@ public class UserServiceImpl implements UserService {
 
     /**
      * ADMIN: LẤY THÔNG TIN USER THEO ID
+     * - Tận dụng chung vùng cache "user_profiles" theo userId để tăng tốc độ phản hồi.
      */
     @Override
+    @Cacheable(value = RedisConfig.USER_PROFILE_CACHE, key = "#userId")
     public UserProfileResponse getUserById(UUID userId) {
         User user = findUserByIdOrThrow(userId);
         return userMapper.toProfileResponse(user);
@@ -213,9 +234,12 @@ public class UserServiceImpl implements UserService {
 
     /**
      * ADMIN: KHÓA / MỞ KHÓA TÀI KHOẢN (Cập nhật trạng thái)
+     * - @CacheEvict: Xóa cache ngay lập tức khi Admin khóa tài khoản, tránh trường hợp tài khoản đã bị khóa
+     *   nhưng profile trong Redis vẫn hiển thị trạng thái cũ trong suốt 10 phút.
      */
     @Override
     @Transactional
+    @CacheEvict(value = RedisConfig.USER_PROFILE_CACHE, key = "#userId")
     public UserProfileResponse updateStatus(UUID userId, UserStatusUpdateRequest request) {
         User user = findUserByIdOrThrow(userId);
         user.setStatus(request.getStatus());
@@ -231,9 +255,11 @@ public class UserServiceImpl implements UserService {
      *   Notification đang lưu userId này sẽ bị mất tham chiếu lịch sử (mồ côi dữ liệu).
      * - Xóa mềm chỉ đổi trạng thái status = DELETED. Người dùng không thể đăng nhập được nữa,
      *   nhưng dữ liệu cũ và tính toàn vẹn hệ thống vẫn được bảo tồn phục vụ báo cáo / kiểm toán.
+     * - @CacheEvict: Xóa ngay cache profile khi tài khoản bị xóa mềm.
      */
     @Override
     @Transactional
+    @CacheEvict(value = RedisConfig.USER_PROFILE_CACHE, key = "#userId")
     public void deleteUser(UUID userId) {
         User user = findUserByIdOrThrow(userId);
         user.setStatus(UserStatus.DELETED);

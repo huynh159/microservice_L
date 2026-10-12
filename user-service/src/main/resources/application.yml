@@ -27,6 +27,12 @@ spring:
     baseline-on-migrate: true
     locations: classpath:db/migration
 
+  cache:
+    type: redis
+    redis:
+      time-to-live: 600000 # 10 phut (10 * 60 * 1000)
+      cache-null-values: false
+
   data:
     redis:
       host: ${REDIS_HOST:localhost}

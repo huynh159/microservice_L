@@ -47,6 +47,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.jwtService = jwtService;
     }
 
+    /**
+     * PHƯƠNG THỨC LỌC CHÍNH (THỰC THI DUY NHẤT 1 LẦN CHO MỖI REQUEST):
+     * - Chặn bắt HTTP Request trước khi đến Controller.
+     * - Trích xuất chuỗi JWT trong Header "Authorization: Bearer <token>".
+     * - Nếu token hợp lệ: Giải mã claims (userId, email, roles), tạo Authentication và lưu vào SecurityContext.
+     * - Nếu không có token (ví dụ các API public như /login, /register): Bỏ qua, để các bộ lọc sau quyết định.
+     */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -54,38 +61,51 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         try {
+            // Bước 1: Trích xuất token thô từ Header Authorization của request
             String jwt = extractJwtFromRequest(request);
 
+            // Bước 2: Kiểm tra nếu có token và token hợp lệ (đúng chữ ký số và chưa hết hạn)
             if (StringUtils.hasText(jwt) && jwtService.validateToken(jwt)) {
-                UUID userId = jwtService.extractUserId(jwt);
-                String email = jwtService.extractEmail(jwt);
-                Set<String> roles = jwtService.extractRoles(jwt);
+                // Bước 3: Trích xuất các Claims từ Payload của token JWT
+                UUID userId = jwtService.extractUserId(jwt);     // Lấy User ID (sub claim)
+                String email = jwtService.extractEmail(jwt);       // Lấy Email
+                Set<String> roles = jwtService.extractRoles(jwt);  // Lấy danh sách vai trò (ví dụ ["ROLE_USER"])
 
+                // Bước 4: Tạo đối tượng UserPrincipal đóng gói danh tính và danh sách quyền hạn (GrantedAuthority)
                 UserPrincipal principal = UserPrincipal.create(userId, email, roles);
 
+                // Bước 5: Khởi tạo đối tượng Authentication chuẩn của Spring Security
+                // Tham số: (principal, credentials = null vì stateless, authorities = danh sách quyền ROLE_...)
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+                
+                // Gắn thêm thông tin chi tiết của web request (IP, Session ID...) vào authentication token
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                // Nạp thông tin xác thực vào SecurityContext của luồng xử lý hiện tại
+                // Bước 6: NẠP VÀO SECURITY CONTEXT:
+                // Lưu danh tính vào SecurityContextHolder của Thread hiện tại. Kể từ thời điểm này,
+                // Spring Security chính thức công nhận request này "ĐÃ ĐĂNG NHẬP" và biết rõ các quyền hạn!
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {
+            // Bắt ngoại lệ để tránh làm sập request, ghi log cảnh báo
             log.error("Không thể thiết lập thông tin xác thực người dùng trong Security Context: {}", ex.getMessage());
         }
 
-        // Cho phép request tiếp tục đi qua các bộ lọc phía sau
+        // Bước 7: Luôn chuyển tiếp request cho bộ lọc tiếp theo trong chuỗi Filter Chain thực thi
         filterChain.doFilter(request, response);
     }
 
     /**
-     * Trích xuất JWT từ Header Authorization
+     * HÀM HỖ TRỢ TRÍCH XUẤT CHUỖI JWT TỪ HEADER HTTP:
+     * - Header chuẩn có dạng: "Authorization: Bearer eyJhbGciOi..."
+     * - Hàm sẽ kiểm tra tiền tố "Bearer ", sau đó cắt bỏ tiền tố 7 ký tự này để lấy đúng chuỗi JWT thô.
      */
     private String extractJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(BEARER_PREFIX.length()).trim();
         }
-        return null;
+        return null; // Không có Header Authorization hoặc không bắt đầu bằng "Bearer "
     }
 }

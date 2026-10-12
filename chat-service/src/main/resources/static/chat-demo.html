@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Chat Realtime WebSocket (STOMP) - Microservices</title>
+    <!-- Thư viện SockJS và STOMP.js qua CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; padding: 20px; }
+        h1 { text-align: center; margin-bottom: 8px; font-size: 24px; color: #38bdf8; }
+        .subtitle { text-align: center; margin-bottom: 20px; color: #94a3b8; font-size: 14px; }
+        .container { display: flex; gap: 20px; max-width: 1300px; margin: 0 auto; height: 80vh; }
+        .panel { flex: 1; background: #1e293b; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #334155; }
+        .panel-header { padding: 14px 18px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+        .panel-header.user { background: #0369a1; }
+        .panel-header.admin { background: #6d28d9; }
+        .panel-title { font-weight: 600; font-size: 16px; }
+        .status-badge { font-size: 12px; padding: 4px 8px; border-radius: 9999px; background: #0f172a; }
+        .status-badge.online { color: #4ade80; }
+        .status-badge.offline { color: #f87171; }
+        .auth-box { padding: 12px; background: #0f172a; border-bottom: 1px solid #334155; }
+        .auth-box input { width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #f8fafc; font-size: 12px; margin-bottom: 6px; }
+        .auth-box button { width: 100%; padding: 8px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-user { background: #38bdf8; color: #0f172a; }
+        .btn-user:hover { background: #7dd3fc; }
+        .btn-admin { background: #a855f7; color: #ffffff; }
+        .btn-admin:hover { background: #c084fc; }
+        .room-info { padding: 8px 12px; font-size: 12px; background: #334155; color: #cbd5e1; }
+        .chat-body { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .message { max-width: 75%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.4; word-break: break-word; }
+        .message.mine { align-self: flex-end; background: #2563eb; color: #ffffff; border-bottom-right-radius: 2px; }
+        .message.theirs { align-self: flex-start; background: #334155; color: #f1f5f9; border-bottom-left-radius: 2px; }
+        .message-meta { font-size: 10px; margin-top: 4px; opacity: 0.7; text-align: right; }
+        .chat-footer { padding: 12px; border-top: 1px solid #334155; display: flex; gap: 8px; }
+        .chat-footer input { flex: 1; padding: 10px 14px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: #f8fafc; font-size: 14px; outline: none; }
+        .chat-footer button { padding: 10px 18px; border-radius: 8px; border: none; background: #22c55e; color: #0f172a; font-weight: 600; cursor: pointer; }
+        .chat-footer button:hover { background: #4ade80; }
+        .inbox-list { max-height: 100px; overflow-y: auto; background: #0f172a; padding: 6px; border-bottom: 1px solid #334155; font-size: 12px; }
+        .inbox-item { padding: 6px 10px; background: #1e293b; border-radius: 4px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .inbox-item:hover { background: #334155; }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 PHÒNG THÍ NGHIỆM CHAT REALTIME WEBSOCKET (STOMP)</h1>
+    <p class="subtitle">Kiến trúc Microservices: chat-service (:8083) xác thực qua JWT từ user-service (:8081)</p>
+
+    <div class="container">
+        <!-- ================= CỘT TRÁI: KHÁCH HÀNG (USER) ================= -->
+        <div class="panel">
+            <div class="panel-header user">
+                <span class="panel-title">👤 Khách hàng (User)</span>
+                <span id="userStatus" class="status-badge offline">Chưa kết nối</span>
+            </div>
+            <div class="auth-box">
+                <input type="text" id="userToken" placeholder="Dán JWT Access Token của USER vào đây..." />
+                <button class="btn-user" onclick="connectUser()">1. Kết nối WebSocket (Khách hàng)</button>
+            </div>
+            <div id="userRoomInfo" class="room-info">Phòng: Chưa tạo | Nhấn kết nối để mở phòng hỗ trợ</div>
+            <div id="userChatBody" class="chat-body">
+                <div class="message theirs">
+                    <div>Xin chào! Hãy dán Access Token của bạn và bấm kết nối để bắt đầu trò chuyện với hỗ trợ viên.</div>
+                    <div class="message-meta">Hệ thống</div>
+                </div>
+            </div>
+            <div class="chat-footer">
+                <input type="text" id="userInput" placeholder="Nhập tin nhắn..." onkeypress="handleUserKeyPress(event)" />
+                <button onclick="sendUserMessage()">Gửi</button>
+            </div>
+        </div>
+
+        <!-- ================= CỘT PHẢI: QUẢN TRỊ VIÊN (ADMIN) ================= -->
+        <div class="panel">
+            <div class="panel-header admin">
+                <span class="panel-title">🛡️ Quản trị viên (Admin)</span>
+                <span id="adminStatus" class="status-badge offline">Chưa kết nối</span>
+            </div>
+            <div class="auth-box">
+                <input type="text" id="adminToken" placeholder="Dán JWT Access Token của ADMIN vào đây..." />
+                <button class="btn-admin" onclick="connectAdmin()">2. Kết nối WebSocket (Admin)</button>
+            </div>
+            <div class="room-info" style="background:#1e1b4b;">Hàng đợi hỗ trợ: Bấm vào phòng bên dưới để tiếp nhận</div>
+            <div id="adminInbox" class="inbox-list">
+                <div style="color:#64748b; padding: 4px;">Chưa có khách hàng nào trong hàng đợi...</div>
+            </div>
+            <div id="adminRoomInfo" class="room-info">Đang hỗ trợ: Chưa chọn phòng</div>
+            <div id="adminChatBody" class="chat-body">
+                <div class="message theirs">
+                    <div>Chào Admin! Khi khách hàng gửi tin nhắn, phòng chat mới sẽ xuất hiện ở hàng đợi phía trên.</div>
+                    <div class="message-meta">Hệ thống</div>
+                </div>
+            </div>
+            <div class="chat-footer">
+                <input type="text" id="adminInput" placeholder="Nhập câu trả lời cho khách..." onkeypress="handleAdminKeyPress(event)" />
+                <button onclick="sendAdminMessage()" style="background:#a855f7; color:#fff;">Trả lời</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = window.location.origin;
+        let userStompClient = null;
+        let adminStompClient = null;
+        let currentRoomId = null;
+        let userRoomSubscription = null;
+        let adminRoomSubscription = null;
+
+        // ================= XỬ LÝ KHÁCH HÀNG (USER) =================
+        async function connectUser() {
+            const token = document.getElementById('userToken').value.trim();
+            if (!token) {
+                alert('Vui lòng nhập JWT Token của User!');
+                return;
+            }
+
+            try {
+                // 1. Gọi REST API tạo hoặc lấy phòng chat hiện tại
+                const res = await fetch(`${BASE_URL}/api/v1/chat/rooms`, {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (!res.ok) throw new Error('Không thể mở phòng chat. Kiểm tra lại Token!');
+                const room = await res.json();
+                currentRoomId = room.id;
+                document.getElementById('userRoomInfo').innerText = `Phòng: ${room.id} | Trạng thái: ${room.status}`;
+
+                // 2. Mở kết nối WebSocket STOMP
+                const socket = new SockJS(`${BASE_URL}/ws-chat`);
+                userStompClient = Stomp.over(socket);
+                userStompClient.debug = null; // Tắt log spam
+
+                // STOMP CONNECT: Gửi Header Authorization
+                userStompClient.connect({ 'Authorization': 'Bearer ' + token }, function (frame) {
+                    document.getElementById('userStatus').innerText = 'Đã kết nối';
+                    document.getElementById('userStatus').className = 'status-badge online';
+
+                    // 3. SUBSCRIBE vào phòng chat riêng của mình: /topic/rooms.{roomId}
+                    userStompClient.subscribe(`/topic/rooms.${currentRoomId}`, function (messageOutput) {
+                        const msg = JSON.parse(messageOutput.body);
+                        if (msg.content) {
+                            appendUserMessage(msg.content, msg.senderRole === 'ROLE_USER' ? 'mine' : 'theirs', msg.senderRole);
+                        }
+                    });
+
+                    // 4. Tải lại lịch sử tin nhắn cũ
+                    loadHistory(currentRoomId, token, 'userChatBody');
+                }, function (error) {
+                    console.error('Lỗi kết nối User STOMP:', error);
+                    document.getElementById('userStatus').innerText = 'Lỗi kết nối';
+                    document.getElementById('userStatus').className = 'status-badge offline';
+                });
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+
+        function sendUserMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text || !userStompClient || !currentRoomId) return;
+
+            // Gửi tin nhắn qua STOMP Destination: /app/chat.sendMessage
+            userStompClient.send('/app/chat.sendMessage', {}, JSON.stringify({
+                roomId: currentRoomId,
+                content: text
+            }));
+            input.value = '';
+        }
+
+        function handleUserKeyPress(e) {
+            if (e.key === 'Enter') sendUserMessage();
+        }
+
+        function appendUserMessage(content, cls, sender) {
+            const body = document.getElementById('userChatBody');
+            const div = document.createElement('div');
+            div.className = `message ${cls}`;
+            div.innerHTML = `<div>${escapeHtml(content)}</div><div class="message-meta">${sender === 'ROLE_USER' ? 'Bạn' : 'Hỗ trợ viên'}</div>`;
+            body.appendChild(div);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        // ================= XỬ LÝ QUẢN TRỊ VIÊN (ADMIN) =================
+        async function connectAdmin() {
+            const token = document.getElementById('adminToken').value.trim();
+            if (!token) {
+                alert('Vui lòng nhập JWT Token của Admin!');
+                return;
+            }
+
+            try {
+                const socket = new SockJS(`${BASE_URL}/ws-chat`);
+                adminStompClient = Stomp.over(socket);
+                adminStompClient.debug = null;
+
+                // STOMP CONNECT với quyền Admin
+                adminStompClient.connect({ 'Authorization': 'Bearer ' + token }, function (frame) {
+                    document.getElementById('adminStatus').innerText = 'Đã kết nối';
+                    document.getElementById('adminStatus').className = 'status-badge online';
+
+                    // SUBSCRIBE vào kênh thông báo phòng mới: /topic/admin/inbox
+                    adminStompClient.subscribe('/topic/admin/inbox', function (messageOutput) {
+                        const room = JSON.parse(messageOutput.body);
+                        addRoomToInbox(room);
+                    });
+
+                    // Tải danh sách các phòng đang mở
+                    loadAdminRooms(token);
+                }, function (error) {
+                    console.error('Lỗi kết nối Admin STOMP:', error);
+                    document.getElementById('adminStatus').innerText = 'Lỗi kết nối';
+                    document.getElementById('adminStatus').className = 'status-badge offline';
+                });
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+
+        async function loadAdminRooms(token) {
+            const res = await fetch(`${BASE_URL}/api/v1/chat/rooms`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            if (res.ok) {
+                const rooms = await res.json();
+                const inbox = document.getElementById('adminInbox');
+                inbox.innerHTML = '';
+                rooms.forEach(addRoomToInbox);
+            }
+        }
+
+        function addRoomToInbox(room) {
+            const inbox = document.getElementById('adminInbox');
+            let item = document.getElementById(`inbox-room-${room.id}`);
+            if (!item) {
+                item = document.createElement('div');
+                item.id = `inbox-room-${room.id}`;
+                item.className = 'inbox-item';
+                inbox.appendChild(item);
+            }
+            item.innerHTML = `<span><b>${escapeHtml(room.userEmail)}</b> (${room.status})</span><button style="padding:2px 8px;font-size:11px;" onclick="joinAdminRoom('${room.id}', '${room.userEmail}')">Vào chat</button>`;
+        }
+
+        async function joinAdminRoom(roomId, userEmail) {
+            const token = document.getElementById('adminToken').value.trim();
+            document.getElementById('adminRoomInfo').innerText = `Đang hỗ trợ: ${userEmail} (${roomId})`;
+
+            if (adminRoomSubscription) {
+                adminRoomSubscription.unsubscribe();
+            }
+
+            // Tiếp nhận phòng chat
+            await fetch(`${BASE_URL}/api/v1/chat/rooms/${roomId}/assign`, {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+
+            // SUBSCRIBE vào phòng chat của khách hàng này
+            adminRoomSubscription = adminStompClient.subscribe(`/topic/rooms.${roomId}`, function (messageOutput) {
+                const msg = JSON.parse(messageOutput.body);
+                if (msg.content) {
+                    appendAdminMessage(msg.content, msg.senderRole === 'ROLE_ADMIN' ? 'mine' : 'theirs', msg.senderRole);
+                }
+            });
+
+            loadHistory(roomId, token, 'adminChatBody');
+        }
+
+        function sendAdminMessage() {
+            const input = document.getElementById('adminInput');
+            const text = input.value.trim();
+            if (!text || !adminStompClient || !currentRoomId) return;
+
+            adminStompClient.send('/app/chat.sendMessage', {}, JSON.stringify({
+                roomId: currentRoomId,
+                content: text
+            }));
+            input.value = '';
+        }
+
+        function handleAdminKeyPress(e) {
+            if (e.key === 'Enter') sendAdminMessage();
+        }
+
+        function appendAdminMessage(content, cls, sender) {
+            const body = document.getElementById('adminChatBody');
+            const div = document.createElement('div');
+            div.className = `message ${cls}`;
+            div.innerHTML = `<div>${escapeHtml(content)}</div><div class="message-meta">${sender === 'ROLE_ADMIN' ? 'Admin (Bạn)' : 'Khách hàng'}</div>`;
+            body.appendChild(div);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        async function loadHistory(roomId, token, elementId) {
+            const res = await fetch(`${BASE_URL}/api/v1/chat/rooms/${roomId}/messages`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            if (res.ok) {
+                const messages = await res.json();
+                const body = document.getElementById(elementId);
+                body.innerHTML = '';
+                messages.forEach(m => {
+                    const isUserPanel = elementId === 'userChatBody';
+                    const isMine = isUserPanel ? (m.senderRole === 'ROLE_USER') : (m.senderRole === 'ROLE_ADMIN');
+                    const div = document.createElement('div');
+                    div.className = `message ${isMine ? 'mine' : 'theirs'}`;
+                    div.innerHTML = `<div>${escapeHtml(m.content)}</div><div class="message-meta">${m.senderRole === 'ROLE_USER' ? 'Khách hàng' : 'Hỗ trợ viên'}</div>`;
+                    body.appendChild(div);
+                });
+                body.scrollTop = body.scrollHeight;
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+        }
+    </script>
+</body>
+</html>
