@@ -1,37 +1,33 @@
 package com.example.notificationservice.consumer;
 
 import com.example.common.dto.event.UserCreatedEvent;
-import com.example.notificationservice.entity.NotificationLog;
-import com.example.notificationservice.entity.NotificationStatus;
-import com.example.notificationservice.entity.NotificationType;
-import com.example.notificationservice.repository.NotificationLogRepository;
-import com.example.notificationservice.service.EmailService;
+import com.example.notificationservice.service.NotificationProcessService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.UUID;
-
 /**
  * ==============================================================================
- * UserEventsConsumer - Lắng nghe topic `user-events` (BƯỚC 4.1 & BƯỚC 4.2)
+ * UserEventsConsumer - Lắng nghe topic `user-events` (BƯỚC 4.1, 4.2 & 4.3)
  * ==============================================================================
  * 1. Lắng nghe topic `user-events` (group `notification-service-group`).
  * 2. Phân tích envelope của message (eventId, eventType, payload).
- * 3. Khi nhận `UserCreatedEvent`:
- *    - Ghi nhận `notification_log` trạng thái PENDING.
- *    - Gửi email chào mừng qua EmailService (Thymeleaf welcome.html + SMTP Mailpit).
- *    - Cập nhật trạng thái `notification_log` thành SENT (hoặc FAILED nếu lỗi).
- * 4. Bỏ qua các sự kiện khác (UserUpdatedEvent, UserDeletedEvent) có log đầy đủ.
- * 5. Khi gặp message lỗi cú pháp / schema: ném exception để Kafka ErrorHandler
- *    tự động chuyển hướng sang Dead Letter Topic `user-events.DLT`.
+ * 3. Khi gặp message lỗi cú pháp / schema: ném IllegalArgumentException (fatal error)
+ *    để Kafka ErrorHandler tự động chuyển hướng ngay sang Dead Letter Topic `user-events.DLT`.
+ * 4. Khi nhận `UserCreatedEvent` hợp lệ:
+ *    - Gọi NotificationProcessService xử lý Idempotent (chống trùng lặp).
+ *    - Gửi email chào mừng qua EmailService & lưu notification_log.
+ *    - Lưu processed_events để đảm bảo cùng 1 eventId chỉ tạo 1 email duy nhất.
+ *    - Nếu gặp lỗi mạng / SMTP tạm thời: ném exception để ErrorHandler tự động
+ *      retry có backoff. Nếu vượt ngưỡng số lần thử lại -> chuyển sang DLT.
+ * 5. Bỏ qua các sự kiện khác (UserUpdatedEvent, UserDeletedEvent) có log đầy đủ.
  * ==============================================================================
  */
 @Component
@@ -40,22 +36,19 @@ public class UserEventsConsumer {
     private static final Logger log = LoggerFactory.getLogger(UserEventsConsumer.class);
 
     private final ObjectMapper objectMapper;
-    private final EmailService emailService;
-    private final NotificationLogRepository notificationLogRepository;
+    private final NotificationProcessService notificationProcessService;
 
     public UserEventsConsumer(ObjectMapper objectMapper) {
-        this(objectMapper, null, null);
+        this(objectMapper, null);
     }
 
-    @org.springframework.beans.factory.annotation.Autowired
+    @Autowired
     public UserEventsConsumer(
             ObjectMapper objectMapper,
-            EmailService emailService,
-            NotificationLogRepository notificationLogRepository
+            NotificationProcessService notificationProcessService
     ) {
         this.objectMapper = objectMapper;
-        this.emailService = emailService;
-        this.notificationLogRepository = notificationLogRepository;
+        this.notificationProcessService = notificationProcessService;
     }
 
     @KafkaListener(
@@ -78,6 +71,11 @@ public class UserEventsConsumer {
             throw new IllegalArgumentException("Kafka message body không được rỗng");
         }
 
+        String eventId;
+        String eventType;
+        UserCreatedEvent userCreatedEvent = null;
+
+        // Phân tách pha 1: Parse JSON & Envelope (Lỗi ở đây là Fatal -> Ném IllegalArgumentException -> Vào DLT ngay)
         try {
             JsonNode rootNode = objectMapper.readTree(rawMessage);
 
@@ -86,8 +84,8 @@ public class UserEventsConsumer {
                 throw new IllegalArgumentException("Sự kiện thiếu thông tin envelope bắt buộc: " + rawMessage);
             }
 
-            String eventId = rootNode.get("eventId").asText();
-            String eventType = rootNode.get("eventType").asText();
+            eventId = rootNode.get("eventId").asText();
+            eventType = rootNode.get("eventType").asText();
 
             if ("UserCreatedEvent".equals(eventType)) {
                 JsonNode payloadNode = rootNode.get("payload");
@@ -96,18 +94,14 @@ public class UserEventsConsumer {
                     throw new IllegalArgumentException("UserCreatedEvent thiếu payload: " + eventId);
                 }
 
-                UserCreatedEvent userCreatedEvent = objectMapper.treeToValue(payloadNode, UserCreatedEvent.class);
+                userCreatedEvent = objectMapper.treeToValue(payloadNode, UserCreatedEvent.class);
                 if (userCreatedEvent == null || userCreatedEvent.getUserId() == null || userCreatedEvent.getEmail() == null) {
                     log.error("Payload của UserCreatedEvent không hợp lệ (thiếu userId hoặc email): eventId [{}]", eventId);
                     throw new IllegalArgumentException("Payload UserCreatedEvent thiếu userId hoặc email: " + eventId);
                 }
-
-                log.info("Nhận sự kiện UserCreatedEvent thành công: eventId [{}], userId [{}], email [{}], fullName [{}]",
-                        eventId, userCreatedEvent.getUserId(), userCreatedEvent.getEmail(), userCreatedEvent.getFullName());
-
-                handleUserCreated(eventId, userCreatedEvent);
             } else {
                 log.info("Bỏ qua sự kiện không cần gửi thông báo: eventType [{}], eventId [{}]", eventType, eventId);
+                return;
             }
 
         } catch (IllegalArgumentException e) {
@@ -116,37 +110,19 @@ public class UserEventsConsumer {
             log.error("Không thể phân tích cú pháp message JSON: {}. Chi tiết lỗi: {}", rawMessage, e.getMessage());
             throw new IllegalArgumentException("Lỗi phân tích cú pháp JSON message: " + e.getMessage(), e);
         }
+
+        // Pha 2: Xử lý nghiệp vụ sự kiện (Nếu có lỗi tạm thời như SMTP, ngoại lệ được giữ nguyên để Kafka retry)
+        log.info("Nhận sự kiện UserCreatedEvent thành công: eventId [{}], userId [{}], email [{}], fullName [{}]",
+                eventId, userCreatedEvent.getUserId(), userCreatedEvent.getEmail(), userCreatedEvent.getFullName());
+
+        handleUserCreated(eventId, userCreatedEvent);
     }
 
     protected void handleUserCreated(String eventId, UserCreatedEvent event) {
-        if (emailService == null || notificationLogRepository == null) {
-            log.debug("EmailService hoặc NotificationLogRepository chưa được thiết lập. Bỏ qua ghi log & gửi mail.");
-            return;
-        }
-
-        NotificationLog logEntry = NotificationLog.builder()
-                .id(UUID.randomUUID())
-                .eventId(eventId)
-                .recipient(event.getEmail())
-                .type(NotificationType.WELCOME_EMAIL)
-                .status(NotificationStatus.PENDING)
-                .createdAt(Instant.now())
-                .build();
-
-        notificationLogRepository.save(logEntry);
-
-        try {
-            emailService.sendWelcomeEmail(event.getEmail(), event.getFullName());
-            logEntry.setStatus(NotificationStatus.SENT);
-            notificationLogRepository.save(logEntry);
-            log.info("Đã cập nhật notification_log thành công trạng thái SENT cho eventId [{}]", eventId);
-        } catch (Exception e) {
-            logEntry.setStatus(NotificationStatus.FAILED);
-            logEntry.setError(e.getMessage());
-            notificationLogRepository.save(logEntry);
-            log.error("Gửi email thất bại cho eventId [{}]. Đã lưu trạng thái FAILED vào notification_log: {}",
-                    eventId, e.getMessage());
-            throw e;
+        if (notificationProcessService != null) {
+            notificationProcessService.processUserCreatedEvent(eventId, event);
+        } else {
+            log.debug("NotificationProcessService chưa được thiết lập. Bỏ qua gửi thông báo.");
         }
     }
 }

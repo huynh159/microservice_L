@@ -11,11 +11,10 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.KafkaOperations;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.CommonErrorHandler;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
-import org.springframework.util.backoff.FixedBackOff;
+import org.springframework.kafka.support.ExponentialBackOffWithMaxRetries;
 
 @Configuration
 @EnableKafka
@@ -39,10 +38,15 @@ public class KafkaConsumerConfig {
                 (record, ex) -> new TopicPartition(dltTopicName, -1)
         );
 
-        // Thử lại 2 lần (cách nhau 1 giây), nếu vẫn lỗi thì đẩy sang DLT
-        DefaultErrorHandler errorHandler = new DefaultErrorHandler(recoverer, new FixedBackOff(1000L, 2L));
+        // Retry có backoff: Thử lại tối đa 3 lần (500ms, 1000ms, 2000ms) cho các lỗi tạm thời (SMTP gián đoạn)
+        ExponentialBackOffWithMaxRetries backOff = new ExponentialBackOffWithMaxRetries(3);
+        backOff.setInitialInterval(500L);
+        backOff.setMultiplier(2.0);
+        backOff.setMaxInterval(3000L);
 
-        // Các lỗi định dạng dữ liệu (Json, format, v.v.) không retry mà đẩy thẳng sang DLT
+        DefaultErrorHandler errorHandler = new DefaultErrorHandler(recoverer, backOff);
+
+        // Các lỗi định dạng dữ liệu / payload sai cấu trúc: Không retry mà đẩy thẳng sang DLT ngay lập tức
         errorHandler.addNotRetryableExceptions(
                 com.fasterxml.jackson.core.JsonParseException.class,
                 com.fasterxml.jackson.databind.JsonMappingException.class,
