@@ -36,16 +36,32 @@ public class NotificationProcessServiceImpl implements NotificationProcessServic
         this.emailService = emailService;
     }
 
+    /**
+     * XỬ LÝ NGHIỆP VỤ THÔNG BÁO CHO SỰ KIỆN TẠO NGƯỜI DÙNG (USER CREATED)
+     * 
+     * TẠI SAO CÓ @Transactional?
+     * - Để đảm bảo toàn vẹn dữ liệu (ACID): Bảng notification_log và bảng processed_events
+     *   phải cùng THÀNH CÔNG hoặc cùng THẤT BẠI.
+     * - Nếu việc gửi email thất bại: Toàn bộ thao tác trong Database sẽ được ROLLBACK.
+     *   Nhờ đó, lần retry tiếp theo của Kafka sẽ thấy eventId này chưa được xử lý và chạy lại từ đầu!
+     */
     @Override
     @Transactional
     public boolean processUserCreatedEvent(String eventId, UserCreatedEvent event) {
-        // 1. Kiểm tra Idempotency chống xử lý trùng lặp
+        
+        // ==============================================================================
+        // BƯỚC 1: KIỂM TRA CHỐNG TRÙNG LẶP (IDEMPOTENCY CHECK)
+        // ==============================================================================
+        // Trong hệ thống phân tán, Kafka có thể gửi lại cùng 1 tin nhắn do mạng chập chờn.
+        // Ta dùng bảng `processed_events` để ghi nhớ các eventId đã từng được xử lý.
         if (processedEventRepository.existsById(eventId)) {
             log.info("Sự kiện eventId [{}] đã được xử lý thành công trước đó. Bỏ qua chống trùng lặp (Idempotent).", eventId);
-            return false;
+            return false; // Trả về false và kết thúc, KHÔNG gửi email lần 2 cho khách hàng!
         }
 
-        // 2. Ghi nhận log thông báo PENDING
+        // ==============================================================================
+        // BƯỚC 2: GHI LOG THÔNG BÁO Ở TRẠNG THÁI PENDING (ĐANG XỬ LÝ)
+        // ==============================================================================
         NotificationLog logEntry = NotificationLog.builder()
                 .id(UUID.randomUUID())
                 .eventId(eventId)
@@ -57,17 +73,32 @@ public class NotificationProcessServiceImpl implements NotificationProcessServic
         notificationLogRepository.save(logEntry);
 
         try {
-            // 3. Gửi email qua SMTP
+            // ==============================================================================
+            // BƯỚC 3: SOẠN THẢO VÀ GỬI EMAIL THẬT QUA GIAO THỨC SMTP
+            // ==============================================================================
+            // Gọi EmailService để render giao diện Thymeleaf (welcome.html) và gửi email qua Mailpit
             emailService.sendWelcomeEmail(event.getEmail(), event.getFullName());
 
-            // 4. Cập nhật log SENT và lưu processed_events trong cùng transaction
+            // ==============================================================================
+            // BƯỚC 4: CẬP NHẬT TRẠNG THÁI THÀNH CÔNG (SENT) & ĐÁNH DẤU ĐÃ XỬ LÝ
+            // ==============================================================================
+            // 4a. Đổi trạng thái log sang SENT
             logEntry.setStatus(NotificationStatus.SENT);
             notificationLogRepository.save(logEntry);
 
+            // 4b. Lưu eventId vào bảng processed_events để các lần gọi sau bị chặn lại ở Bước 1
             processedEventRepository.save(new ProcessedEvent(eventId, Instant.now()));
             log.info("Xử lý thành công UserCreatedEvent: eventId [{}], email [{}]", eventId, event.getEmail());
             return true;
+
         } catch (Exception e) {
+            // ==============================================================================
+            // KHI GẶP LỖI (VÍ DỤ: MÁY CHỦ EMAIL MẤT KẾT NỐI):
+            // ==============================================================================
+            // Khi ném ngoại lệ ra khỏi phương thức @Transactional, Spring sẽ tự động ROLLBACK:
+            // - Bản ghi PENDING ở Bước 2 sẽ bị xóa khỏi Database.
+            // - eventId chưa được lưu vào processed_events.
+            // Ngoại lệ này văng về KafkaConsumer -> Kích hoạt cơ chế Retry Backoff của Kafka!
             log.error("Gửi email thất bại cho eventId [{}] tới email [{}]. Transaction sẽ rollback để Kafka retry: {}",
                     eventId, event.getEmail(), e.getMessage());
             throw e;
