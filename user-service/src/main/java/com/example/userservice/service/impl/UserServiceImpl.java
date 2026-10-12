@@ -1,5 +1,8 @@
 package com.example.userservice.service.impl;
 
+import com.example.common.dto.event.UserCreatedEvent;
+import com.example.common.dto.event.UserDeletedEvent;
+import com.example.common.dto.event.UserUpdatedEvent;
 import com.example.common.dto.response.PageResponse;
 import com.example.common.exception.BadRequestException;
 import com.example.common.exception.ConflictException;
@@ -16,6 +19,7 @@ import com.example.userservice.mapper.UserMapper;
 import com.example.userservice.repository.RefreshTokenRepository;
 import com.example.userservice.repository.RoleRepository;
 import com.example.userservice.repository.UserRepository;
+import com.example.userservice.service.OutboxService;
 import com.example.userservice.service.UserService;
 import com.example.userservice.config.RedisConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -59,19 +63,22 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final OutboxService outboxService;
 
     public UserServiceImpl(
             UserRepository userRepository,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
             UserMapper userMapper,
-            RefreshTokenRepository refreshTokenRepository
+            RefreshTokenRepository refreshTokenRepository,
+            OutboxService outboxService
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.outboxService = outboxService;
     }
 
     /**
@@ -110,6 +117,14 @@ public class UserServiceImpl implements UserService {
 
         // Lưu vào DB (lúc này @PrePersist trong User Entity sẽ tự tạo UUID nếu chưa có)
         User savedUser = userRepository.save(user);
+
+        // BƯỚC 3.7: Ghi Outbox Event (UserCreatedEvent) trong cùng Transaction
+        UserCreatedEvent createdEvent = new UserCreatedEvent(
+                savedUser.getId(),
+                savedUser.getEmail(),
+                savedUser.getFullName()
+        );
+        outboxService.saveEvent("USER", savedUser.getId().toString(), "UserCreatedEvent", createdEvent);
 
         // Chuyển sang DTO an toàn thông qua UserMapper và trả về
         return userMapper.toProfileResponse(savedUser);
@@ -153,6 +168,15 @@ public class UserServiceImpl implements UserService {
 
         // Lưu lại (JPA dirty checking hoặc gọi save rõ ràng)
         User updatedUser = userRepository.save(user);
+
+        // BƯỚC 3.7: Ghi Outbox Event (UserUpdatedEvent) trong cùng Transaction
+        UserUpdatedEvent updatedEvent = new UserUpdatedEvent(
+                updatedUser.getId(),
+                updatedUser.getEmail(),
+                updatedUser.getFullName()
+        );
+        outboxService.saveEvent("USER", updatedUser.getId().toString(), "UserUpdatedEvent", updatedEvent);
+
         return userMapper.toProfileResponse(updatedUser);
     }
 
@@ -264,6 +288,10 @@ public class UserServiceImpl implements UserService {
         User user = findUserByIdOrThrow(userId);
         user.setStatus(UserStatus.DELETED);
         userRepository.save(user);
+
+        // BƯỚC 3.7: Ghi Outbox Event (UserDeletedEvent) trong cùng Transaction
+        UserDeletedEvent deletedEvent = new UserDeletedEvent(user.getId());
+        outboxService.saveEvent("USER", user.getId().toString(), "UserDeletedEvent", deletedEvent);
     }
 
     // =========================================================================

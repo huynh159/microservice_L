@@ -70,6 +70,9 @@ class UserServiceTest {
     @Mock
     private com.example.userservice.repository.RefreshTokenRepository refreshTokenRepository;
 
+    @Mock
+    private com.example.userservice.service.OutboxService outboxService;
+
     private final UserMapper userMapper = new UserMapper();
 
     private UserServiceImpl userService;
@@ -80,7 +83,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserServiceImpl(userRepository, roleRepository, passwordEncoder, userMapper, refreshTokenRepository);
+        userService = new UserServiceImpl(userRepository, roleRepository, passwordEncoder, userMapper, refreshTokenRepository, outboxService);
 
         userRole = new Role(1, "ROLE_USER");
 
@@ -132,6 +135,7 @@ class UserServiceTest {
 
         verify(passwordEncoder).encode("Password123");
         verify(userRepository, times(1)).save(any(User.class));
+        verify(outboxService, times(1)).saveEvent(eq("USER"), any(), eq("UserCreatedEvent"), any());
     }
 
     @Test
@@ -196,6 +200,7 @@ class UserServiceTest {
         assertThat(response.getFullName()).isEqualTo("Nguyen Van Updated");
         assertThat(response.getPhone()).isEqualTo("0999999999");
         assertThat(response.getAvatarUrl()).isEqualTo("https://avatar.png");
+        verify(outboxService, times(1)).saveEvent(eq("USER"), eq(sampleUserId.toString()), eq("UserUpdatedEvent"), any());
     }
 
     // =========================================================================
@@ -303,5 +308,6 @@ class UserServiceTest {
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
         verify(userRepository).save(captor.capture());
         assertThat(captor.getValue().getStatus()).isEqualTo(UserStatus.DELETED);
+        verify(outboxService, times(1)).saveEvent(eq("USER"), eq(sampleUserId.toString()), eq("UserDeletedEvent"), any());
     }
 }

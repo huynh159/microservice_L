@@ -96,19 +96,26 @@ class UserServiceCacheTest {
         }
 
         @Bean
+        public com.example.userservice.service.OutboxService outboxService() {
+            return mock(com.example.userservice.service.OutboxService.class);
+        }
+
+        @Bean
         public UserService userService(
                 UserRepository userRepository,
                 RoleRepository roleRepository,
                 PasswordEncoder passwordEncoder,
                 UserMapper userMapper,
-                RefreshTokenRepository refreshTokenRepository
+                RefreshTokenRepository refreshTokenRepository,
+                com.example.userservice.service.OutboxService outboxService
         ) {
             return new UserServiceImpl(
                     userRepository,
                     roleRepository,
                     passwordEncoder,
                     userMapper,
-                    refreshTokenRepository
+                    refreshTokenRepository,
+                    outboxService
             );
         }
     }
