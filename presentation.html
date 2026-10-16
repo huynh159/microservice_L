@@ -1,0 +1,2606 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo Cáo Seminar: Kiến Trúc Microservices & Kỹ Thuật Phân Tán</title>
+  <meta name="description"
+    content="Slide thuyết trình hệ thống Microservices: Spring Cloud Gateway, Kafka Outbox, Redis Brute-Force, WebSocket STOMP, Docker & Spring Security">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM: TƯƠI MỚI - GÓC CẠNH SẮC NÉT (SHARP & FRESH TECH THEME)
+       ========================================================================== */
+    :root {
+      /* Backgrounds */
+      --bg-dark: #070a12;
+      --bg-surface: #0d121f;
+      --bg-card: rgba(13, 18, 31, 0.88);
+      --bg-card-hover: rgba(19, 27, 46, 0.96);
+
+      /* Hairline Borders */
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      --border-accent: rgba(56, 189, 248, 0.45);
+
+      /* Crisp Sharp Corners (Ít bo viền) */
+      --radius-xs: 2px;
+      --radius-sm: 4px;
+      --radius-md: 5px;
+
+      /* Vibrant Fresh Tech Colors */
+      --accent-cyan: #00f0ff;
+      --accent-blue: #38bdf8;
+      --accent-indigo: #6366f1;
+      --accent-violet: #a855f7;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+
+      /* Typography */
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Gradients */
+      --gradient-brand: linear-gradient(135deg, #00f0ff 0%, #38bdf8 40%, #6366f1 100%);
+      --gradient-emerald: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      --gradient-amber: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      --gradient-rose: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+      --gradient-violet: linear-gradient(135deg, #c084fc 0%, #8b5cf6 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-dark);
+      /* Fresh subtle tech grid */
+      background-image:
+        radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(180deg, #070a12 0%, #0b101c 100%);
+      background-size: 28px 28px, 100% 100%;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient Lighting */
+    .ambient-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient-glow-1 {
+      position: absolute;
+      top: -15%;
+      left: 10%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, transparent 65%);
+      filter: blur(80px);
+    }
+
+    .ambient-glow-2 {
+      position: absolute;
+      bottom: -15%;
+      right: 15%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+      filter: blur(90px);
+    }
+
+    /* ==========================================================================
+       CONTAINER & SLIDE SYSTEM (FULLPAGE SCROLL SNAP)
+       ========================================================================== */
+    .slides-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      position: relative;
+      z-index: 1;
+      scrollbar-width: none;
+    }
+
+    .slides-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .slide {
+      width: 100%;
+      height: 100vh;
+      min-height: 100vh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 68px 48px 76px 48px;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .slide-inner {
+      width: 100%;
+      max-width: 1300px;
+      max-height: 86vh;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      animation: fadeInSlide 0.4s ease-out;
+    }
+
+    @keyframes fadeInSlide {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Slide Header - Sharp & Fresh */
+    .slide-header {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 14px;
+    }
+
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: var(--radius-xs);
+      background: rgba(0, 240, 255, 0.08);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      margin-bottom: 6px;
+    }
+
+    .slide-title {
+      font-size: 1.95rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .slide-title .gradient-text {
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-subtitle {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    /* Cards - Sharp & Clean (Ít bo viền) */
+    .sharp-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 18px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .sharp-card:hover {
+      border-color: rgba(0, 240, 255, 0.4);
+      background: var(--bg-card-hover);
+      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+    }
+
+    .sharp-card.highlight {
+      border-color: rgba(56, 189, 248, 0.45);
+      background: linear-gradient(135deg, rgba(17, 26, 46, 0.95) 0%, rgba(11, 16, 28, 0.95) 100%);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .card-icon-box {
+      width: 30px;
+      height: 30px;
+      border-radius: var(--radius-xs);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      background: rgba(0, 240, 255, 0.12);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Tables - Sharp & Crisp */
+    .table-container {
+      width: 100%;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.86rem;
+    }
+
+    .custom-table th {
+      background: #0f1627;
+      color: var(--accent-cyan);
+      font-weight: 700;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .custom-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+    }
+
+    .custom-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .custom-table tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Tech Badges & Ports */
+    .port-pill {
+      font-family: var(--font-mono);
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--accent-cyan);
+      padding: 2px 7px;
+      border-radius: var(--radius-xs);
+      font-size: 0.78rem;
+      font-weight: 600;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: var(--radius-xs);
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+    }
+
+    .badge-cyan {
+      background: rgba(0, 240, 255, 0.15);
+      color: #00f0ff;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+    }
+
+    .badge-emerald {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-amber {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .badge-rose {
+      background: rgba(244, 63, 94, 0.15);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .badge-violet {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    /* Code Block */
+    .code-box {
+      background: #040711;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    .code-comment {
+      color: #526077;
+    }
+
+    .code-keyword {
+      color: #f43f5e;
+      font-weight: 600;
+    }
+
+    .code-func {
+      color: #38bdf8;
+    }
+
+    .code-str {
+      color: #34d399;
+    }
+
+    .code-ann {
+      color: #fbbf24;
+    }
+
+    /* Fresh Alert Banners */
+    .banner-tip {
+      background: rgba(0, 240, 255, 0.06);
+      border-left: 3px solid var(--accent-cyan);
+      border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+    }
+
+    .banner-tip strong {
+      color: var(--accent-cyan);
+    }
+
+    .banner-warning {
+      background: rgba(245, 158, 11, 0.07);
+      border-left: 3px solid var(--accent-amber);
+      border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: #fde68a;
+    }
+
+    /* ==========================================================================
+       FLOWCHART SYSTEM - BẮT MẮT & TRỰC QUAN (VISUAL FLOW GRAPHS)
+       ========================================================================== */
+    .flow-container {
+      width: 100%;
+      background: rgba(10, 15, 26, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .flow-steps-row {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 8px;
+      position: relative;
+    }
+
+    .flow-node {
+      flex: 1;
+      background: #0d1424;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xs);
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .flow-node:hover {
+      border-color: var(--accent-cyan);
+      background: #111a30;
+      transform: translateY(-2px);
+    }
+
+    .flow-node.active-glow {
+      border-color: rgba(0, 240, 255, 0.5);
+      background: linear-gradient(180deg, rgba(0, 240, 255, 0.08) 0%, rgba(13, 20, 36, 0.9) 100%);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.15);
+    }
+
+    .flow-step-idx {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .flow-step-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.25;
+    }
+
+    .flow-step-detail {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      margin-top: 5px;
+      font-family: var(--font-sans);
+    }
+
+    .flow-arrow-conn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      font-weight: bold;
+      padding: 0 2px;
+      user-select: none;
+    }
+
+    .flow-arrow-label {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      margin-top: -4px;
+    }
+
+    /* Multi-branch Decision Flow */
+    .decision-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .branch-card {
+      border-radius: var(--radius-xs);
+      padding: 12px 14px;
+      border: 1px solid var(--border-subtle);
+      font-size: 0.82rem;
+    }
+
+    .branch-card.success {
+      background: rgba(16, 185, 129, 0.06);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .branch-card.danger {
+      background: rgba(244, 63, 94, 0.06);
+      border-color: rgba(244, 63, 94, 0.3);
+    }
+
+    /* ==========================================================================
+       SPECIAL COVER SLIDE
+       ========================================================================== */
+    .cover-slide {
+      text-align: center;
+    }
+
+    .cover-hero-title {
+      font-size: 3.3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+
+    .cover-hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 860px;
+      margin: 0 auto 32px auto;
+      line-height: 1.6;
+    }
+
+    .tech-pill-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      max-width: 950px;
+      margin: 0 auto 36px auto;
+    }
+
+    .tech-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      padding: 5px 12px;
+      border-radius: var(--radius-xs);
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      color: #e2e8f0;
+      transition: all 0.2s;
+    }
+
+    .tech-pill:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: rgba(0, 240, 255, 0.4);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .sharp-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gradient-brand);
+      color: #070a12;
+      font-size: 0.98rem;
+      font-weight: 800;
+      padding: 13px 32px;
+      border-radius: var(--radius-xs);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.35);
+      transition: all 0.2s ease;
+      letter-spacing: 0.02em;
+    }
+
+    .sharp-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.55);
+    }
+
+    /* ==========================================================================
+       FLOATING CONTROLS & HUD (SHARP & MINIMAL)
+       ========================================================================== */
+    .top-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 999;
+    }
+
+    .top-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--gradient-brand);
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .top-hud {
+      position: fixed;
+      top: 14px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .hud-brand {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      background: rgba(13, 18, 31, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 5px 12px;
+      border-radius: var(--radius-xs);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .hud-brand-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 6px var(--accent-cyan);
+    }
+
+    .hud-actions {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hud-btn {
+      background: rgba(13, 18, 31, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 5px 12px;
+      border-radius: var(--radius-xs);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .hud-btn:hover {
+      background: #172138;
+      border-color: var(--border-accent);
+      color: #fff;
+    }
+
+    /* Side Nav Dots */
+    .side-nav-dots {
+      position: fixed;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 100;
+    }
+
+    .dot-item {
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .dot-item:hover .dot {
+      background: var(--accent-cyan);
+      transform: scale(1.4);
+    }
+
+    .dot-item.active .dot {
+      background: var(--accent-cyan);
+      transform: scale(1.6);
+      box-shadow: 0 0 8px var(--accent-cyan);
+    }
+
+    .dot-tooltip {
+      position: absolute;
+      right: 20px;
+      background: #0f1627;
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      font-size: 0.73rem;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: var(--radius-xs);
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateX(8px);
+      transition: all 0.2s ease;
+    }
+
+    .dot-item:hover .dot-tooltip {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Bottom Controller Bar */
+    .bottom-controller {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(13, 18, 31, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 6px 16px;
+      border-radius: var(--radius-xs);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+      z-index: 100;
+    }
+
+    .slide-counter {
+      font-size: 0.84rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--accent-cyan);
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .nav-arrow-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-xs);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .nav-arrow-btn:hover {
+      background: var(--accent-cyan);
+      color: #070a12;
+      border-color: var(--accent-cyan);
+    }
+
+    .keyboard-hint {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      border-left: 1px solid var(--border-subtle);
+      padding-left: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+    }
+
+    .key-badge {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1px 5px;
+      border-radius: var(--radius-xs);
+      font-size: 0.68rem;
+    }
+
+    /* Speaker Notes Drawer */
+    .speaker-drawer {
+      position: fixed;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 440px;
+      max-width: 90vw;
+      background: #090e1a;
+      border-left: 1px solid var(--border-subtle);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 22px;
+    }
+
+    .speaker-drawer.open {
+      transform: translateX(0);
+    }
+
+    .speaker-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .speaker-drawer-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent-amber);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .speaker-drawer-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .speaker-drawer-content {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+
+    .speaker-script-box {
+      background: rgba(245, 158, 11, 0.05);
+      border-radius: var(--radius-xs);
+      padding: 14px;
+      border-left: 3px solid var(--accent-amber);
+      margin-bottom: 14px;
+    }
+
+    .speaker-script-box strong {
+      color: var(--accent-amber);
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Modal Menu */
+    .menu-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(6px);
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+    }
+
+    .menu-modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .menu-modal {
+      width: 760px;
+      max-width: 92vw;
+      max-height: 82vh;
+      background: #0d1322;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    }
+
+    .menu-modal-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .menu-item {
+      background: #111a2e;
+      border: 1px solid var(--border-subtle);
+      padding: 10px 12px;
+      border-radius: var(--radius-xs);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.15s;
+    }
+
+    .menu-item:hover {
+      background: #16223d;
+      border-color: var(--accent-cyan);
+      transform: translateX(3px);
+    }
+
+    .menu-item-num {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-xs);
+      background: rgba(0, 240, 255, 0.1);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.72rem;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .menu-item-text {
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 1024px) {
+
+      .grid-3,
+      .grid-4 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .cover-hero-title {
+        font-size: 2.5rem;
+      }
+
+      .slide-title {
+        font-size: 1.6rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+
+      .grid-2,
+      .grid-3,
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .slide {
+        padding: 60px 18px 75px 18px;
+      }
+
+      .cover-hero-title {
+        font-size: 1.95rem;
+      }
+
+      .side-nav-dots,
+      .keyboard-hint {
+        display: none;
+      }
+
+      .speaker-drawer {
+        width: 100vw;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Ambient Lights -->
+  <div class="ambient-glow">
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+  </div>
+
+  <!-- Top Progress Bar -->
+  <div class="top-progress-container">
+    <div class="top-progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top HUD Bar -->
+  <header class="top-hud">
+    <div class="hud-brand">
+      <span class="hud-brand-dot"></span>
+      <span>Seminar Microservices 2026</span>
+    </div>
+    <div class="hud-actions">
+      <button class="hud-btn" id="btnOpenMenu" title="Mục lục bài nói (Phím M)">
+        📑 <span>Mục lục</span>
+      </button>
+      <button class="hud-btn" id="btnToggleNotes" title="Ghi chú người thuyết trình (Phím N)">
+        🎙️ <span>Lời thoại</span>
+      </button>
+      <button class="hud-btn" id="btnFullscreen" title="Toàn màn hình (Phím F)">
+        ⛶ <span>Toàn màn hình</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Side Navigation Dots -->
+  <nav class="side-nav-dots" id="sideNavDots" aria-label="Điều hướng slide"></nav>
+
+  <!-- Bottom Floating Controller -->
+  <div class="bottom-controller">
+    <button class="nav-arrow-btn" id="btnPrev" title="Slide trước (Phím Mũi tên Lên / Trái)">↑</button>
+    <div class="slide-counter" id="slideCounter">01 / 12</div>
+    <button class="nav-arrow-btn" id="btnNext" title="Slide tiếp theo (Phím Mũi tên Xuống / Phải / Space)">↓</button>
+    <div class="keyboard-hint">
+      <span>Cuộn chuột</span> hoặc <span class="key-badge">↑</span> <span class="key-badge">↓</span> <span
+        class="key-badge">Space</span>
+    </div>
+  </div>
+
+  <!-- Speaker Notes Drawer -->
+  <aside class="speaker-drawer" id="speakerDrawer">
+    <div class="speaker-drawer-header">
+      <div class="speaker-drawer-title">
+        <span>🎙️ LỜI THOẠI & GỢI Ý THUYẾT TRÌNH</span>
+      </div>
+      <button class="speaker-drawer-close" id="btnCloseNotes">✕</button>
+    </div>
+    <div class="speaker-drawer-content" id="speakerNotesBody"></div>
+  </aside>
+
+  <!-- Menu / Jump Modal -->
+  <div class="menu-modal-overlay" id="menuModalOverlay">
+    <div class="menu-modal">
+      <div class="menu-modal-title">
+        <span>📋 Danh Sách Các Chuyên Đề Báo Cáo</span>
+        <button style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1.2rem;"
+          id="btnCloseMenu">✕</button>
+      </div>
+      <div class="menu-grid" id="menuGrid"></div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN PRESENTATION SLIDES (SCROLL SNAP CONTAINER)
+       ========================================================================== -->
+  <main class="slides-container" id="slidesContainer">
+
+    <!-- ------------------------------------------------------------------
+         SLIDE 0: TRANG BÌA
+         ------------------------------------------------------------------ -->
+    <section class="slide cover-slide" data-slide="0" data-title="Trang Bìa - Khởi Động">
+      <div class="slide-inner">
+        <div style="margin-bottom: 16px;">
+          <span class="slide-tag">🚀 BÁO CÁO THỰC CHIẾN HỆ THỐNG PHÂN TÁN</span>
+          <span class="slide-tag"
+            style="background:rgba(16,185,129,0.1); color:var(--accent-emerald); border-color:rgba(16,185,129,0.3)">BACKEND
+            ARCHITECTURE</span>
+        </div>
+
+        <h1 class="cover-hero-title">
+          KIẾN TRÚC <span class="gradient-text">MICROSERVICES</span><br>
+          & KỸ THUẬT PHÂN TÁN CHUYÊN SÂU
+        </h1>
+
+        <p class="cover-hero-desc">
+          Tổng kết các kỹ thuật cốt lõi đã áp dụng trực tiếp: Thiết kế hệ thống 4 Microservices, Bảo mật JWT Stateless &
+          Rotation,
+          Xử lý bất đồng bộ tin cậy với Kafka Outbox Pattern, Realtime Chat WebSocket và Cửa ngõ API Gateway.
+        </p>
+
+        <div class="tech-pill-row">
+          <span class="tech-pill">🌐 Spring Cloud Gateway</span>
+          <span class="tech-pill">🛡️ Spring Security 6</span>
+          <span class="tech-pill">⚡ Apache Kafka</span>
+          <span class="tech-pill">🔴 Redis In-Memory</span>
+          <span class="tech-pill">💬 WebSocket STOMP</span>
+          <span class="tech-pill">🐳 Docker Multi-Stage</span>
+          <span class="tech-pill">🐘 PostgreSQL DB-per-Service</span>
+        </div>
+
+        <div>
+          <button class="sharp-btn-primary" id="btnStartPresentation">
+            <span>Bắt Đầu Thuyết Trình</span>
+            <span>➔</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------
+         SLIDE 1: MỤC LỤC / AGENDA (7 CHUYÊN ĐỀ)
+         ------------------------------------------------------------------ -->
+    <section class="slide" data-slide="1" data-title="Mục Lục 7 Chuyên Đề">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">📋 AGENDA TỔNG QUAN</span>
+            <h2 class="slide-title">Mục Lục 7 Chuyên Đề Trọng Tâm</h2>
+            <p class="slide-subtitle">Đi thẳng vào các giải pháp kỹ thuật thực chiến trong dự án</p>
+          </div>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-4" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="sharp-card" onclick="goToSlide(2)" style="cursor:pointer">
+              <div class="card-header">
+                <div class="card-icon-box">01</div>
+                <div class="card-title">Kiến Trúc Microservices</div>
+              </div>
+              <p style="font-size:0.81rem; color:var(--text-muted)">4 Microservices, Database per Service, Giao tiếp
+                HTTP REST & Kafka</p>
+            </div>
+
+            <div class="sharp-card" onclick="goToSlide(3)" style="cursor:pointer">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(56,189,248,0.12); color:var(--accent-blue)">02</div>
+                <div class="card-title">Docker Hóa Hệ Thống</div>
+              </div>
+              <p style="font-size:0.81rem; color:var(--text-muted)">Multi-stage build 800MB → 300MB, Non-root OWASP,
+                Compose 8 services</p>
+            </div>
+
+            <div class="sharp-card" onclick="goToSlide(4)" style="cursor:pointer">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(168,85,247,0.12); color:var(--accent-violet)">03</div>
+                <div class="card-title">Bảo Mật JWT & Spring Security</div>
+              </div>
+              <p style="font-size:0.81rem; color:var(--text-muted)">HMAC-SHA256, Token Rotation, Hash SHA-256 vs BCrypt,
+                Zero-Knowledge</p>
+            </div>
+
+            <div class="sharp-card" onclick="goToSlide(6)" style="cursor:pointer">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(244,63,94,0.12); color:var(--accent-rose)">04</div>
+                <div class="card-title">WebSocket & STOMP Chat</div>
+              </div>
+              <p style="font-size:0.81rem; color:var(--text-muted)">Full-duplex thay thế Polling, Stateless JWT
+                Interceptor, Token Relay</p>
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-top:2px;">
+            <div class="sharp-card" onclick="goToSlide(7)" style="cursor:pointer">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(245,158,11,0.12); color:var(--accent-amber)">05</div>
+                <div class="card-title">Spring Kafka & Outbox</div>
+              </div>
+              <p style="font-size:0.81rem; color:var(--text-muted)">Transactional Outbox Pattern, FOR UPDATE SKIP
+                LOCKED, Idempotent Consumer</p>
+            </div>
+
+            <div class="sharp-card" onclick="goToSlide(8)" style="cursor:pointer">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(244,63,94,0.12); color:var(--accent-rose)">06</div>
+                <div class="card-title">Redis Chống Brute-Force</div>
+              </div>
+              <p style="font-size:0.81rem; color:var(--text-muted)">Rate limit 5 lần sai, Bộ đếm RAM tốc độ micro-giây,
+                Tự động chặn bằng HTTP 429</p>
+            </div>
+
+            <div class="sharp-card" onclick="goToSlide(9)" style="cursor:pointer">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(0,240,255,0.12); color:var(--accent-cyan)">07</div>
+                <div class="card-title">Spring Cloud Gateway</div>
+              </div>
+              <p style="font-size:0.81rem; color:var(--text-muted)">Route = Predicate + Filter, Header Enrichment, Netty
+                Reactive Event Loop</p>
+            </div>
+          </div>
+
+          <div class="banner-tip" style="margin-top:6px;">
+            <span>💡</span>
+            <span><strong>Mạch giải pháp liền mạch:</strong> <em>Gateway bảo vệ cửa ngõ ➔ Service xử lý nghiệp vụ ➔
+                Redis ngăn tấn công mật khẩu ➔ Kafka gửi mail ngầm ➔ WebSocket chat tức thì</em>.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------
+         SLIDE 2: PHẦN 1 - KIẾN TRÚC MICROSERVICES & BIỂU ĐỒ LUỒNG
+         ------------------------------------------------------------------ -->
+    <section class="slide" data-slide="2" data-title="Phần 1: Kiến Trúc Microservices">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">CHUYÊN ĐỀ 01 • TỔNG QUAN KIẾN TRÚC</span>
+            <h2 class="slide-title">Kiến Trúc Microservices: <span class="gradient-text">Nguyên Lý & Áp Dụng Thực
+                Tế</span>
+            </h2>
+            <p class="slide-subtitle">Bản chất, ưu thế so với Monolith và mô hình 4 dịch vụ chuyên trách trong dự án</p>
+          </div>
+        </div>
+
+        <div class="slide-body">
+          <!-- PHẦN 1: ĐỊNH NGHĨA & ƯU THẾ KIẾN TRÚC -->
+          <div class="grid-2">
+            <!-- 1. ĐỊNH NGHĨA -->
+            <div class="sharp-card">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(0,240,255,0.15); color:var(--accent-cyan)">📖</div>
+                <div class="card-title">1. Định Nghĩa & Bản Chất Kỹ Thuật</div>
+              </div>
+              <p style="font-size:0.83rem; color:var(--text-muted); margin-bottom:8px; line-height:1.55;">
+                • <strong>Monolith (Kiến trúc nguyên khối):</strong> Toàn bộ module nghiệp vụ (Auth, Chat, Mail, User)
+                đóng gói thành một ứng dụng duy nhất, dùng chung một cơ sở dữ liệu. Nhược điểm: Sự cố ở một chức năng
+                (lỗi bộ nhớ, CPU cao) có thể làm tê liệt toàn bộ ứng dụng.<br>
+                • <strong>Microservices (Kiến trúc vi dịch vụ):</strong> Phân rã hệ thống thành nhiều dịch vụ nhỏ độc
+                lập theo từng nghiệp vụ. Mỗi dịch vụ chạy trên tiến trình riêng và kết nối với nhau qua giao thức mạng.
+              </p>
+              <div class="banner-tip" style="padding:7px 10px; font-size:0.78rem;">
+                <span>💡</span>
+                <span><strong>Nguyên tắc cốt lõi:</strong> Độc lập triển khai (Independent Deployment), Trách nhiệm đơn
+                  lẻ (Single Responsibility), và Cơ sở dữ liệu riêng (Database-per-Service).</span>
+              </div>
+            </div>
+
+            <!-- 2. CÔNG DỤNG -->
+            <div class="sharp-card highlight">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(16,185,129,0.15); color:var(--accent-emerald)">🎯
+                </div>
+                <div class="card-title">2. Lợi Ích Cốt Lõi So Với Monolith</div>
+              </div>
+              <ul style="list-style:none; display:flex; flex-direction:column; gap:6px; font-size:0.81rem;">
+                <li style="display:flex; gap:8px;">
+                  <span style="color:var(--accent-cyan)">■</span>
+                  <span><strong>Cách ly lỗi, không sập dây chuyền (Fault Isolation):</strong> Nếu dịch vụ Chat hoặc
+                    Notification gặp sự cố, dịch vụ User và Gateway vẫn hoạt động bình thường, phục vụ người dùng đăng
+                    nhập.</span>
+                </li>
+                <li style="display:flex; gap:8px;">
+                  <span style="color:var(--accent-cyan)">■</span>
+                  <span><strong>Triển khai độc lập (Independent Deployment):</strong> Cập nhật tính năng Chat chỉ cần
+                    build và deploy lại Chat Service, không ảnh hưởng hay làm gián đoạn các dịch vụ khác.</span>
+                </li>
+                <li style="display:flex; gap:8px;">
+                  <span style="color:var(--accent-cyan)">■</span>
+                  <span><strong>Mở rộng linh hoạt (Targeted Scalability):</strong> Khi lưu lượng chat tăng cao, chỉ cần
+                    nhân bản thêm container Chat Service, tối ưu hóa tài nguyên RAM/CPU máy chủ.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- PHẦN 2: ÁP DỤNG THỰC TẾ VÀO DỰ ÁN (4 DỊCH VỤ CHUYÊN TRÁCH) -->
+          <div class="sharp-card" style="padding:13px 16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <div style="font-size:0.88rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:8px;">
+                <span class="card-icon-box"
+                  style="width:24px; height:24px; font-size:0.8rem; background:rgba(168,85,247,0.15); color:var(--accent-violet)">🏢</span>
+                <span>3. Mô Hình Thực Tế Dự Án: 4 Microservices Chuyên Trách</span>
+              </div>
+              <span class="status-badge badge-emerald">MỖI SERVICE CÓ DATABASE RIÊNG (DATABASE-PER-SERVICE)</span>
+            </div>
+
+            <div class="grid-4" style="gap:10px;">
+              <div
+                style="background:#090e1a; border:1px solid var(--border-subtle); padding:10px; border-radius:var(--radius-xs);">
+                <div style="font-size:0.82rem; font-weight:700; color:var(--accent-cyan); margin-bottom:2px;">🚪
+                  api-gateway (:8080)</div>
+                <div style="font-size:0.75rem; color:#f8fafc; font-weight:600;">Cổng Điều Hướng & Xác Thực</div>
+                <div style="font-size:0.73rem; color:var(--text-muted); margin-top:4px;">
+                  Điểm tiếp nhận tập trung, kiểm tra tính hợp lệ của token JWT và định tuyến request đến service nội bộ
+                  phù hợp.
+                </div>
+              </div>
+
+              <div
+                style="background:#090e1a; border:1px solid var(--border-subtle); padding:10px; border-radius:var(--radius-xs);">
+                <div style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); margin-bottom:2px;">👤
+                  user-service (:8081)</div>
+                <div style="font-size:0.75rem; color:#f8fafc; font-weight:600;">Quản Trị Người Dùng & Phân Quyền</div>
+                <div style="font-size:0.73rem; color:var(--text-muted); margin-top:4px;">
+                  Xử lý đăng ký, đăng nhập, cấp phát token JWT và quản lý hồ sơ tài khoản. Quản lý cơ sở dữ liệu riêng:
+                  <code>user_db</code>.
+                </div>
+              </div>
+
+              <div
+                style="background:#090e1a; border:1px solid var(--border-subtle); padding:10px; border-radius:var(--radius-xs);">
+                <div style="font-size:0.82rem; font-weight:700; color:var(--accent-rose); margin-bottom:2px;">💬
+                  chat-service (:8083)</div>
+                <div style="font-size:0.75rem; color:#f8fafc; font-weight:600;">Giao Tiếp Thời Gian Thực (Chat)</div>
+                <div style="font-size:0.73rem; color:var(--text-muted); margin-top:4px;">
+                  Duy trì kết nối WebSocket hai chiều cho phép gửi và nhận tin nhắn tức thời. Quản lý cơ sở dữ liệu
+                  riêng: <code>chat_db</code>.
+                </div>
+              </div>
+
+              <div
+                style="background:#090e1a; border:1px solid var(--border-subtle); padding:10px; border-radius:var(--radius-xs);">
+                <div style="font-size:0.82rem; font-weight:700; color:var(--accent-amber); margin-bottom:2px;">📮
+                  notification-svc (:8082)</div>
+                <div style="font-size:0.75rem; color:#f8fafc; font-weight:600;">Dịch Vụ Gửi Email & Thông Báo</div>
+                <div style="font-size:0.73rem; color:var(--text-muted); margin-top:4px;">
+                  Lắng nghe sự kiện từ Kafka broker để thực hiện gửi email thông báo qua giao thức SMTP một cách bất
+                  đồng bộ.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PHẦN 3: GIAO TIẾP LIÊN DỊCH VỤ -->
+          <div class="flow-container" style="padding:11px 14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span class="status-badge badge-cyan">4. CƠ CHẾ GIAO TIẾP LIÊN DỊCH VỤ (INTER-SERVICE
+                COMMUNICATION)</span>
+              <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono)">Đồng bộ (REST) vs
+                Bất đồng bộ (Kafka)</span>
+            </div>
+
+            <div class="grid-2" style="gap:10px;">
+              <!-- Con đường 1 -->
+              <div
+                style="background:#090e1a; border:1px solid var(--border-subtle); padding:9px 12px; border-radius:var(--radius-xs);">
+                <div
+                  style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); display:flex; align-items:center; gap:6px;">
+                  <span>📞 CƠ CHẾ 1: ĐỒNG BỘ TRỰC TIẾP (SYNCHRONOUS REST API)</span>
+                  <span class="status-badge badge-cyan" style="font-size:0.66rem;">YÊU CẦU PHẢN HỒI NGAY</span>
+                </div>
+                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px; line-height:1.45;">
+                  <strong>Ví dụ thực tế:</strong> Khi người dùng mở phòng chat, <code>chat-service</code> gửi request
+                  HTTP GET sang <code>user-service</code> để lấy thông tin hiển thị (tên tài khoản, ảnh đại diện).
+                  <code>user-service</code> xác thực và phản hồi trong khoảng ~20ms.
+                </div>
+              </div>
+
+              <!-- Con đường 2 -->
+              <div
+                style="background:#090e1a; border:1px solid var(--border-subtle); padding:9px 12px; border-radius:var(--radius-xs);">
+                <div
+                  style="font-size:0.8rem; font-weight:700; color:var(--accent-amber); display:flex; align-items:center; gap:6px;">
+                  <span>📮 CƠ CHẾ 2: BẤT ĐỒNG BỘ QUA MESSAGE BROKER (ASYNCHRONOUS KAFKA)</span>
+                  <span class="status-badge badge-amber" style="font-size:0.66rem;">XỬ LÝ CHẠY NGẦM</span>
+                </div>
+                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px; line-height:1.45;">
+                  <strong>Ví dụ thực tế:</strong> Khi người dùng đăng ký tài khoản thành công, <code>user-service</code>
+                  xuất bản sự kiện vào Kafka topic và phản hồi ngay cho client. Dịch vụ
+                  <code>notification-service</code> tiêu thụ sự kiện từ Kafka để gửi email chào mừng mà không bắt client
+                  phải chờ đợi.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------
+         SLIDE 3: PHẦN 2 - DOCKER & CONTAINER HÓA (CÓ BIỂU ĐỒ MULTI-STAGE)
+         ------------------------------------------------------------------ -->
+    <section class="slide" data-slide="3" data-title="Phần 2: Docker & Container Hóa">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">CHUYÊN ĐỀ 02 • DEVOPS & CONTAINERIZATION</span>
+            <h2 class="slide-title">Docker Hóa & Biểu Đồ Multi-Stage Build</h2>
+            <p class="slide-subtitle">Tối ưu dung lượng từ 800MB xuống 300MB, Tuân thủ OWASP Non-Root & Dàn dựng 8
+              Container</p>
+          </div>
+        </div>
+
+        <div class="slide-body">
+          <!-- Flowchart Multi-stage Build -->
+          <div class="flow-container">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="status-badge badge-cyan">BIỂU ĐỒ LUỒNG ĐÓNG GÓI DOCKER MULTI-STAGE BUILD</span>
+              <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono)">Giảm 62% dung lượng
+                Image</span>
+            </div>
+
+            <div class="flow-steps-row">
+              <div class="flow-node" style="flex: 1.1">
+                <div class="flow-step-idx">SOURCE</div>
+                <div class="flow-step-title">Code + pom.xml</div>
+                <div class="flow-step-detail">Mã nguồn Java 21</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">COPY</span></div>
+
+              <div class="flow-node active-glow" style="flex: 1.4; border-color:var(--accent-amber)">
+                <div class="flow-step-idx">STAGE 1: BUILDER (~800MB)</div>
+                <div class="flow-step-title">eclipse-temurin:21-jdk</div>
+                <div class="flow-step-detail">Chạy <code>mvn clean package</code> → sinh ra file
+                  <strong>app.jar</strong>
+                </div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">ONLY JAR</span></div>
+
+              <div class="flow-node active-glow" style="flex: 1.4; border-color:var(--accent-emerald)">
+                <div class="flow-step-idx">STAGE 2: RUNTIME (~300MB)</div>
+                <div class="flow-step-title">eclipse-temurin:21-jre</div>
+                <div class="flow-step-detail">Vứt bỏ toàn bộ JDK & Maven, chỉ giữ lại JRE siêu nhẹ</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">OWASP</span></div>
+
+              <div class="flow-node" style="flex: 1.3; border-color:var(--accent-rose)">
+                <div class="flow-step-idx">NON-ROOT USER</div>
+                <div class="flow-step-title">USER appuser (UID 1001)</div>
+                <div class="flow-step-detail">Không dùng Root, cô lập an toàn container</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom: Codebox & Docker Compose Features -->
+          <div class="grid-2">
+            <div class="code-box">
+              <span class="status-badge badge-cyan" style="margin-bottom:8px;">DOCKERFILE THỰC TẾ TRONG DỰ ÁN</span>
+              <pre><code><span class="code-comment"># Stage 1: Build file .jar</span>
+<span class="code-keyword">FROM</span> eclipse-temurin:21-jdk-jammy <span class="code-keyword">AS</span> builder
+<span class="code-keyword">WORKDIR</span> /workspace
+<span class="code-keyword">COPY</span> pom.xml . && <span class="code-keyword">COPY</span> src ./src
+<span class="code-keyword">RUN</span> ./mvnw clean package -DskipTests
+
+<span class="code-comment"># Stage 2: Runtime siêu nhẹ</span>
+<span class="code-keyword">FROM</span> eclipse-temurin:21-jre-jammy
+<span class="code-comment"># Tạo user riêng, TUYỆT ĐỐI KHÔNG DÙNG ROOT</span>
+<span class="code-keyword">RUN</span> groupadd -r appgroup && useradd -r -g appgroup -u 1001 appuser
+<span class="code-keyword">USER</span> appuser
+<span class="code-keyword">COPY</span> --from=builder /workspace/target/*.jar app.jar
+<span class="code-keyword">ENTRYPOINT</span> [<span class="code-str">"java"</span>, <span class="code-str">"-jar"</span>, <span class="code-str">"app.jar"</span>]</code></pre>
+            </div>
+
+            <div class="sharp-card">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(56,189,248,0.15); color:var(--accent-blue)">🐳</div>
+                <div class="card-title">Docker Compose: Khởi Động 8 Services 1 Lệnh</div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px; font-size:0.82rem;">
+                <div
+                  style="background:#090e1a; padding:8px 10px; border-radius:var(--radius-xs); border:1px solid var(--border-subtle)">
+                  <strong style="color:var(--accent-cyan)">1. Healthcheck & Depends_on condition:</strong>
+                  <p style="color:var(--text-muted)">PostgreSQL và Kafka phải báo <code>healthy</code> thì các service
+                    mới chạy. Không bao giờ bị lỗi CrashLoop do DB chưa sẵn sàng.</p>
+                </div>
+
+                <div
+                  style="background:#090e1a; padding:8px 10px; border-radius:var(--radius-xs); border:1px solid var(--border-subtle)">
+                  <strong style="color:var(--accent-emerald)">2. Mạng nội bộ riêng (microservice_net):</strong>
+                  <p style="color:var(--text-muted)">Gọi nhau qua DNS tên service (ví dụ: <code>postgres:5432</code>,
+                    <code>kafka:9092</code>). Toàn bộ Database ẩn hoàn toàn khỏi Internet.
+                  </p>
+                </div>
+
+                <div
+                  style="background:#090e1a; padding:8px 10px; border-radius:var(--radius-xs); border:1px solid var(--border-subtle)">
+                  <strong style="color:var(--accent-amber)">3. Quản lý bí mật qua file .env:</strong>
+                  <p style="color:var(--text-muted)">Mật khẩu Database, JWT Secret Key được nạp tự động qua biến môi
+                    trường, không hard-code vào mã nguồn.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------
+         SLIDE 4: PHẦN 3.1 - SPRING SECURITY & JWT FLOWCHART
+         ------------------------------------------------------------------ -->
+    <section class="slide" data-slide="4" data-title="Phần 3.1: Spring Security & JWT">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">CHUYÊN ĐỀ 03.1 • AUTHENTICATION & SECURITY</span>
+            <h2 class="slide-title">Bảo Mật JWT: <span class="gradient-text">Định Nghĩa, Thuật Toán Băm & Phân Quyền</span></h2>
+            <p class="slide-subtitle">Bản chất Access vs Refresh Token, Cơ chế chữ ký HMAC-SHA256 chống giả mạo và phân quyền User / Admin</p>
+          </div>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2" style="gap:12px;">
+            <!-- CARD 1: ĐỊNH NGHĨA CẶP TOKEN -->
+            <div class="sharp-card">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(0,240,255,0.15); color:var(--accent-cyan)">🎫</div>
+                <div class="card-title">1. Định Nghĩa: Access Token vs Refresh Token</div>
+              </div>
+              <div style="font-size:0.8rem; color:var(--text-muted); display:flex; flex-direction:column; gap:6px; line-height:1.45;">
+                <div>
+                  <strong style="color:var(--accent-cyan)">• Access Token (15m - Stateless):</strong>
+                  Chuỗi JWT tự chứa danh tính (User ID, Email, Roles). Gửi qua Header <code>Authorization: Bearer</code> mỗi khi gọi API. Server <strong>không lưu DB</strong>, chỉ cần Secret Key là giải mã xác thực tức thì trong 0.1ms. <em>Nhược điểm:</em> không thể thu hồi ngay, nên TTL bắt buộc phải ngắn.
+                </div>
+                <div>
+                  <strong style="color:var(--accent-amber)">• Refresh Token (7d - Stateful):</strong>
+                  Chuỗi ngẫu nhiên 64 ký tự hex (độ hỗn loạn cao). Chỉ dùng duy nhất 1 việc: xin cấp lại Access Token mới khi hết hạn mà không bắt user đăng nhập lại. Server lưu <strong>bản băm SHA-256</strong> trong DB để quản lý phiên.
+                </div>
+              </div>
+            </div>
+
+            <!-- CARD 2: CẤU TRÚC 3 PHẦN & THUẬT TOÁN KÝ SỐ -->
+            <div class="sharp-card highlight">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(168,85,247,0.15); color:var(--accent-violet)">🔐</div>
+                <div class="card-title">2. Cấu Trúc 3 Phần & Thuật Toán HMAC-SHA256</div>
+              </div>
+              <div class="code-box" style="margin-bottom:6px; font-size:0.73rem; padding:6px 10px;">
+                <span style="color:#f43f5e" title="Header">eyJhbGciOiJIUzI1NiJ9</span>.<span
+                  style="color:#38bdf8" title="Payload">eyJzdWIiOiIxMjMiLCJyb2xlcyI6WyJBRE1JTiJdfQ</span>.<span
+                  style="color:#34d399" title="Signature">s4gK_Xq-90_signature</span>
+              </div>
+              <div style="font-size:0.78rem; color:var(--text-muted); line-height:1.45;">
+                <p>• <strong>Header & Payload:</strong> Chỉ là mã hóa <code>Base64URL</code> (dạng đọc được công khai, không phải mã hóa bí mật). Bất kỳ ai cũng đọc được claim <code>sub</code>, <code>roles</code>.</p>
+                <p>• <strong>Signature (Chữ ký số - Nơi bảo mật thực sự):</strong><br>
+                  <code>Signature = HMAC-SHA256(Base64(Header) + "." + Base64(Payload), SecretKey)</code><br>
+                  <em>Chống sửa quyền:</em> Nếu kẻ xấu tự sửa <code>ROLE_USER</code> thành <code>ROLE_ADMIN</code>, Signature do Server tính lại bằng <code>SecretKey</code> sẽ sai lệch ➔ Chặn đứng ngay lập tức!
+                </p>
+              </div>
+            </div>
+
+            <!-- CARD 3: SO SÁNH MÃ BĂM BCRYPT VS SHA-256 -->
+            <div class="sharp-card">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(16,185,129,0.15); color:var(--accent-emerald)">⚙️</div>
+                <div class="card-title">3. Mã Băm Trong Hệ Thống: BCrypt vs SHA-256</div>
+              </div>
+              <div style="font-size:0.79rem; color:var(--text-muted); display:flex; flex-direction:column; gap:6px; line-height:1.45;">
+                <div>
+                  <strong style="color:var(--accent-emerald)">• Mật khẩu người dùng ➔ Dùng BCrypt:</strong>
+                  Thuật toán băm một chiều có sinh <strong>Salt ngẫu nhiên</strong> và tốc độ chậm (~100ms) để chống tấn công vét cạn (Brute-force) và tra cứu từ điển (Rainbow Table) đối với mật khẩu ngắn.
+                </div>
+                <div>
+                  <strong style="color:var(--accent-cyan)">• Refresh Token trong DB ➔ Dùng SHA-256:</strong>
+                  Token vốn là chuỗi 64 ký tự ngẫu nhiên (không thể vét cạn). Ta băm SHA-256 để: (1) Nếu DB bị lộ, hacker chỉ thấy chuỗi băm vô dụng; (2) Tốc độ băm cực nhanh (&lt;1ms), tạo B-Tree Index tra cứu O(1) tức thì.
+                </div>
+              </div>
+            </div>
+
+            <!-- CARD 4: PHÂN QUYỀN RBAC (USER VS ADMIN) -->
+            <div class="sharp-card">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(244,63,94,0.15); color:var(--accent-rose)">🛡️</div>
+                <div class="card-title">4. Cơ Chế Phân Quyền RBAC (User vs Admin)</div>
+              </div>
+              <div style="font-size:0.79rem; color:var(--text-muted); display:flex; flex-direction:column; gap:6px; line-height:1.45;">
+                <div>
+                  • <strong>Trích xuất quyền:</strong> <code>JwtAuthenticationFilter</code> đọc claim <code>"roles": ["ROLE_ADMIN"]</code> từ token ➔ Chuyển thành <code>GrantedAuthority</code> nạp vào <code>SecurityContextHolder</code>.
+                </div>
+                <div>
+                  • <strong>Kiểm soát API:</strong> Dùng <code>@PreAuthorize("hasRole('ADMIN')")</code> tại Controller hoặc <code>.requestMatchers("/api/v1/users/**").hasRole("ADMIN")</code> tại FilterChain.
+                </div>
+                <div style="background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:var(--radius-xs);">
+                  <strong style="color:#fff">Phân biệt 2 mã lỗi HTTP:</strong><br>
+                  • <span class="status-badge badge-amber" style="font-size:0.68rem;">401 Unauthorized</span>: Thiếu token hoặc token hết hạn (Chưa xác thực danh tính).<br>
+                  • <span class="status-badge badge-rose" style="font-size:0.68rem;">403 Forbidden</span>: Đã có token hợp lệ nhưng role là USER cố tình gọi API xóa của ADMIN (Không đủ quyền hạn).
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------
+         SLIDE 5: PHẦN 3.2 - TOKEN ROTATION & BẢO VỆ CHUYÊN SÂU
+         ------------------------------------------------------------------ -->
+    <section class="slide" data-slide="5" data-title="Phần 3.2: Token Rotation & Security">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">CHUYÊN ĐỀ 03.2 • ADVANCED TOKEN SECURITY</span>
+            <h2 class="slide-title">Chiến Lược Token Rotation & Chống Chiếm Đoạt Phiên</h2>
+            <p class="slide-subtitle">Sự khác biệt cốt tử giữa SHA-256 vs BCrypt, Tự động phát hiện token bị đánh cắp
+            </p>
+          </div>
+        </div>
+
+        <div class="slide-body">
+          <!-- Flowchart Token Rotation -->
+          <div class="flow-container">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="status-badge badge-amber">SƠ ĐỒ XOAY VÒNG REFRESH TOKEN (TOKEN ROTATION WORKFLOW)</span>
+              <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono)">Nguyên lý
+                Zero-Knowledge</span>
+            </div>
+
+            <div class="decision-split">
+              <!-- Branch 1: Normal Refresh -->
+              <div class="branch-card success">
+                <div style="font-weight:700; color:var(--accent-emerald); margin-bottom:4px;">
+                  ✓ KỊCH BẢN 1: NGƯỜI DÙNG HỢP LỆ ĐỔI TOKEN MỚI
+                </div>
+                <div style="font-size:0.78rem; color:var(--text-muted); line-height:1.5;">
+                  1. Client gửi Refresh Token cũ lên <code>/api/v1/auth/refresh</code>.<br>
+                  2. Server băm SHA-256 tìm trong database ➔ Token chưa bị thu hồi.<br>
+                  3. <strong>Thu hồi token cũ</strong> (đánh dấu <code>revoked_at</code>) + <strong>Cấp Refresh Token
+                    mới</strong>.<br>
+                  ➔ Token cũ lập tức bị vô hiệu hóa (Revoked), hacker có lấy được token cũ cũng hoàn toàn vô dụng!
+                </div>
+              </div>
+
+              <!-- Branch 2: Hacker replay attack -->
+              <div class="branch-card danger">
+                <div style="font-weight:700; color:var(--accent-rose); margin-bottom:4px;">
+                  ⚠️ KỊCH BẢN 2: PHÁT HIỆN HACKER TÁI SỬ DỤNG TOKEN
+                </div>
+                <div style="font-size:0.78rem; color:var(--text-muted); line-height:1.5;">
+                  1. Hacker lấy được token cũ và gửi lên để xin cấp mới.<br>
+                  2. Server kiểm tra DB ➔ Phát hiện token này <strong>ĐÃ TỪNG BỊ THU HỒI!</strong><br>
+                  3. <strong>BẬT BÁO ĐỘNG ĐỎ:</strong> Có kẻ gian đang dùng token đánh cắp.<br>
+                  ➔ Lập tức từ chối <strong>HTTP 401</strong> và có thể thu hồi toàn bộ phiên của tài khoản này!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom: Cryptography secrets & Zero enumeration -->
+          <div class="grid-2">
+            <div class="sharp-card highlight">
+              <div class="card-header">
+                <div class="card-icon-box">🔒</div>
+                <div class="card-title">Tại Sao Token Dùng SHA-256 Còn Pass Dùng BCrypt?</div>
+              </div>
+              <div style="font-size:0.81rem; color:var(--text-muted); display:flex; flex-direction:column; gap:6px;">
+                <p>• <strong>Mật khẩu:</strong> Người dùng đặt ngắn, dễ đoán ➔ Cần <em>BCrypt</em> (có salt ngẫu nhiên,
+                  cố tình tính toán chậm để chống vét cạn Brute-force).</p>
+                <p>• <strong>Refresh Token:</strong> Là chuỗi ngẫu nhiên 64 ký tự (bản thân nó đã cực mạnh) ➔ Dùng
+                  <em>SHA-256</em> (hàm tất định) để có thể đánh index và tìm kiếm <code>WHERE token_hash = ?</code> với
+                  tốc độ <strong>O(1)</strong>!
+                </p>
+              </div>
+            </div>
+
+            <div class="sharp-card">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(244,63,94,0.15); color:var(--accent-rose)">🛡️</div>
+                <div class="card-title">Thu Hồi Khi Đổi Mật Khẩu & Zero Enumeration</div>
+              </div>
+              <div style="font-size:0.81rem; color:var(--text-muted); display:flex; flex-direction:column; gap:6px;">
+                <p>• <strong>Đổi mật khẩu:</strong> Lập tức gọi <code>revokeAllByUserId(userId)</code> xóa sổ toàn bộ
+                  phiên đăng nhập trên mọi thiết bị, buộc đăng nhập lại.</p>
+                <p>• <strong>Zero User Enumeration:</strong> Dù email không tồn tại hay sai password, hệ thống luôn trả
+                  cùng 1 thông điệp: <em>"Email hoặc mật khẩu không chính xác"</em> (chống hacker dò email tồn tại).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------
+         SLIDE 6: PHẦN 4 - WEBSOCKET & STOMP REALTIME CHAT
+         ------------------------------------------------------------------ -->
+    <section class="slide" data-slide="6" data-title="Phần 4: WebSocket & STOMP Realtime">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">CHUYÊN ĐỀ 04 • REAL-TIME COMMUNICATION</span>
+            <h2 class="slide-title">Chat Realtime Với WebSocket & Giao Thức STOMP</h2>
+            <p class="slide-subtitle">Sơ đồ bắt tay kết nối 2 chiều, Xác thực JWT Interceptor & Kỹ thuật Token Relay
+              giữa Microservices</p>
+          </div>
+        </div>
+
+        <div class="slide-body">
+          <!-- Flowchart WebSocket & STOMP -->
+          <div class="flow-container">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="status-badge badge-rose">BIỂU ĐỒ BẮT TAY & TRUYỀN TIN REALTIME TRONG CHAT-SERVICE</span>
+              <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono)">Kênh truyền 2 chiều
+                Full-Duplex</span>
+            </div>
+
+            <div class="flow-steps-row">
+              <div class="flow-node" style="flex: 1.1">
+                <div class="flow-step-idx">BẮT TAY HTTP</div>
+                <div class="flow-step-title">GET /ws-chat</div>
+                <div class="flow-step-detail">Upgrade sang TCP WebSocket</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">STOMP</span></div>
+
+              <div class="flow-node active-glow" style="flex: 1.4; border-color:var(--accent-rose)">
+                <div class="flow-step-idx">STOMP CONNECT</div>
+                <div class="flow-step-title">Gửi Bearer Token</div>
+                <div class="flow-step-detail">ChannelInterceptor xác thực JWT Stateless</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">KÊNH</span></div>
+
+              <div class="flow-node active-glow" style="flex: 1.3; border-color:var(--accent-cyan)">
+                <div class="flow-step-idx">SUBSCRIBE</div>
+                <div class="flow-step-title">/topic/rooms/{id}</div>
+                <div class="flow-step-detail">Lắng nghe tin nhắn phòng chat</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">GỬI TIN</span></div>
+
+              <div class="flow-node" style="flex: 1.3; border-color:var(--accent-amber)">
+                <div class="flow-step-idx">SEND MESSAGE</div>
+                <div class="flow-step-title">/app/chat.sendMessage</div>
+                <div class="flow-step-detail">Lưu DB chat_db</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">RELAY</span></div>
+
+              <div class="flow-node" style="flex: 1.4; border-color:var(--accent-emerald)">
+                <div class="flow-step-idx">TOKEN RELAY</div>
+                <div class="flow-step-title">user-service (:8081)</div>
+                <div class="flow-step-detail">Lấy avatar/tên khách hàng</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom: HTTP Polling vs WebSocket & Token Relay Details -->
+          <div class="grid-2">
+            <div class="table-container">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Tiêu chí</th>
+                    <th>HTTP Polling</th>
+                    <th>WebSocket + STOMP</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Cơ chế truyền</strong></td>
+                    <td>Client hỏi liên tục mỗi 2s: <em>"Có tin mới không?"</em></td>
+                    <td>Mở 1 kết nối duy nhất, Server chủ động bắn tin</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Độ trễ</strong></td>
+                    <td>2 - 3 giây (chờ vòng lặp tiếp theo)</td>
+                    <td><strong>Mili-giây (Gần như tức thì)</strong></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Tài nguyên</strong></td>
+                    <td>Rất tốn băng thông (hàng ngàn request rỗng)</td>
+                    <td>Cực kỳ tiết kiệm mạng và tải máy chủ</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sharp-card highlight">
+              <div class="card-header">
+                <div class="card-icon-box">🛡️</div>
+                <div class="card-title">Token Relay & Kháng Lỗi (Graceful Degradation)</div>
+              </div>
+              <div style="font-size:0.81rem; color:var(--text-muted); display:flex; flex-direction:column; gap:6px;">
+                <p>• <strong>Token Relay:</strong> Khi Admin xem chi tiết chat, <code>chat-service</code> gọi HTTP sang
+                  <code>user-service</code> và truyền tiếp (relay) Token trong header để lấy thông tin khách hàng.
+                </p>
+                <p>• <strong>Graceful Degradation:</strong> Nếu <code>user-service</code> chẳng may bị chậm hoặc gián
+                  đoạn,
+                  <code>chat-service</code> tự động dùng thông tin fallback ("Khách ẩn danh"), bảo đảm chức
+                  năng chat không bị ngắt quãng!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------
+         SLIDE 7: PHẦN 5 - SPRING KAFKA & TRANSACTIONAL OUTBOX
+         ------------------------------------------------------------------ -->
+    <section class="slide" data-slide="7" data-title="Phần 5: Spring Kafka & Outbox Pattern">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">CHUYÊN ĐỀ 05 • ASYNCHRONOUS MESSAGING</span>
+            <h2 class="slide-title">Spring Kafka & Mẫu Thiết Kế Transactional Outbox</h2>
+            <p class="slide-subtitle">Giải quyết triệt để bài toán Dual-Write, Đảm bảo không bao giờ mất sự kiện gửi
+              email</p>
+          </div>
+        </div>
+
+        <div class="slide-body">
+          <!-- Flowchart Outbox Pattern -->
+          <div class="flow-container">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="status-badge badge-amber">BIỂU ĐỒ TRANSACTIONAL OUTBOX PATTERN ĐÃ TRIỂN KHAI</span>
+              <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono)">Đảm bảo tính nhất
+                quán cuối cùng (Eventual Consistency)</span>
+            </div>
+
+            <div class="flow-steps-row">
+              <div class="flow-node active-glow" style="flex: 1.3; border-color:var(--accent-cyan)">
+                <div class="flow-step-idx">1. ĐĂNG KÝ USER</div>
+                <div class="flow-step-title">CÙNG 1 TRANSACTION</div>
+                <div class="flow-step-detail">
+                  • INSERT <code>users</code><br>
+                  • INSERT <code>outbox_events</code><br>
+                  <em>Cùng COMMIT hoặc ROLLBACK</em>
+                </div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">2s Scan</span></div>
+
+              <div class="flow-node active-glow" style="flex: 1.4; border-color:var(--accent-amber)">
+                <div class="flow-step-idx">2. OUTBOX PROCESSOR</div>
+                <div class="flow-step-title">FOR UPDATE SKIP LOCKED</div>
+                <div class="flow-step-detail">
+                  Quét bảng outbox mỗi 2 giây, tránh xung đột khi chạy nhiều instance
+                </div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">Kafka</span></div>
+
+              <div class="flow-node" style="flex: 1.3; border-color:var(--accent-indigo)">
+                <div class="flow-step-idx">3. TOPIC: user-events</div>
+                <div class="flow-step-title">Key = userId</div>
+                <div class="flow-step-detail">Bảo đảm thứ tự sự kiện trên cùng 1 Partition</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">Consume</span></div>
+
+              <div class="flow-node" style="flex: 1.4; border-color:var(--accent-emerald)">
+                <div class="flow-step-idx">4. IDEMPOTENT CONSUMER</div>
+                <div class="flow-step-title">notification-service</div>
+                <div class="flow-step-detail">Kiểm tra eventId đã xử lý chưa ➔ Gửi mail chào mừng qua SMTP</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom: Dual write problem & 4 advanced kafka points -->
+          <div class="grid-2">
+            <div class="sharp-card highlight">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(245,158,11,0.15); color:var(--accent-amber)">⚠️</div>
+                <div class="card-title">Vấn Đề Dual-Write Nếu Không Có Outbox</div>
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:8px;">
+                Nếu lưu User vào Database xong rồi gọi Kafka trực tiếp: Lỡ Kafka bị rớt mạng đúng lúc đó ➔ <strong>User
+                  đã tạo nhưng email không bao giờ được gửi!</strong>
+              </p>
+              <p style="font-size:0.82rem; color:#fde68a">
+                ➔ <strong>Với Outbox:</strong> Dữ liệu event nằm an toàn trong bảng <code>outbox_events</code>. Khi
+                Kafka phục hồi kết nối, processor sẽ tiếp tục đẩy đi ➔ <em>Zero Data Loss</em>!
+              </p>
+            </div>
+
+            <div class="sharp-card">
+              <div class="card-header">
+                <div class="card-icon-box">⚙️</div>
+                <div class="card-title">Idempotent Consumer & Dead Letter Topic</div>
+              </div>
+              <div style="font-size:0.81rem; color:var(--text-muted); display:flex; flex-direction:column; gap:6px;">
+                <p>• <strong>Idempotent Consumer:</strong> Nếu mạng chập chờn Kafka gửi lại sự kiện lần 2,
+                  <code>notification-service</code> kiểm tra thấy <code>eventId</code> này đã gửi rồi ➔ bỏ qua, chống
+                  gửi 2 email rác cho khách.
+                </p>
+                <p>• <strong>Dead Letter Topic (DLT):</strong> Các event bị lỗi nghiêm trọng (JSON sai cú pháp) sẽ tự
+                  động được cách ly sang <code>user-events.DLT</code> để lập trình viên kiểm tra sau mà không làm nghẽn
+                  luồng chính.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------
+         SLIDE 8: PHẦN 6 - REDIS CHỐNG BRUTE-FORCE
+         ------------------------------------------------------------------ -->
+    <section class="slide" data-slide="8" data-title="Phần 6: Redis Chống Brute-force">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">CHUYÊN ĐỀ 06 • IN-MEMORY DEFENSE</span>
+            <h2 class="slide-title">Redis: Phòng Vệ Đăng Nhập Tấn Công Brute-Force</h2>
+            <p class="slide-subtitle">Sử dụng bộ nhớ đệm In-Memory RAM với TTL tự hủy để khóa tài khoản tạm thời</p>
+          </div>
+        </div>
+
+        <div class="slide-body">
+          <!-- Flowchart Redis Rate Limit -->
+          <div class="flow-container">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="status-badge badge-rose">BIỂU ĐỒ BẢO VỆ CHỐNG DÒ MẬT KHẨU (LOGIN ATTEMPTS RATE LIMIT)</span>
+              <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono)">Ngưỡng: 5 lần sai •
+                Khóa tạm thời 900s</span>
+            </div>
+
+            <div class="flow-steps-row">
+              <div class="flow-node" style="flex: 1.1">
+                <div class="flow-step-idx">BƯỚC 1</div>
+                <div class="flow-step-title">Login Request</div>
+                <div class="flow-step-detail">Gửi email đăng nhập</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">CHECK</span></div>
+
+              <div class="flow-node active-glow" style="flex: 1.3; border-color:var(--accent-rose)">
+                <div class="flow-step-idx">BƯỚC 2: REDIS RAM</div>
+                <div class="flow-step-title">login:attempts:{email}</div>
+                <div class="flow-step-detail">Đọc counter trong bộ nhớ RAM (&lt; 0.2ms)</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">&gt;= 5?</span></div>
+
+              <div class="flow-node active-glow" style="flex: 1.5; border-color:var(--accent-rose)">
+                <div class="flow-step-idx">NẾU ĐÃ SAI &gt;= 5 LẦN</div>
+                <div class="flow-step-title">TỪ CHỐI NGAY LẬP TỨC</div>
+                <div class="flow-step-detail">Trả <strong>HTTP 429 Too Many Requests</strong>, không cần query DB!</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔<span class="flow-arrow-label">&lt; 5 lần</span></div>
+
+              <div class="flow-node" style="flex: 1.5; border-color:var(--accent-emerald)">
+                <div class="flow-step-idx">KIỂM TRA PASSWORD</div>
+                <div class="flow-step-title">Đúng / Sai</div>
+                <div class="flow-step-detail">
+                  • <strong>Sai:</strong> INCR counter + EXPIRE 900s<br>
+                  • <strong>Đúng:</strong> DEL key (reset counter về 0)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom: Redis vs PostgreSQL Comparison -->
+          <div class="grid-2">
+            <div class="table-container">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Tiêu chí</th>
+                    <th>PostgreSQL (Ổ cứng)</th>
+                    <th>Redis (Bộ nhớ RAM)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Tốc độ đọc/ghi</strong></td>
+                    <td>Vài mili-giây (Chậm hơn)</td>
+                    <td><strong>Micro-giây (Cực nhanh)</strong></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Tự động hết hạn</strong></td>
+                    <td>Phải viết cronjob quét xóa thủ công</td>
+                    <td><strong>Có sẵn TTL:</strong> <code>EXPIRE key 900</code> tự giải phóng sau 900s</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Chịu tải tấn công</strong></td>
+                    <td>Dễ nghẽn Connection Pool DB</td>
+                    <td>Xử lý hàng trăm ngàn lệnh/giây thoải mái</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sharp-card highlight">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(244,63,94,0.15); color:var(--accent-rose)">🛡️</div>
+                <div class="card-title">Cơ Chế Ngăn Chặn Tấn Công Brute-force</div>
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.5;">
+                Khi đối tượng tấn công dùng bot tự động dò mật khẩu liên tục với tần suất cao: Redis sẽ phát hiện và
+                chặn đứng ngay tại tầng RAM chỉ trong
+                <strong>0.2 mili-giây</strong>.
+                Cơ sở dữ liệu PostgreSQL hoàn toàn không bị ảnh hưởng, đảm bảo hiệu năng và tính ổn định cho toàn bộ
+                người dùng hợp lệ.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------
+         SLIDE 9: PHẦN 7.1 - SPRING CLOUD GATEWAY TỔNG QUAN
+         ------------------------------------------------------------------ -->
+    <section class="slide" data-slide="9" data-title="Phần 7.1: Spring Cloud Gateway">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">CHUYÊN ĐỀ 07.1 • REVENUE & ROUTING</span>
+            <h2 class="slide-title">Spring Cloud Gateway: Cửa Ngõ Hệ Thống</h2>
+            <p class="slide-subtitle">Khắc phục 5 rủi ro khi gọi trực tiếp Microservices và Sức mạnh của Netty Reactive
+              Event Loop</p>
+          </div>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Left: 5 Problems without Gateway -->
+            <div class="sharp-card">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(244,63,94,0.15); color:var(--accent-rose)">❌</div>
+                <div class="card-title">5 Rủi Ro Chí Mạng Khi Không Có Gateway</div>
+              </div>
+              <div style="font-size:0.82rem; color:var(--text-muted); display:flex; flex-direction:column; gap:7px;">
+                <p>1. <strong>Lộ sơ đồ mạng:</strong> Phải mở port 8081, 8082, 8083 ra ngoài Internet ➔ Bề mặt tấn công
+                  cực rộng.</p>
+                <p>2. <strong>CORS phức tạp:</strong> Từng service phải tự viết cấu hình CORS, dễ sai sót và xung đột.
+                </p>
+                <p>3. <strong>Xác thực lặp thừa:</strong> Mỗi service lại phải giải mã JWT, kiểm tra quyền ➔ Lãng phí
+                  CPU máy chủ.</p>
+                <p>4. <strong>Mất dấu truy vết (Traceability):</strong> Không có điểm tập trung sinh
+                  <code>X-Trace-Id</code> ngay từ đầu.
+                </p>
+                <p>5. <strong>Khớp nối chặt (Coupling):</strong> Đổi IP hay port service nội bộ thì Frontend bắt buộc
+                  phải sửa code theo.</p>
+              </div>
+            </div>
+
+            <!-- Right: Netty vs Tomcat -->
+            <div class="sharp-card highlight">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(0,240,255,0.15); color:var(--accent-cyan)">⚡</div>
+                <div class="card-title">Tomcat (Spring MVC) vs Netty (Gateway)</div>
+              </div>
+
+              <table class="custom-table" style="font-size:0.82rem; margin-bottom:10px;">
+                <thead>
+                  <tr>
+                    <th>Tiêu chí</th>
+                    <th>Tomcat Blocking</th>
+                    <th>Netty Reactive (Gateway)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Mô hình luồng</strong></td>
+                    <td>1 Request = 1 Thread cố định</td>
+                    <td><strong>Event Loop phi phong tỏa</strong></td>
+                  </tr>
+                  <tr>
+                    <td><strong>10.000 requests</strong></td>
+                    <td>Cần 10.000 thread ➔ Tràn RAM</td>
+                    <td>Chỉ cần vài Thread lõi CPU</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Starter Maven</strong></td>
+                    <td><code>spring-boot-starter-web</code></td>
+                    <td><code>spring-cloud-starter-gateway</code></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="banner-tip" style="padding:8px 12px; font-size:0.8rem;">
+                <span>💡</span>
+                <span><strong>Công thức Route:</strong>
+                  <code>Route = Predicate (Khớp URL) + Filter (Xử lý Request/Response)</code></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------
+         SLIDE 10: PHẦN 7.2 - LUỒNG GATEWAY & HEADER ENRICHMENT
+         ------------------------------------------------------------------ -->
+    <section class="slide" data-slide="10" data-title="Phần 7.2: Luồng Gateway & Tracing">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">CHUYÊN ĐỀ 07.2 • FILTER PIPELINE & TRACING</span>
+            <h2 class="slide-title">Luồng Request Gateway & Kỹ Thuật Header Enrichment</h2>
+            <p class="slide-subtitle">Sơ đồ 5 bước qua Filter Pipeline, Truy vết phân tán X-Trace-Id và Xử lý lỗi toàn
+              cục</p>
+          </div>
+        </div>
+
+        <div class="slide-body">
+          <!-- Flowchart 5 bước qua Gateway -->
+          <div class="flow-container">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="status-badge badge-cyan">SƠ ĐỒ 5 BƯỚC XỬ LÝ REQUEST TẠI CỔNG API GATEWAY</span>
+              <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono)">Global Filters &
+                Error Handling</span>
+            </div>
+
+            <div class="flow-steps-row">
+              <div class="flow-node active-glow" style="flex: 1.2; border-color:var(--accent-cyan)">
+                <div class="flow-step-idx">1. TRACE ID</div>
+                <div class="flow-step-title">TraceIdGlobalFilter</div>
+                <div class="flow-step-detail">Sinh UUID gắn <code>X-Trace-Id</code> xuyên suốt</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔</div>
+
+              <div class="flow-node active-glow" style="flex: 1.4; border-color:var(--accent-violet)">
+                <div class="flow-step-idx">2. AUTHENTICATION</div>
+                <div class="flow-step-title">JwtAuthFilter</div>
+                <div class="flow-step-detail">Kiểm tra Bearer Token, sai ➔ 401 dừng luồng</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔</div>
+
+              <div class="flow-node active-glow" style="flex: 1.4; border-color:var(--accent-emerald)">
+                <div class="flow-step-idx">3. HEADER ENRICHMENT</div>
+                <div class="flow-step-title">Bơm Header</div>
+                <div class="flow-step-detail">Gắn <code>X-User-Id</code>, <code>X-User-Roles</code> cho backend</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔</div>
+
+              <div class="flow-node" style="flex: 1.2; border-color:var(--accent-indigo)">
+                <div class="flow-step-idx">4. FORWARD</div>
+                <div class="flow-step-title">Route to Service</div>
+                <div class="flow-step-detail">Chuyển tiếp đến :8081 / :8083</div>
+              </div>
+
+              <div class="flow-arrow-conn">➔</div>
+
+              <div class="flow-node" style="flex: 1.2; border-color:var(--accent-cyan)">
+                <div class="flow-step-idx">5. RESPONSE</div>
+                <div class="flow-step-title">Log & Return</div>
+                <div class="flow-step-detail">Ghi log thời gian thực thi + trả Client</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom: Header Enrichment Code & Error Handler -->
+          <div class="grid-2">
+            <div class="sharp-card highlight">
+              <div class="card-header">
+                <div class="card-icon-box">💎</div>
+                <div class="card-title">Kỹ Thuật Header Enrichment</div>
+              </div>
+              <p style="font-size:0.81rem; color:var(--text-muted); margin-bottom:8px;">
+                Gateway giải mã token đúng 1 lần duy nhất, sau đó bóc tách dữ liệu và gắn vào Header trước khi chuyển
+                tiếp:
+              </p>
+              <div class="code-box" style="font-size:0.78rem;">
+                X-Trace-Id: <span style="color:#00f0ff">"a1b2c3d4-e5f6..."</span><br>
+                X-User-Id: <span style="color:#34d399">"987e6543-e21b..."</span><br>
+                X-User-Email: <span style="color:#fbbf24">"admin@company.com"</span><br>
+                X-User-Roles: <span style="color:#f43f5e">"ROLE_ADMIN"</span>
+              </div>
+              <p style="font-size:0.78rem; color:#bae6fd; margin-top:6px;">
+                ➔ <code>user-service</code> và <code>chat-service</code> chỉ việc đọc Header là biết ai đang gọi, không
+                cần dependency JWT!
+              </p>
+            </div>
+
+            <div class="sharp-card">
+              <div class="card-header">
+                <div class="card-icon-box" style="background:rgba(244,63,94,0.15); color:var(--accent-rose)">🚨</div>
+                <div class="card-title">ErrorWebExceptionHandler Toàn Cục</div>
+              </div>
+              <div style="font-size:0.81rem; color:var(--text-muted); display:flex; flex-direction:column; gap:7px;">
+                <p>• Trong Spring Cloud Gateway (Netty), <code>@RestControllerAdvice</code> không hoạt động vì không có
+                  Spring MVC!</p>
+                <p>• Sử dụng <code>ErrorWebExceptionHandler</code> với độ ưu tiên <code>@Order(-2)</code> để bắt trọn
+                  mọi exception.</p>
+                <p>• Khi backend service bị sập ➔ Gateway tự động trả về JSON chuẩn HTTP <strong>503 Service
+                    Unavailable</strong> (kèm traceId), tuyệt đối không hiển thị trang trắng HTML lỗi.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------
+         SLIDE 11: TỔNG KẾT & Q&A
+         ------------------------------------------------------------------ -->
+    <section class="slide" data-slide="11" data-title="Tổng Kết & Q&A">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-tag">TỔNG KẾT • WRAP-UP & DEMO</span>
+            <h2 class="slide-title">Bảng Tổng Hợp Kỹ Thuật Đã Áp Dụng & Q&A</h2>
+            <p class="slide-subtitle">Bức tranh toàn cảnh về năng lực hệ thống và sẵn sàng giải đáp thắc mắc</p>
+          </div>
+        </div>
+
+        <div class="slide-body">
+          <div class="table-container">
+            <table class="custom-table" style="font-size:0.81rem;">
+              <thead>
+                <tr>
+                  <th>Công Nghệ</th>
+                  <th>Vai Trò Trong Dự Án</th>
+                  <th>Kỹ Thuật Đột Phá Đã Áp Dụng</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Microservices</strong></td>
+                  <td>Kiến trúc tổng thể phân tán</td>
+                  <td>4 service độc lập, Database-per-service, Giao tiếp HTTP + Kafka</td>
+                </tr>
+                <tr>
+                  <td><strong>Docker</strong></td>
+                  <td>Đóng gói & môi trường chuẩn hóa</td>
+                  <td>Multi-stage build (800MB → 300MB), Non-root OWASP, Compose 8 services</td>
+                </tr>
+                <tr>
+                  <td><strong>Spring Security + JWT</strong></td>
+                  <td>Bảo mật & Phân quyền RBAC</td>
+                  <td>Stateless JWT, Token Rotation, Hash SHA-256 vs Password BCrypt</td>
+                </tr>
+                <tr>
+                  <td><strong>WebSocket STOMP</strong></td>
+                  <td>Chat realtime hai chiều</td>
+                  <td>Độ trễ mili-giây, Stateless JWT Interceptor, Microservice Token Relay</td>
+                </tr>
+                <tr>
+                  <td><strong>Apache Kafka</strong></td>
+                  <td>Xử lý bất đồng bộ tin cậy</td>
+                  <td>Transactional Outbox Pattern, FOR UPDATE SKIP LOCKED, Idempotent, DLT</td>
+                </tr>
+                <tr>
+                  <td><strong>Redis In-Memory</strong></td>
+                  <td>Chống Brute-force đăng nhập</td>
+                  <td>Bộ đếm RAM tốc độ micro-giây, TTL 900s tự hủy, Trả HTTP 429</td>
+                </tr>
+                <tr>
+                  <td><strong>Spring Cloud Gateway</strong></td>
+                  <td>Cửa ngõ đơn điểm</td>
+                  <td>Route/Predicate/Filter, Header Enrichment, Netty Reactive Event Loop</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid-2">
+            <div class="sharp-card highlight" style="text-align:center;">
+              <h3 style="font-size:1.2rem; color:#fff; margin-bottom:6px;">🎤 SẴN SÀNG CHO PHẦN Q&A</h3>
+              <p style="font-size:0.84rem; color:var(--text-muted)">
+                Xin chân thành cảm ơn Thầy Cô và các bạn đã lắng nghe bài thuyết trình!<br>
+                Em rất mong nhận được những câu hỏi và góp ý quý báu.
+              </p>
+            </div>
+
+            <div class="sharp-card" style="display:flex; flex-direction:column; justify-content:center;">
+              <div style="font-size:0.83rem; color:var(--accent-cyan); font-weight:700; margin-bottom:6px;">
+                💡 4 ĐIỂM SẴN SÀNG LIVE-DEMO:
+              </div>
+              <ul
+                style="font-size:0.8rem; color:var(--text-muted); list-style:none; display:flex; flex-direction:column; gap:4px;">
+                <li>1. <strong>jwt.io:</strong> Decode token xem Header, Payload, Signature.</li>
+                <li>2. <strong>Swagger UI:</strong> Test trực tiếp API qua Gateway :8080.</li>
+                <li>3. <strong>Console Log Kafka:</strong> Xem event truyền từ user sang notification.</li>
+                <li>4. <strong>Chat Demo:</strong> Mở 2 tab trình duyệt chat realtime WebSocket.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       JAVASCRIPT LOGIC
+       ========================================================================== -->
+  <script>
+    // Speaker notes content per slide index (12 slides)
+    const speakerNotes = [
+      {
+        title: "Trang Bìa - Mở đầu",
+        script: "Kính chào Thầy Cô và các bạn. Hôm nay em xin phép được trình bày bài seminar tổng kết các kiến thức và kỹ thuật chuyên sâu mà em đã trực tiếp áp dụng trong việc xây dựng hệ thống Microservices thực tế với Java 21, Spring Cloud Gateway, Kafka, Redis và Docker."
+      },
+      {
+        title: "Mục Lục 7 Chuyên Đề",
+        script: "Nội dung bài nói hôm nay gồm 7 phần đi từ bức tranh tổng thể kiến trúc, cách đóng gói Docker tối ưu, cơ chế bảo mật JWT nâng cao, giao tiếp thời gian thực WebSocket, xử lý bất đồng bộ tin cậy với Kafka, phòng thủ Brute-force bằng Redis và cửa ngõ API Gateway."
+      },
+      {
+        title: "Phần 1: Kiến Trúc Microservices",
+        script: "Kính thưa Thầy Cô, kiến trúc Microservices phân rã hệ thống thành các dịch vụ độc lập theo từng nghiệp vụ chuyên biệt thay vì đóng gói nguyên khối (Monolith). Trong dự án thực tế, em xây dựng 4 microservices: API Gateway giữ vai trò cổng vào tập trung kiểm tra token JWT và điều hướng request; User Service quản lý thông tin tài khoản và xác thực; Chat Service xử lý truyền tin thời gian thực qua WebSocket; và Notification Service xử lý gửi email bất đồng bộ qua Kafka. Mỗi dịch vụ sở hữu cơ sở dữ liệu riêng biệt theo mô hình Database-per-Service, nhờ đó đảm bảo tính độc lập triển khai và cách ly sự cố (Fault Isolation) - khi một dịch vụ gặp sự cố thì các dịch vụ khác vẫn vận hành bình thường."
+      },
+      {
+        title: "Phần 2: Docker & Container",
+        script: "Em áp dụng 2 kỹ thuật Docker quan trọng: Thứ nhất là Multi-stage build giúp giảm dung lượng image từ 800MB xuống 300MB vì giai đoạn chạy chỉ cần JRE. Thứ hai là bảo mật OWASP: Tuyệt đối không chạy container bằng quyền root, em tạo user appuser riêng để cô lập an toàn."
+      },
+      {
+        title: "Phần 3.1: Spring Security & JWT",
+        script: "Kính thưa Thầy Cô, ở phần này em làm rõ 4 trọng tâm kỹ thuật cốt lõi: Thứ nhất, Access Token là stateless 15 phút đính kèm header mỗi request không lưu DB, còn Refresh Token là stateful 7 ngày lưu bản băm SHA-256 trong Database để cấp lại token mới. Thứ hai, JWT gồm 3 phần: Header và Payload chỉ là mã hóa Base64URL để truyền tải dữ liệu công khai, còn bảo mật nằm ở Chữ ký số Signature được tạo bằng HMAC-SHA256 với Secret Key bí mật; nếu ai cố tình sửa đổi role từ USER thành ADMIN trong Payload thì chữ ký sẽ sai lệch ngay lập tức. Thứ ba, em phân biệt rõ: Mật khẩu người dùng dùng BCrypt vì có Salt ngẫu nhiên chống vét cạn; còn Refresh Token dùng SHA-256 để tra cứu O(1) siêu tốc mà vẫn bảo vệ an toàn nếu rò rỉ cơ sở dữ liệu. Thứ tư, hệ thống phân quyền RBAC bóc tách claims nạp vào SecurityContext và phân định rạch ròi: Chưa đăng nhập trả về HTTP 401 Unauthorized, còn thiếu quyền hạn trả về HTTP 403 Forbidden."
+      },
+      {
+        title: "Phần 3.2: Token Rotation & Bảo Vệ",
+        script: "Điểm độc đáo ở đây: Refresh Token được lưu trong DB nhưng ở dạng hash SHA-256 chứ không lưu thô (Zero-Knowledge). Em dùng SHA-256 cho Refresh Token vì nó là chuỗi dài ngẫu nhiên và cần tìm kiếm O(1), trong khi mật khẩu người dùng thì bắt buộc phải dùng BCrypt vì có salt ngẫu nhiên chống vét cạn."
+      },
+      {
+        title: "Phần 4: WebSocket & STOMP",
+        script: "Thay vì dùng cơ chế Polling gửi request hỏi liên tục làm nghẽn mạng, WebSocket mở 1 kết nối 2 chiều duy nhất. Em xác thực JWT ngay trong frame CONNECT thông qua ChannelInterceptor, không cần truy DB. Khi cần lấy thông tin user, chat-service dùng kỹ thuật Token Relay truyền tiếp token sang user-service."
+      },
+      {
+        title: "Phần 5: Kafka & Outbox Pattern",
+        script: "Đây là mẫu thiết kế Transactional Outbox Pattern: Khi người dùng đăng ký tài khoản, dữ liệu người dùng và sự kiện gửi email được ghi vào cơ sở dữ liệu trong cùng một Database Transaction. Một tiến trình định kỳ sẽ đọc bảng Outbox để xuất bản lên Kafka broker. Nhờ đó, ngay cả khi Kafka broker hoặc kết nối mạng gặp gián đoạn tạm thời, dữ liệu sự kiện vẫn được bảo toàn trọn vẹn và không bao giờ bị thất thoát."
+      },
+      {
+        title: "Phần 6: Redis Chống Brute-force",
+        script: "Em dùng Redis vì nó chạy trên bộ nhớ RAM cực nhanh và có sẵn tính năng TTL tự động giải phóng key. Nếu một IP nhập sai mật khẩu quá 5 lần, Redis sẽ chặn ngay lập tức và trả về mã lỗi HTTP 429 Too Many Requests trong thời gian khóa cấu hình (TTL 900 giây), giúp triệt tiêu tải tấn công và bảo vệ an toàn cho cơ sở dữ liệu PostgreSQL."
+      },
+      {
+        title: "Phần 7.1: API Gateway Tổng Quan",
+        script: "Nếu không có Gateway, Frontend phải gọi thẳng vào từng port, vừa lộ mạng vừa phức tạp CORS. Em chọn Spring Cloud Gateway chạy trên Netty Reactive với mô hình Event Loop, chỉ cần vài Thread là xử lý được hàng chục nghìn request cùng lúc mà không bị tràn RAM như Tomcat."
+      },
+      {
+        title: "Phần 7.2: Luồng Gateway & Header Enrichment",
+        script: "Kỹ thuật Header Enrichment: Gateway giải mã JWT đúng 1 lần duy nhất, sau đó gắn userId và roles vào Header rồi chuyển tiếp vào trong. Các service backend phía sau không cần giải mã token nữa. Mọi request đều được gắn X-Trace-Id để truy vết lỗi xuyên suốt hệ thống."
+      },
+      {
+        title: "Tổng Kết & Hỏi Đáp",
+        script: "Em đã tổng hợp toàn bộ các công nghệ trong bảng ma trận này. Em đã chuẩn bị sẵn sàng demo trên Postman, Swagger UI, console log Kafka và giao diện chat realtime. Em xin lắng nghe các câu hỏi và nhận xét từ Thầy Cô!"
+      }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('slidesContainer');
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const totalSlides = slides.length;
+
+      const progressBar = document.getElementById('progressBar');
+      const slideCounter = document.getElementById('slideCounter');
+      const sideNavDots = document.getElementById('sideNavDots');
+      const menuGrid = document.getElementById('menuGrid');
+
+      const btnPrev = document.getElementById('btnPrev');
+      const btnNext = document.getElementById('btnNext');
+      const btnStart = document.getElementById('btnStartPresentation');
+
+      const speakerDrawer = document.getElementById('speakerDrawer');
+      const speakerNotesBody = document.getElementById('speakerNotesBody');
+      const btnToggleNotes = document.getElementById('btnToggleNotes');
+      const btnCloseNotes = document.getElementById('btnCloseNotes');
+
+      const menuModalOverlay = document.getElementById('menuModalOverlay');
+      const btnOpenMenu = document.getElementById('btnOpenMenu');
+      const btnCloseMenu = document.getElementById('btnCloseMenu');
+      const btnFullscreen = document.getElementById('btnFullscreen');
+
+      let currentSlide = 0;
+      let isScrolling = false;
+
+      // Build side dots & menu
+      slides.forEach((slide, index) => {
+        const title = slide.getAttribute('data-title') || `Slide ${index + 1}`;
+
+        const dotItem = document.createElement('div');
+        dotItem.className = `dot-item ${index === 0 ? 'active' : ''}`;
+        dotItem.setAttribute('data-index', index);
+        dotItem.innerHTML = `
+          <div class="dot-tooltip">${index + 1}. ${title}</div>
+          <div class="dot"></div>
+        `;
+        dotItem.addEventListener('click', () => goToSlide(index));
+        sideNavDots.appendChild(dotItem);
+
+        const menuItem = document.createElement('div');
+        menuItem.className = 'menu-item';
+        menuItem.innerHTML = `
+          <div class="menu-item-num">${String(index).padStart(2, '0')}</div>
+          <div style="flex:1; overflow:hidden">
+            <div class="menu-item-text">${title}</div>
+          </div>
+        `;
+        menuItem.addEventListener('click', () => {
+          goToSlide(index);
+          closeMenu();
+        });
+        menuGrid.appendChild(menuItem);
+      });
+
+      window.goToSlide = function (index) {
+        if (index < 0 || index >= totalSlides) return;
+        currentSlide = index;
+        slides[index].scrollIntoView({ behavior: 'smooth' });
+        updateUI(index);
+      };
+
+      function updateUI(index) {
+        slideCounter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+
+        const percent = (index / (totalSlides - 1)) * 100;
+        progressBar.style.width = `${percent}%`;
+
+        const allDots = sideNavDots.querySelectorAll('.dot-item');
+        allDots.forEach((d, i) => {
+          d.classList.toggle('active', i === index);
+        });
+
+        const note = speakerNotes[index] || { title: `Slide ${index + 1}`, script: 'Chưa có ghi chú.' };
+        speakerNotesBody.innerHTML = `
+          <div class="speaker-script-box">
+            <strong>Kịch Bản Gợi Ý Cho: ${note.title}</strong>
+            <p>${note.script}</p>
+          </div>
+          <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-xs); font-size:0.78rem; color:var(--text-muted)">
+            <strong style="color:var(--accent-cyan); display:block; margin-bottom:4px; font-family:var(--font-mono)">💡 GỢI Ý TRÌNH BÀY:</strong>
+            Nhấn mạnh vào <em>lý do kiến trúc & tại sao chọn giải pháp này</em>. Hãy nói mạch lạc và phong thái tự tin!
+          </div>
+        `;
+      }
+
+      updateUI(0);
+
+      // Wheel Listener
+      let wheelTimeout = null;
+      window.addEventListener('wheel', (e) => {
+        if (speakerDrawer.classList.contains('open') && speakerDrawer.contains(e.target)) return;
+        if (menuModalOverlay.classList.contains('open')) return;
+        if (isScrolling) return;
+
+        if (Math.abs(e.deltaY) > 25) {
+          isScrolling = true;
+          if (e.deltaY > 0) {
+            goToSlide(currentSlide + 1);
+          } else {
+            goToSlide(currentSlide - 1);
+          }
+
+          clearTimeout(wheelTimeout);
+          wheelTimeout = setTimeout(() => {
+            isScrolling = false;
+          }, 600);
+        }
+      }, { passive: false });
+
+      // Intersection Observer
+      const slideObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const idx = parseInt(entry.target.getAttribute('data-slide'), 10);
+            currentSlide = idx;
+            updateUI(idx);
+          }
+        });
+      }, { root: container, threshold: 0.55 });
+
+      slides.forEach(s => slideObserver.observe(s));
+
+      // Buttons
+      if (btnPrev) btnPrev.addEventListener('click', () => goToSlide(currentSlide - 1));
+      if (btnNext) btnNext.addEventListener('click', () => goToSlide(currentSlide + 1));
+      if (btnStart) btnStart.addEventListener('click', () => goToSlide(1));
+
+      // Keyboards
+      window.addEventListener('keydown', (e) => {
+        if (menuModalOverlay.classList.contains('open')) {
+          if (e.key === 'Escape') closeMenu();
+          return;
+        }
+
+        switch (e.key) {
+          case 'ArrowDown':
+          case 'ArrowRight':
+          case 'PageDown':
+          case ' ':
+            e.preventDefault();
+            goToSlide(currentSlide + 1);
+            break;
+          case 'ArrowUp':
+          case 'ArrowLeft':
+          case 'PageUp':
+            e.preventDefault();
+            goToSlide(currentSlide - 1);
+            break;
+          case 'Home':
+            e.preventDefault();
+            goToSlide(0);
+            break;
+          case 'End':
+            e.preventDefault();
+            goToSlide(totalSlides - 1);
+            break;
+          case 'f':
+          case 'F':
+            e.preventDefault();
+            toggleFullscreen();
+            break;
+          case 'n':
+          case 'N':
+            e.preventDefault();
+            toggleSpeakerNotes();
+            break;
+          case 'm':
+          case 'M':
+            e.preventDefault();
+            toggleMenu();
+            break;
+          case 'Escape':
+            if (speakerDrawer.classList.contains('open')) {
+              speakerDrawer.classList.remove('open');
+            }
+            break;
+        }
+      });
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => { });
+        } else {
+          if (document.exitFullscreen) document.exitFullscreen();
+        }
+      }
+      if (btnFullscreen) btnFullscreen.addEventListener('click', toggleFullscreen);
+
+      function toggleSpeakerNotes() {
+        speakerDrawer.classList.toggle('open');
+      }
+      if (btnToggleNotes) btnToggleNotes.addEventListener('click', toggleSpeakerNotes);
+      if (btnCloseNotes) btnCloseNotes.addEventListener('click', () => speakerDrawer.classList.remove('open'));
+
+      function openMenu() { menuModalOverlay.classList.add('open'); }
+      function closeMenu() { menuModalOverlay.classList.remove('open'); }
+      function toggleMenu() { menuModalOverlay.classList.toggle('open'); }
+
+      if (btnOpenMenu) btnOpenMenu.addEventListener('click', openMenu);
+      if (btnCloseMenu) btnCloseMenu.addEventListener('click', closeMenu);
+      menuModalOverlay.addEventListener('click', (e) => {
+        if (e.target === menuModalOverlay) closeMenu();
+      });
+    });
+  </script>
+</body>
+
+</html>

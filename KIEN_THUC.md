@@ -19,6 +19,7 @@ Tài liệu này tổng hợp toàn bộ các kiến thức lập trình, kiến
 12. [Phân quyền RBAC & Thu hồi Token khi Đổi mật khẩu](#12-phân-quyền-rbac--thu-hồi-token-khi-đổi-mật-khẩu)
 13. [HƯỚNG DẪN CHẠY DỰ ÁN TRÊN LAPTOP Ở NHÀ](#13-hướng-dẫn-chạy-dự-án-trên-laptop-ở-nhà)
 14. [CHỨC NĂNG CHAT REALTIME VỚI WEBSOCKET STOMP & GIAO TIẾP MICROSERVICES](#14-chức-năng-chat-realtime-với-websocket-stomp--giao-tiếp-microservices)
+15. [KIẾN TRÚC & TƯ DUY XÂY DỰNG API GATEWAY (SPRING CLOUD GATEWAY REACTIVE)](#15-kiến-trúc--tư-duy-xây-dựng-api-gateway-spring-cloud-gateway-reactive)
 
 ---
 
@@ -356,4 +357,162 @@ docker run -d --name user-service -p 8081:8081 --network microservice-network us
    - Cột trái: Khách hàng (User).
    - Cột phải: Quản trị viên (Admin).
    - Dán token của User và Admin để quan sát tin nhắn nhảy qua lại trong mili-giây!
+
+---
+
+## 15. KIẾN TRÚC & TƯ DUY XÂY DỰNG API GATEWAY (SPRING CLOUD GATEWAY REACTIVE)
+
+### 15.1 Tại sao Hệ thống Microservices BẮT BUỘC phải có API Gateway?
+Nếu không có API Gateway, Frontend (Web, Mobile, Postman) phải gọi trực tiếp vào từng service (`user-service:8081`, `chat-service:8083`, `notification-service:8082`). Điều này gây ra 5 vấn đề nghiêm trọng:
+1. **Lộ sơ đồ mạng nội bộ (Security Risk):** Toàn bộ các cổng của các service phải mở ra Internet, làm gia tăng bề mặt tấn công (*Attack Surface*).
+2. **Ác mộng CORS (Cross-Origin Resource Sharing):** Mỗi service phải tự viết cấu hình CORS riêng, rất dễ xung đột hoặc sơ hở bảo mật.
+3. **Xác thực lặp thừa (Redundant Authentication):** Request nào cũng phải đi sâu vào tận thread pool của từng service mới biết token hết hạn -> tốn tài nguyên CPU, Database của service backend.
+4. **Không có điểm truy vết tập trung (Distributed Tracing Gap):** Khó đồng bộ `X-Trace-Id` ngay từ lúc request vừa chạm vào hệ thống.
+5. **Coupling giữa Client và Backend:** Mỗi khi tách, gộp hoặc đổi port service, toàn bộ ứng dụng Mobile/Frontend phải sửa code và build lại bản cập nhật.
+
+👉 **Giải pháp:** Đặt **API Gateway tại Cổng 8080** làm **Cửa ngõ duy nhất (Single Entry Point)**. Chỉ duy nhất cổng 8080 được public ra ngoài, toàn bộ các microservice còn lại nằm ẩn mình trong mạng nội bộ riêng (Private Network)!
+
+---
+
+### 15.2 Tam giác vàng của Spring Cloud Gateway: Route = Predicate + Filter
+
+Cấu trúc định tuyến của Spring Cloud Gateway luôn xoay quanh 3 khái niệm:
+```
+                      ┌─────────────────────────────────┐
+                      │              ROUTE              │
+                      │  (Đường đi hoàn chỉnh cho 1 API)│
+                      └────────────────┬────────────────┘
+                                       │
+                ┌──────────────────────┴──────────────────────┐
+                ▼                                             ▼
+       ┌─────────────────┐                           ┌─────────────────┐
+       │    PREDICATE    │                           │     FILTER      │
+       │ (Điều kiện lọc) │                           │  (Bộ biến đổi)  │
+       └─────────────────┘                           └─────────────────┘
+        - Khớp URL Path                                - Thêm Header
+        - Khớp HTTP Method                             - Kiểm tra JWT
+        - Khớp Header/Cookie                           - Ghi Log, Đo giờ
+```
+
+1. **Route (Tuyến đường):** Đại diện cho một đích đến (ví dụ: route `user-service-users` trỏ tới `http://user-service:8081`).
+2. **Predicate (Điều kiện so khớp):** Biểu thức logic kiểm tra xem request đến có thuộc về route này không (ví dụ: `Path=/api/v1/users/**`). Nếu `true`, request sẽ được điều hướng vào route đó.
+3. **Filter (Bộ lọc xử lý):** Nơi ta can thiệp vào request trước khi chuyển tiếp (Pre-filter) hoặc can thiệp vào response trước khi trả về cho client (Post-filter).
+
+---
+
+### 15.3 Tư duy Luồng đời của một Request qua Gateway (Request Lifecycle)
+
+```
+[ Client Request ]
+       │
+       ▼ (1. Nhận kết nối tại Netty Event Loop)
+┌────────────────────────────────────────────────────────────────────────┐
+│                          API GATEWAY (Port 8080)                       │
+│                                                                        │
+│  [TraceIdGlobalFilter]                                                 │
+│    - Kiểm tra hoặc sinh UUID mới cho "X-Trace-Id"                     │
+│    - Gắn hook beforeCommit để ghi X-Trace-Id vào HTTP Response         │
+│         │                                                              │
+│         ▼                                                              │
+│  [JwtAuthenticationFilter]                                             │
+│    - Nếu là Public URL (Login, Register, Actuator) -> Cho qua          │
+│    - Nếu là Protected URL:                                             │
+│      + Kiểm tra Header "Authorization: Bearer <token>"                │
+│      + Token sai / hết hạn -> Ngắt luồng (Short-circuit), trả HTTP 401 │
+│      + Token đúng -> Giải mã Claim, làm giàu (Enrich) Header:          │
+│        X-User-Id, X-User-Email, X-User-Roles                           │
+│         │                                                              │
+│         ▼                                                              │
+│  [RequestLoggingGlobalFilter]                                          │
+│    - Ghi log START [METHOD] [PATH] [TraceId], bấm giờ System.now()     │
+│         │                                                              │
+│         ▼ (2. Route & Forward Request qua mạng nội bộ)                 │
+└─────────┼──────────────────────────────────────────────────────────────┘
+          │
+          ▼
+┌──────────────────┐
+│  user-service    │  (Đọc sẵn X-Trace-Id, X-User-Id, X-User-Roles từ Header)
+│   (Port 8081)    │  (Xử lý logic nghiệp vụ và truy vấn Database)
+└─────────┬────────┘
+          │
+          ▼ (3. Trả Response về Gateway)
+┌─────────┴──────────────────────────────────────────────────────────────┐
+│  [RequestLoggingGlobalFilter] (.then Post-filter hook)                 │
+│    - Tính duration = System.now() - startTime                          │
+│    - Ghi log END [STATUS] [DURATION ms]                                │
+│         │                                                              │
+│  [TraceIdGlobalFilter] (beforeCommit hook)                             │
+│    - Đính kèm X-Trace-Id vào Response Header                           │
+└─────────┬──────────────────────────────────────────────────────────────┘
+          │
+          ▼ (4. Trả Response chuẩn về cho Client)
+[ Client nhận kết quả ]
+```
+
+---
+
+### 15.4 Kỹ thuật Reactive Non-blocking: Tại sao KHÔNG ĐƯỢC dùng Spring MVC (Tomcat) trong Gateway?
+
+* **Spring MVC / Tomcat (Thread-per-request):** Mỗi client chiếm trọn 1 Thread của hệ điều hành. Khi có 10.000 request đồng thời, server cần hàng ngàn Thread, dẫn đến tràn bộ nhớ (OOM) và nghẽn CPU do chuyển đổi ngữ cảnh (*Context Switching*).
+* **Spring Cloud Gateway / Netty (Event-Loop Non-blocking):** Chỉ cần một số lượng nhỏ Thread (thường bằng số lõi CPU) để điều phối hàng chục nghìn kết nối qua cơ chế I/O bất đồng bộ (*Event Loop*).
+* **LƯU Ý SỐNG CÒN:** Không bao giờ đưa dependency `spring-boot-starter-web` vào module Gateway. Nếu đưa vào, Tomcat sẽ được nạp đè lên classpath và làm sập ứng dụng ngay khi khởi động với lỗi:
+  `Spring MVC found on classpath, which is incompatible with Spring Cloud Gateway`.
+
+---
+
+### 15.5 Kỹ thuật Header Enrichment & Token Relay
+
+Thay vì để từng microservice tự mình gọi hàm giải mã JWT phức tạp, Gateway đóng vai trò "người gác cổng" thông minh:
+1. **Giải mã một lần duy nhất tại Gateway:** Trích xuất `userId`, `email`, `roles`.
+2. **Làm giàu Header (Enrichment):** Sử dụng `request.mutate()` để tiêm các Header mới vào HTTP Request trước khi đẩy sang downstream:
+   - `X-User-Id`: UUID của người dùng.
+   - `X-User-Email`: Email người dùng.
+   - `X-User-Roles`: Chuỗi quyền (ví dụ `ROLE_USER,ROLE_ADMIN`).
+3. **Truyền tiếp Token gốc (Token Relay):** Giữ nguyên header `Authorization: Bearer ...` để downstream service nếu muốn kiểm tra Zero-Trust hoặc truyền tiếp sang service thứ ba thì vẫn có token nguyên bản.
+
+---
+
+### 15.6 Xử lý Ngoại lệ Toàn cục trong Reactive Gateway (`ErrorWebExceptionHandler`)
+
+Vì Gateway không có `@RestController`, các annotation như `@ControllerAdvice` và `@ExceptionHandler` sẽ **HOÀN TOÀN VÔ DỤNG**.
+* Spring Cloud Gateway cung cấp interface `ErrorWebExceptionHandler` với `@Order(-2)`.
+* Khi một service backend bị sập (down), Netty sẽ bắn ra ngoại lệ `ConnectException`.
+* Filter bắt ngoại lệ này và tự động đóng gói JSON theo đúng chuẩn `ErrorResponse` của `common-lib`:
+  ```json
+  {
+    "timestamp": "2026-10-16T08:30:00Z",
+    "status": 503,
+    "error": "Service Unavailable",
+    "code": "SERVICE_UNAVAILABLE",
+    "message": "Dịch vụ đích hiện tại không phản hồi hoặc đang bảo trì. Vui lòng thử lại sau.",
+    "path": "/api/v1/users/me",
+    "traceId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
+  }
+  ```
+  Giúp Client không bao giờ bị nhận trang trắng HTML lỗi 500 khó hiểu!
+
+---
+
+### 15.7 5 Bước Tư Duy Tự Xây Dựng API Gateway Từ Đầu (Check-list Tự Lập Trình)
+
+Khi bắt đầu một dự án mới hoặc đi phỏng vấn, bạn có thể tự mình viết Gateway hoàn chỉnh chỉ với 5 bước:
+
+1. **Bước 1: Khởi tạo module với dependencies chuẩn:**
+   - Parent: Spring Boot 3.4.x
+   - Import BOM `spring-cloud-dependencies` (version `2024.0.x`).
+   - Thêm `spring-cloud-starter-gateway` (TUYỆT ĐỐI không thêm `spring-boot-starter-web`).
+   - Thêm `jjwt-api`, `jjwt-impl`, `jjwt-jackson` (cho bảo mật JWT).
+2. **Bước 2: Viết cấu hình định tuyến (`application.yml`):**
+   - Đặt `server.port: 8080`.
+   - Khai báo các `routes` với `id`, `uri` (trỏ đến host của service), và `predicates: Path=/api/v1/...`.
+   - Bật cấu hình `globalcors` để hỗ trợ frontend gọi API.
+3. **Bước 3: Lập trình Bộ lọc Trace ID (`TraceIdGlobalFilter`):**
+   - Implement `GlobalFilter, Ordered` với `Ordered.HIGHEST_PRECEDENCE`.
+   - Lấy hoặc sinh `X-Trace-Id`, mutate vào request và đăng ký `beforeCommit` để gắn vào response.
+4. **Bước 4: Lập trình Bộ lọc Bảo mật JWT (`JwtAuthenticationFilter`):**
+   - Viết danh sách Whitelist cho các URL công khai (`/api/v1/auth/**`, `/actuator/**`, `/v3/api-docs/**`).
+   - Các URL còn lại: kiểm tra Bearer token -> giải mã token bằng Secret Key -> nếu sai trả về 401 JSON -> nếu đúng dùng `request.mutate()` gắn `X-User-Id`, `X-User-Roles`.
+5. **Bước 5: Lập trình Bộ xử lý Ngoại lệ (`GatewayExceptionHandler`):**
+   - Implement `ErrorWebExceptionHandler` với `@Order(-2)`.
+   - Bắt các lỗi kết nối (503 Service Unavailable, 404 Route Not Found) và trả về format JSON chuẩn của hệ thống.
 

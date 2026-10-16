@@ -71,8 +71,8 @@ docker logs microservice_notification_service 2>&1 | grep "trace-id-can-tim"
      ```
   2. Xác định header `kafka_dlt-exception-message` và `kafka_dlt-exception-fqcn` để nắm bắt nguyên nhân lỗi ném ra.
   3. Nếu do lỗi format từ phía nguồn phát (user-service), sửa lỗi ứng dụng và phát hành bản vá.
-  4. Sau khi sửa lỗi, phát lại bản tin (Replay) sang topic chính `user-events` nếu cần thiết.
-
+  4. Sau khi sửa lỗi, phát lại bả tin (Replay) sang topic chính `user-events` nếu cần thiết.
+n
 ---
 
 ### SOP 3: Redis Cache Gặp Sự Cố Hoặc Ngắt Kết Nối (Redis Cache Failure)

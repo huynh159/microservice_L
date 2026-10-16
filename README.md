@@ -3,6 +3,7 @@
 Hệ thống Microservices hướng sự kiện (**Event-Driven Architecture - EDA**) chuẩn sản xuất (Production-Ready) được xây dựng bằng **Spring Boot 3.4.3**, **Java 21 LTS**, **Apache Kafka**, **PostgreSQL**, **Redis**, và **Docker Compose**.
 
 Hệ thống bao gồm các dịch vụ độc lập:
+* **`api-gateway`** (Port `8080`): Cổng vào duy nhất (**Single Entry Point**), định tuyến động (**Reverse Proxy**), bảo mật xác thực JWT tập trung (**Edge Authentication & Header Enrichment**), truy vết phân tán (**Distributed Tracing `X-Trace-Id`**) và quản trị **CORS toàn cục**.
 * **`user-service`** (Port `8081`): Quản lý người dùng, hồ sơ cá nhân, phân quyền RBAC, xác thực JWT (Access Token 15m + Refresh Token Rotation 7d), bộ nhớ đệm Redis, và phát sự kiện qua **Transactional Outbox Pattern**.
 * **`notification-service`** (Port `8082`): Lắng nghe sự kiện Kafka (`user-events`), đảm bảo tính **Idempotent** chống xử lý trùng, cơ chế Retry & **Dead Letter Topic (DLT)**, và gửi email chào mừng qua Mailpit SMTP.
 * **`chat-service`** (Port `8083`): Quản lý phòng chat và tin nhắn thời gian thực qua giao thức **WebSocket STOMP**, xác thực Token tại kênh Handshake Channel Interceptor.
@@ -13,33 +14,32 @@ Hệ thống bao gồm các dịch vụ độc lập:
 ## 🏛️ Sơ Đồ Kiến Trúc Hệ Thống (Architecture)
 
 ```
-[ Client / Web / Postman / Mobile ]
-               │
-        HTTPS REST / WebSocket
-               ▼
-  ┌───────────────────────────────┐
-  │         user-service          │ ────▶ PostgreSQL (user_db :5433)
-  │          (Port 8081)          │ ────▶ Redis Cache & Rate-limit (:6379)
-  └───────────────┬───────────────┘
-                  │  (Transactional Outbox Pattern - At-least-once)
-                  ▼
-      [ Apache Kafka (KRaft :9092) ]
-                  │
-        topic: 'user-events'
-                  │
-                  ▼
-  ┌───────────────────────────────┐
-  │     notification-service      │ ────▶ PostgreSQL (notification_db :5433)
-  │          (Port 8082)          │ ────▶ Mailpit SMTP Mock Email (:1025)
-  └───────────────────────────────┘
-                  │ (Poison Message Fallback)
-                  ▼
-     [ topic: 'user-events.DLT' ]
-
-  ┌───────────────────────────────┐
-  │         chat-service          │ ────▶ PostgreSQL (chat_db :5433)
-  │   (Port 8083 - STOMP /ws/chat)│
-  └───────────────────────────────┘
+[ Client / Web Frontend / Postman / Mobile App ]
+                       │
+             HTTPS REST / WebSocket
+                       ▼
+       ┌───────────────────────────────┐
+       │          api-gateway          │ ──── Port 8080 (Single Entry Point)
+       │  (Spring Cloud Gateway/Netty) │ ──── Edge JWT Auth & Tracing
+       └───────┬───────────────┬───────┘
+               │               │
+      /api/v1/auth/**          │
+      /api/v1/users/**         │ /api/v1/chat/** & /ws/**
+               ▼               ▼
+   ┌───────────────────┐   ┌───────────────────────────┐
+   │   user-service    │   │       chat-service        │
+   │    (Port 8081)    │   │ (Port 8083 - STOMP /ws)   │
+   └─────────┬─────────┘   └─────────────┬─────────────┘
+             │                           │
+    (Transactional Outbox)               ▼
+             ▼                      PostgreSQL
+   [ Kafka: user-events ]           (chat_db :5433)
+             │
+             ▼
+   ┌───────────────────────────┐
+   │   notification-service    │ ────▶ Mailpit SMTP (:1025)
+   │        (Port 8082)        │ ────▶ PostgreSQL (notification_db :5433)
+   └───────────────────────────┘
 ```
 
 > 📖 **Xem chi tiết tài liệu kiến trúc kỹ thuật:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)  
@@ -51,9 +51,10 @@ Hệ thống bao gồm các dịch vụ độc lập:
 
 | Dịch vụ / Container | Cổng Host | Cổng Container | Mục đích / Đường dẫn |
 | :--- | :--- | :--- | :--- |
-| **user-service** | `8081` | `8081` | REST API, Swagger: [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html) |
-| **notification-service** | `8082` | `8082` | REST API, Swagger: [http://localhost:8082/swagger-ui.html](http://localhost:8082/swagger-ui.html) |
-| **chat-service** | `8083` | `8083` | REST API, Swagger: [http://localhost:8083/swagger-ui.html](http://localhost:8083/swagger-ui.html), WS: `/ws/chat` |
+| **api-gateway** | `8080` | `8080` | **Cổng vào duy nhất**: `http://localhost:8080`, Health: `/actuator/health` |
+| **user-service** | `8081` | `8081` | REST API nội bộ, Swagger: [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html) |
+| **notification-service** | `8082` | `8082` | REST API nội bộ, Swagger: [http://localhost:8082/swagger-ui.html](http://localhost:8082/swagger-ui.html) |
+| **chat-service** | `8083` | `8083` | REST API nội bộ, Swagger: [http://localhost:8083/swagger-ui.html](http://localhost:8083/swagger-ui.html), WS: `/ws/chat` |
 | **PostgreSQL 16** | `5433` | `5432` | `user_db`, `notification_db`, `chat_db` |
 | **Redis 7** | `6379` | `6379` | Cache & Rate Limiting (`redis_dev_pass`) |
 | **Apache Kafka (KRaft)** | `9092` | `9092` | Message Broker: `localhost:9092` |

@@ -10,6 +10,7 @@ COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
 RUN sed -i 's/\r$//' mvnw && chmod +x mvnw
 COPY common-lib/pom.xml common-lib/
+COPY api-gateway/pom.xml api-gateway/
 COPY user-service/pom.xml user-service/
 COPY notification-service/pom.xml notification-service/
 COPY chat-service/pom.xml chat-service/

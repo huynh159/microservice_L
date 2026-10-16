@@ -1,0 +1,95 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: api-gateway
+  main:
+    web-application-type: reactive
+
+  cloud:
+    gateway:
+      # ==============================================================================
+      # CẤU HÌNH ĐỊNH TUYẾN (ROUTING RULES)
+      # ==============================================================================
+      # Mỗi route bao gồm:
+      # - id: Tên định danh duy nhất của route
+      # - uri: Địa chỉ đích của microservice tiếp nhận request
+      # - predicates: Điều kiện để route này khớp (Path, Method, Header,...)
+      # - filters: Các bộ lọc biến đổi request trước khi gửi hoặc response trước khi trả về
+      # ==============================================================================
+      routes:
+        # 1. Route cho các API của user-service (Xác thực và Quản trị người dùng)
+        - id: user-service-auth
+          uri: ${USER_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/v1/auth/**
+
+        - id: user-service-users
+          uri: ${USER_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/v1/users/**
+
+        # 2. Route cho các API REST của chat-service (Phòng chat, lịch sử tin nhắn)
+        - id: chat-service-rest
+          uri: ${CHAT_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/api/v1/chat/**
+
+        # 3. Route cho giao thức WebSocket STOMP của chat-service
+        # Lưu ý: URI dùng giao thức ws:// thay vì http:// để Netty tự động nâng cấp kết nối (HTTP 101 Switching Protocols)
+        - id: chat-service-websocket
+          uri: ${CHAT_WS_URL:ws://localhost:8083}
+          predicates:
+            - Path=/ws/**,/ws-chat/**
+
+      # ==============================================================================
+      # CẤU HÌNH TOÀN CỤC CORS (CROSS-ORIGIN RESOURCE SHARING)
+      # ==============================================================================
+      # Cho phép Frontend chạy ở bất kỳ tên miền/cổng nào (React/Vue/Postman) gọi API
+      # mà không bị chặn bởi chính sách Same-Origin Policy của trình duyệt.
+      # ==============================================================================
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
+
+# ==============================================================================
+# QUẢN TRỊ JWT (ĐỒNG BỘ VỚI USER-SERVICE & CHAT-SERVICE)
+# ==============================================================================
+jwt:
+  secret: ${JWT_SECRET:super_secret_jwt_key_that_is_at_least_256_bits_long_for_security_reasons}
+
+# ==============================================================================
+# GIÁM SÁT HỆ THỐNG VỚI SPRING BOOT ACTUATOR
+# ==============================================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true
+
+# ==============================================================================
+# CẤU HÌNH GHI LOG HỆ THỐNG
+# ==============================================================================
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: INFO
+    com.example.gateway: DEBUG
+    reactor.netty: INFO
