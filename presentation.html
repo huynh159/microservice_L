@@ -765,7 +765,7 @@
         <div class="slide-header">
           <div>
             <span class="slide-category-tag">LỘ TRÌNH BÁO CÁO</span>
-            <h2 class="slide-title">Mục Lục: 7 Chuyên Đề Kiến Thức & Ứng Dụng</h2>
+            <h2 class="slide-title">Mục Lục: 6 Chuyên Đề Kiến Thức & Ứng Dụng</h2>
             <p class="slide-subtitle">Mạch tư duy liền mạch từ tầng hạ tầng đóng gói đến tương tác thời gian thực</p>
           </div>
         </div>
@@ -779,34 +779,30 @@
             <div class="card-title"><span class="card-icon">02</span> Spring Security & JWT</div>
             <p class="card-desc">Filter Chain, Access/Refresh Token, Token Rotation và phân quyền RBAC.</p>
           </div>
-          <div class="card highlight" onclick="goToSlide(8)" style="cursor:pointer">
+          <div class="card highlight" onclick="goToSlide(7)" style="cursor:pointer">
             <div class="card-title"><span class="card-icon">03</span> Kiến Trúc Microservices</div>
             <p class="card-desc">Monolith vs Microservices, Database-per-service và giao tiếp Sync vs Async.</p>
           </div>
-          <div class="card highlight" onclick="goToSlide(10)" style="cursor:pointer">
+          <div class="card highlight" onclick="goToSlide(9)" style="cursor:pointer">
             <div class="card-title"><span class="card-icon">04</span> Apache Kafka & Outbox</div>
             <p class="card-desc">Event-driven, giải quyết Dual-Write bằng Transactional Outbox Pattern.</p>
           </div>
         </div>
 
-        <div class="grid-3">
-          <div class="card highlight-coral" onclick="goToSlide(12)" style="cursor:pointer">
+        <div class="grid-2">
+          <div class="card highlight-coral" onclick="goToSlide(11)" style="cursor:pointer">
             <div class="card-title"><span class="card-icon coral">05</span> Redis In-Memory</div>
             <p class="card-desc">Bộ nhớ đệm RAM micro-giây, chống Brute-force mật khẩu (TTL 900s) và Cache hồ sơ user.</p>
           </div>
-          <div class="card highlight-coral" onclick="goToSlide(14)" style="cursor:pointer">
-            <div class="card-title"><span class="card-icon coral">06</span> Spring Cloud Gateway</div>
-            <p class="card-desc">Cửa ngõ tập trung Netty Reactive, Header Enrichment, sinh X-Trace-Id và Global CORS.</p>
-          </div>
-          <div class="card highlight-coral" onclick="goToSlide(16)" style="cursor:pointer">
-            <div class="card-title"><span class="card-icon coral">07</span> WebSocket & STOMP Chat</div>
+          <div class="card highlight-coral" onclick="goToSlide(12)" style="cursor:pointer">
+            <div class="card-title"><span class="card-icon coral">06</span> WebSocket & STOMP Chat</div>
             <p class="card-desc">Kết nối hai chiều Full-duplex thay thế Polling, chat Admin – User tức thời.</p>
           </div>
         </div>
 
         <div style="margin-top:14px; background:var(--bg-subtle); border-radius:var(--radius-sm); padding:10px 16px; display:flex; align-items:center; gap:12px; font-size:0.79rem; color:var(--text-main);">
           <span style="font-size:1.1rem;">💡</span>
-          <span><strong>Mạch kiến trúc liền mạch:</strong> <em>Đóng gói ứng dụng ➔ Bảo vệ danh tính ➔ Chia nhỏ dịch vụ ➔ Giao tiếp bất đồng bộ ➔ Tăng tốc & phòng thủ RAM ➔ Cửa ngõ định tuyến ➔ Nhắn tin tức thời</em>.</span>
+          <span><strong>Mạch kiến trúc liền mạch:</strong> <em>Đóng gói ứng dụng ➔ Bảo vệ danh tính ➔ Chia nhỏ dịch vụ ➔ Giao tiếp bất đồng bộ ➔ Tăng tốc & phòng thủ RAM ➔ Nhắn tin tức thời</em>.</span>
         </div>
       </div>
     </section>
@@ -867,74 +863,124 @@
 
 
     <!-- ==================================================================
-         SLIDE 3: DOCKERFILE & MULTI-STAGE BUILD
+         SLIDE 3: DOCKERFILE LÀ GÌ?
          ================================================================== -->
-    <section class="slide" data-slide="3" data-title="Dockerfile & Multi-Stage">
+    <section class="slide" data-slide="3" data-title="Dockerfile là gì?">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
             <span class="slide-category-tag">PHẦN 1 • CONTAINER HÓA</span>
-            <h2 class="slide-title">Dockerfile & Kỹ Thuật Multi-Stage Build</h2>
-            <p class="slide-subtitle">Tối ưu dung lượng Image từ 800MB xuống 300MB và tuân thủ nguyên tắc bảo mật Non-Root</p>
+            <h2 class="slide-title">Dockerfile Là Gì?</h2>
+            <p class="slide-subtitle">Định nghĩa, cấu trúc và cách xây dựng Docker Image cho ứng dụng Spring Boot</p>
           </div>
         </div>
 
-        <!-- Flowchart Multi-stage -->
-        <div class="flowchart-wrapper">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal)">Quy Trình Multi-Stage Build Thực Tế Trong Dự Án</span>
-            <span class="pill pill-teal">Tiết kiệm 62% RAM/Disk</span>
+        <!-- Flowchart quan hệ Dockerfile -> Image -> Container -->
+        <div class="flowchart-wrapper" style="padding:10px 14px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal)">
+              Sơ Đồ Mối Quan Hệ: Từ Mã Nguồn Đến Thực Thể Đang Chạy
+            </span>
+            <span class="pill pill-teal" style="font-size:0.7rem;">Quy trình tự động hóa</span>
           </div>
-          <div class="flow-steps">
-            <div class="flow-step-box">
-              <div class="flow-step-num">STAGE 1: BUILDER (~800MB)</div>
-              <div class="flow-step-name">Maven + JDK 21 Full</div>
-              <div class="flow-step-desc">Tải dependencies, compile mã nguồn Java thành file .jar độc lập</div>
+          <div class="flow-steps" style="gap:8px;">
+            <div class="flow-step-box" style="padding:8px 10px;">
+              <div class="flow-step-num">BƯỚC 1: ĐẦU VÀO</div>
+              <div class="flow-step-name" style="font-size:0.8rem;">Dockerfile + Source Code</div>
+              <div class="flow-step-desc" style="font-size:0.7rem;">Tệp văn bản chứa tập lệnh chỉ dẫn + file JAR / mã nguồn ứng dụng</div>
             </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box active">
-              <div class="flow-step-num">CHỈ COPY FILE .JAR</div>
-              <div class="flow-step-name">Bỏ lại toàn bộ Maven & Source</div>
-              <div class="flow-step-desc">Không đem trình biên dịch hay source code vào môi trường chạy</div>
+            <div class="flow-arrow" style="font-size:0.85rem; flex-direction:column; gap:2px;">
+              <span style="font-size:0.65rem; font-family:var(--font-mono); color:var(--accent-teal); font-weight:700;">docker build</span>
+              <span>➔</span>
             </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box coral">
-              <div class="flow-step-num">STAGE 2: RUNTIME (~300MB)</div>
-              <div class="flow-step-name">Eclipse Temurin JRE 21 Slim</div>
-              <div class="flow-step-desc">Chỉ chứa môi trường thực thi tối thiểu, khởi động nhanh, bảo mật cao</div>
+            <div class="flow-step-box active" style="padding:8px 10px;">
+              <div class="flow-step-num">BƯỚC 2: ĐÓNG GÓI</div>
+              <div class="flow-step-name" style="font-size:0.8rem;">Docker Image (Bản đóng băng)</div>
+              <div class="flow-step-desc" style="font-size:0.7rem;">Gói tĩnh, chỉ đọc (read-only) chứa ứng dụng, Java Runtime và dependencies</div>
+            </div>
+            <div class="flow-arrow" style="font-size:0.85rem; flex-direction:column; gap:2px;">
+              <span style="font-size:0.65rem; font-family:var(--font-mono); color:var(--accent-coral); font-weight:700;">docker run</span>
+              <span>➔</span>
+            </div>
+            <div class="flow-step-box coral" style="padding:8px 10px;">
+              <div class="flow-step-num">BƯỚC 3: THỰC THI</div>
+              <div class="flow-step-name" style="font-size:0.8rem;">Container (Instance Đang Chạy)</div>
+              <div class="flow-step-desc" style="font-size:0.7rem;">Một tiến trình độc lập, cô lập tài nguyên được tạo ra từ Docker Image</div>
             </div>
           </div>
         </div>
 
-        <div class="grid-2">
-          <!-- Code snippet -->
-          <div class="card">
-            <div class="card-title"><span class="card-icon">📄</span> Dockerfile Mẫu Của user-service</div>
-            <div class="code-container">
-              <span class="code-cm"># Stage 1: Build JAR</span><br>
-              <span class="code-hl">FROM</span> maven:3.9-eclipse-temurin-21 <span class="code-hl">AS</span> builder<br>
-              <span class="code-hl">WORKDIR</span> /app<br>
-              <span class="code-hl">COPY</span> pom.xml . && <span class="code-hl">COPY</span> src ./src<br>
-              <span class="code-hl">RUN</span> mvn clean package -DskipTests<br><br>
-              <span class="code-cm"># Stage 2: Minimal Runtime</span><br>
-              <span class="code-hl">FROM</span> eclipse-temurin:21-jre-alpine<br>
-              <span class="code-hl">RUN</span> adduser -D appuser && <span class="code-hl">USER</span> appuser<br>
-              <span class="code-hl">COPY</span> --from=builder /app/target/*.jar app.jar<br>
-              <span class="code-hl">ENTRYPOINT</span> ["java", "-jar", "/app.jar"]
+        <div class="grid-2" style="gap:14px;">
+          <!-- Left Column: Ví dụ Dockerfile thực tế & Hướng dẫn sử dụng -->
+          <div class="card" style="padding:14px 16px;">
+            <div class="card-title" style="margin-bottom:6px;">
+              <span class="card-icon">📄</span> Ví Dụ Dockerfile Spring Boot Thực Tế
             </div>
-          </div>
-
-          <!-- Non root & Directives -->
-          <div class="card highlight-coral">
-            <div class="card-title"><span class="card-icon coral">🛡️</span> Bảo Mật Non-Root User (OWASP)</div>
-            <p class="card-desc">
-              Mặc định, container chạy bằng quyền <code>root</code>. Nếu ứng dụng có lỗ hổng bảo mật (ví dụ: thực thi mã từ xa RCE), kẻ tấn công sẽ chiếm quyền root trên máy chủ chủ quản (Host OS).
+            <p class="card-desc" style="font-size:0.77rem; margin-bottom:8px;">
+              Dockerfile đọc tuần tự từ trên xuống dưới; mỗi chỉ thị tạo một layer mới:
             </p>
-            <div class="card-project-apply coral">
-              <strong>Áp dụng vào dự án:</strong> Em tạo user <code>appuser</code> với quyền hạn tối thiểu và chuyển quyền bằng lệnh <code>USER appuser</code> trước khi chạy Spring Boot. Dù container bị tấn công, hacker cũng không thể can thiệp hệ thống.
+            <div class="code-container" style="font-size:0.73rem; padding:10px 12px; margin-bottom:8px;">
+              <span class="code-hl" style="color:#C084FC;">FROM</span> eclipse-temurin:21-jre<br>
+              <span class="code-hl" style="color:#C084FC;">WORKDIR</span> /app<br>
+              <span class="code-hl" style="color:#C084FC;">COPY</span> target/app.jar app.jar<br>
+              <span class="code-hl" style="color:#C084FC;">EXPOSE</span> 8080<br>
+              <span class="code-hl" style="color:#C084FC;">ENTRYPOINT</span> [<span style="color:#A7F3D0;">"java"</span>, <span style="color:#A7F3D0;">"-jar"</span>, <span style="color:#A7F3D0;">"app.jar"</span>]
             </div>
-            <div style="margin-top:10px; font-size:0.75rem; color:var(--text-dim);">
-              Các chỉ dẫn cốt lõi: <code>FROM</code> (base image), <code>COPY</code> (chép file), <code>RUN</code> (thực thi lệnh build), <code>ENTRYPOINT</code> (lệnh khởi chạy cố định).
+
+            <!-- Hướng dẫn cách đọc & cách chạy 2 lệnh -->
+            <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:8px 10px;">
+              <div style="font-size:0.74rem; font-weight:700; color:var(--text-main); margin-bottom:4px; display:flex; justify-content:space-between;">
+                <span>🛠️ Cách Build Image & Khởi Chạy Container:</span>
+                <span style="font-family:var(--font-mono); font-size:0.68rem; color:var(--accent-teal);">Terminal</span>
+              </div>
+              <div class="code-container" style="font-size:0.7rem; padding:6px 10px; margin-bottom:4px; background:#0F172A;">
+                <span style="color:#94A3B8;"># 1. Đọc Dockerfile tại (.) và tạo Image có tên:tag là my-spring-app:1.0</span><br>
+                <span class="code-hl">docker build</span> -t my-spring-app:1.0 .<br><br>
+                <span style="color:#94A3B8;"># 2. Khởi chạy Container từ Image, ánh xạ cổng 8080 host sang 8080 container</span><br>
+                <span class="code-hl">docker run</span> --name my-spring-app -p 8080:8080 my-spring-app:1.0
+              </div>
+              <div style="font-size:0.71rem; color:var(--text-muted); line-height:1.35;">
+                • <code>-t</code>: Gán tag tên cho Image &nbsp;|&nbsp; <code>.</code>: Build context thư mục hiện tại &nbsp;|&nbsp; <code>-p</code>: Ánh xạ cổng <code>HOST:CONTAINER</code>.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Giải thích từng câu lệnh & Thứ tự thực thi -->
+          <div class="card highlight" style="padding:14px 16px;">
+            <div class="card-title" style="margin-bottom:6px;">
+              <span class="card-icon">🔍</span> Ý Nghĩa Từng Câu Lệnh Trong Dockerfile
+            </div>
+            <div class="card-desc" style="display:flex; flex-direction:column; gap:6px; font-size:0.77rem;">
+              <div>
+                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">FROM:</strong>
+                Chọn base image có sẵn Java Runtime (JRE 21) gọn nhẹ, phù hợp chạy Spring Boot.
+              </div>
+              <div>
+                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">WORKDIR:</strong>
+                Thiết lập thư mục làm việc mặc định <code>/app</code> bên trong container.
+              </div>
+              <div>
+                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">COPY:</strong>
+                Chép file <code>target/app.jar</code> đã build từ máy host vào thư mục <code>/app</code> của image.
+              </div>
+              <div>
+                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">EXPOSE:</strong>
+                Khai báo cổng 8080 ứng dụng lắng nghe (mang tính tài liệu, <em>không tự mở cổng ra ngoài host</em>).
+              </div>
+              <div>
+                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">ENTRYPOINT:</strong>
+                Chỉ định lệnh mặc định cố định luôn được chạy khi container khởi động: <code>java -jar app.jar</code>.
+              </div>
+            </div>
+
+            <div class="card-project-apply" style="margin-top:8px; padding:6px 10px; font-size:0.74rem;">
+              <strong>Thứ tự thực thi:</strong> 
+              Khi <code>docker build</code>, Docker thực thi tuần tự từ trên xuống dưới để nung thành các lớp chỉ đọc (Layers). Khi <code>docker run</code>, container kích hoạt và khởi chạy lệnh tại <code>ENTRYPOINT</code>.
+            </div>
+
+            <div style="margin-top:8px; padding:6px 10px; background:var(--bg-canvas); border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.72rem; color:var(--text-muted); line-height:1.35;">
+              <strong style="color:var(--text-main);">Các chỉ thị phổ biến khác:</strong>
+              <code>RUN</code> (chạy lệnh cài đặt khi build), <code>ENV</code> (đặt biến môi trường), <code>USER</code> (đổi sang non-root user an toàn), <code>CMD</code> (tham số mặc định có thể bị ghi đè).
             </div>
           </div>
         </div>
@@ -943,93 +989,134 @@
 
 
     <!-- ==================================================================
-         SLIDE 4: DOCKER COMPOSE — QUẢN LÝ 8 CONTAINER
+         SLIDE 4: DOCKER COMPOSE LÀ GÌ?
          ================================================================== -->
-    <section class="slide" data-slide="4" data-title="Docker Compose">
+    <section class="slide" data-slide="4" data-title="Docker Compose là gì?">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
             <span class="slide-category-tag">PHẦN 1 • CONTAINER HÓA</span>
-            <h2 class="slide-title">Docker Compose: Điều Phối Cụm 8 Container</h2>
-            <p class="slide-subtitle">Quản lý mạng nội bộ, biến môi trường và đồng bộ trạng thái khởi động bằng Healthcheck</p>
+            <h2 class="slide-title">Docker Compose Là Gì?</h2>
+            <p class="slide-subtitle">Cấu hình và quản lý nhiều service bằng YAML trong một tệp duy nhất</p>
           </div>
         </div>
 
-        <div class="grid-3" style="margin-bottom:12px;">
-          <div class="card">
-            <div class="card-title"><span class="card-icon">⚡</span> 1 Lệnh Khởi Chạy Toàn Bộ</div>
-            <p class="card-desc">
-              Thay vì chạy 8 câu lệnh <code>docker run</code> dài dòng với hàng chục tham số port/volume, file <code>docker-compose.yml</code> định nghĩa toàn bộ hạ tầng:
-              chỉ cần <code>docker compose up -d</code> là toàn bộ hệ thống sẵn sàng.
-            </p>
+        <!-- Kiến trúc giao tiếp mạng giữa các service -->
+        <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm);">
+          <div style="display:flex; align-items:center; gap:8px; font-size:0.77rem; color:var(--text-main);">
+            <span style="font-weight:700; color:var(--accent-teal); text-transform:uppercase; font-size:0.72rem;">Kiến Trúc Giao Tiếp:</span>
+            <span>Client</span> ➔ <span class="pill pill-teal">Backend (:8080)</span> ➔ <span class="pill pill-coral">PostgreSQL (postgres:5432)</span>
           </div>
+          <span style="font-size:0.71rem; color:var(--text-muted); font-family:var(--font-mono);">Mạng ảo: default (bridge) • DNS nội bộ tự động</span>
+        </div>
 
-          <div class="card highlight">
-            <div class="card-title"><span class="card-icon">🩺</span> depends_on + Healthcheck</div>
-            <p class="card-desc">
-              Spring Boot khởi động nhanh hơn cơ sở dữ liệu. Nếu service chạy trước khi PostgreSQL sẵn sàng nhận kết nối, app sẽ crash ngay lập tức.
-            </p>
-            <div class="card-project-apply">
-              <strong>Dự án:</strong> Cấu hình <code>condition: service_healthy</code> bắt buộc Gateway & Backend đợi PostgreSQL và Kafka vượt qua bài kiểm tra sức khỏe.
+        <div class="grid-2" style="gap:14px;">
+          <!-- Left Column: Cấu trúc file docker-compose.yml thực tế & Lệnh chạy -->
+          <div class="card" style="padding:12px 14px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.88rem; justify-content:space-between;">
+              <span><span class="card-icon">🐙</span> Cấu Trúc File <code>docker-compose.yml</code></span>
+              <span class="pill pill-teal" style="font-size:0.67rem;">YAML Cú Pháp Chuẩn</span>
+            </div>
+            <div class="code-container" style="font-size:0.68rem; line-height:1.38; padding:8px 10px; max-height:330px; overflow-y:auto; margin-bottom:8px;">
+              <span class="code-hl" style="color:#38BDF8;">services:</span><br>
+              &nbsp;&nbsp;<span style="color:#FDE047; font-weight:700;">backend:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">build:</span> ./backend<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">ports:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:#A7F3D0;">"8080:8080"</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">environment:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_URL: jdbc:postgresql://<span style="color:#FDE047; font-weight:700;">postgres</span>:5432/todo_db<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_USERNAME: todo_user<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_PASSWORD: <span style="color:#F472B6;">${DB_PASSWORD}</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">depends_on:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#FDE047; font-weight:700;">postgres:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition: <span style="color:#38BDF8; font-weight:700;">service_healthy</span><br><br>
+              &nbsp;&nbsp;<span style="color:#FDE047; font-weight:700;">postgres:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">image:</span> postgres:17-alpine<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">environment:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_DB: todo_db<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_USER: todo_user<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_PASSWORD: <span style="color:#F472B6;">${DB_PASSWORD}</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">volumes:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- postgres_data:/var/lib/postgresql/data<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">healthcheck:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test: [<span style="color:#A7F3D0;">"CMD-SHELL"</span>, <span style="color:#A7F3D0;">"pg_isready -U todo_user -d todo_db"</span>]<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interval: 5s<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeout: 3s<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retries: 10<br><br>
+              <span class="code-hl" style="color:#38BDF8;">volumes:</span><br>
+              &nbsp;&nbsp;<span style="color:#FDE047;">postgres_data:</span><br><br>
+              <span class="code-hl" style="color:#38BDF8;">networks:</span><br>
+              &nbsp;&nbsp;<span style="color:#FDE047;">default:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;driver: bridge
+            </div>
+
+            <!-- Các lệnh vận hành Compose -->
+            <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:6px 10px;">
+              <div style="font-size:0.71rem; font-weight:700; color:var(--text-main); margin-bottom:3px;">
+                🚀 Lệnh Vận Hành Chính Với Docker Compose:
+              </div>
+              <div class="code-container" style="font-size:0.68rem; padding:5px 8px; margin-bottom:3px; background:#0F172A;">
+                <span class="code-hl">docker compose up</span> --build -d  <span style="color:#94A3B8;"># Build lại và khởi chạy nền</span><br>
+                <span class="code-hl">docker compose ps</span>               <span style="color:#94A3B8;"># Xem trạng thái & health của container</span>
+              </div>
+              <div style="font-size:0.69rem; color:var(--text-dim);">
+                <code>--build</code>: Build lại image nếu code thay đổi &nbsp;|&nbsp; <code>-d</code>: Chạy detached ngầm &nbsp;|&nbsp; <code>ps</code>: Kiểm tra trạng thái.
+              </div>
             </div>
           </div>
 
-          <div class="card">
-            <div class="card-title"><span class="card-icon">🌐</span> Mạng Nội Bộ (Bridge Network)</div>
-            <p class="card-desc">
-              Tất cả 8 container nằm chung mạng <code>app-network</code>. Các service gọi nhau trực tiếp bằng <strong>Service Name</strong> (ví dụ: <code>http://user-service:8081</code>) nhờ cơ chế phân giải tên miền nội bộ (Internal DNS).
-            </p>
-          </div>
-        </div>
+          <!-- Right Column: Giải thích từng thuộc tính & Lưu ý quan trọng -->
+          <div class="card highlight" style="padding:12px 14px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.88rem;">
+              <span class="card-icon">📋</span> Ý Nghĩa Các Thuộc Tính Trong File Compose
+            </div>
 
-        <!-- 8 Containers Schema Table -->
-        <div class="card">
-          <div style="font-size:0.77rem; font-weight:700; color:var(--text-main); margin-bottom:6px; display:flex; justify-content:space-between;">
-            <span>DANH SÁCH 8 CONTAINER TRONG HỆ THỐNG THỰC TẾ (DOCKER-COMPOSE.YML)</span>
-            <span class="pill pill-teal">Tất cả cấu hình qua file .env</span>
+            <div class="card-desc" style="display:flex; flex-direction:column; gap:5px; font-size:0.75rem;">
+              <div>
+                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">services:</strong>
+                Định nghĩa các container của ứng dụng (<code>backend</code>, <code>postgres</code>). Tên service cũng chính là Hostname nội bộ.
+              </div>
+              <div>
+                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">build & image:</strong>
+                <code>build: ./backend</code> yêu cầu build từ Dockerfile; còn <code>image</code> kéo trực tiếp từ Docker Hub (PostgreSQL 17).
+              </div>
+              <div>
+                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">ports ("8080:8080"):</strong>
+                Ánh xạ cổng <code>HOST:CONTAINER</code>. Cổng 8080 mở cho Client bên ngoài gọi; còn 5432 của DB được giữ kín trong mạng nội bộ.
+              </div>
+              <div>
+                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">environment & ${DB_PASSWORD}:</strong>
+                Nạp biến môi trường cho container. Dùng biến <code>${DB_PASSWORD}</code> từ file <code>.env</code>, tuyệt đối không hardcode mật khẩu.
+              </div>
+              <div>
+                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">volumes:</strong>
+                Gắn ổ đĩa ảo <code>postgres_data</code> để dữ liệu database không bị mất khi container bị tắt hoặc tạo mới.
+              </div>
+              <div>
+                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">networks:</strong>
+                Tạo mạng bridge ảo cho phép các service tự tìm thấy nhau thông qua Service Name.
+              </div>
+            </div>
+
+            <!-- Các câu lệnh thường dùng với Docker -->
+            <div style="margin-top:6px; padding:7px 10px; background:var(--bg-canvas); border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.71rem;">
+              <div style="font-weight:700; color:var(--text-main); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
+                <span>🛠️ CÁC CÂU LỆNH THƯỜNG DÙNG VỚI DOCKER:</span>
+                <span class="pill pill-teal" style="font-size:0.64rem;">CLI Cheat Sheet</span>
+              </div>
+              <div style="display:grid; grid-template-columns:1.45fr 1fr; gap:2px 8px; font-size:0.67rem; line-height:1.32;">
+                <div><code>docker ps</code></div><div style="color:var(--text-muted);">Xem container đang chạy</div>
+                <div><code>docker ps -a</code></div><div style="color:var(--text-muted);">Xem tất cả container</div>
+                <div><code>docker run -d --name my-app my-app:1.0</code></div><div style="color:var(--text-muted);">Tạo và chạy container ở chế độ nền</div>
+                <div><code>docker start my-app</code></div><div style="color:var(--text-muted);">Khởi động container đã tồn tại</div>
+                <div><code>docker stop my-app</code></div><div style="color:var(--text-muted);">Dừng container</div>
+                <div><code>docker restart my-app</code></div><div style="color:var(--text-muted);">Khởi động lại container</div>
+                <div><code>docker rm my-app</code></div><div style="color:var(--text-muted);">Xóa container đã dừng</div>
+                <div><code>docker logs my-app</code></div><div style="color:var(--text-muted);">Xem log</div>
+                <div><code>docker logs -f my-app</code></div><div style="color:var(--text-muted);">Theo dõi log liên tục</div>
+              </div>
+            </div>
           </div>
-          <table class="editorial-table">
-            <thead>
-              <tr>
-                <th>Service Name</th>
-                <th>Hình Ảnh (Image)</th>
-                <th>Port Nội Bộ / Ngoài</th>
-                <th>Vai Trò Trong Dự Án</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>api-gateway</strong></td>
-                <td>Custom Multi-Stage</td>
-                <td>8080 : 8080</td>
-                <td>Cửa ngõ tiếp nhận toàn bộ request từ Client, định tuyến tập trung</td>
-              </tr>
-              <tr>
-                <td><strong>user-service</strong></td>
-                <td>Custom Multi-Stage</td>
-                <td>8081 (Ẩn nội bộ)</td>
-                <td>Đăng ký, xác thực JWT, bảo vệ đăng nhập và quản lý hồ sơ</td>
-              </tr>
-              <tr>
-                <td><strong>chat-service</strong></td>
-                <td>Custom Multi-Stage</td>
-                <td>8083 (Ẩn nội bộ)</td>
-                <td>Nhắn tin thời gian thực WebSocket STOMP giữa User và Admin</td>
-              </tr>
-              <tr>
-                <td><strong>notification-service</strong></td>
-                <td>Custom Multi-Stage</td>
-                <td>8082 (Ẩn nội bộ)</td>
-                <td>Lắng nghe Kafka event để gửi email chào mừng và thông báo ngầm</td>
-              </tr>
-              <tr>
-                <td><strong>postgres_db / redis / kafka / zookeeper</strong></td>
-                <td>Official Images</td>
-                <td>5432 / 6379 / 9092</td>
-                <td>Cơ sở dữ liệu bền vững, bộ đệm RAM và hàng đợi thông điệp phân tán</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </section>
@@ -1044,201 +1131,297 @@
           <div>
             <span class="slide-category-tag coral">PHẦN 2 • BẢO MẬT & XÁC THỰC</span>
             <h2 class="slide-title">Spring Security: Authentication & Authorization</h2>
-            <p class="slide-subtitle">Nguyên lý hoạt động của Security Filter Chain, Phân quyền RBAC và Xử lý mã lỗi HTTP</p>
+            <p class="slide-subtitle">Khái niệm cốt lõi, luồng xử lý request qua Filter Chain và ví dụ cấu hình SecurityFilterChain</p>
           </div>
         </div>
 
-        <!-- Flowchart Filter Chain -->
-        <div class="flowchart-wrapper">
-          <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-coral); margin-bottom:8px;">
-            Luồng Xử Lý Request Qua Security Filter Chain
+        <!-- 2. LUỒNG HOẠT ĐỘNG CỦA SPRING SECURITY -->
+        <div class="flowchart-wrapper" style="padding:10px 14px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-coral)">
+              Luồng Xử Lý Request Qua Spring Security Filter Chain
+            </span>
+            <span class="pill pill-coral" style="font-size:0.67rem;">Sơ đồ luồng 4 bước</span>
           </div>
-          <div class="flow-steps">
-            <div class="flow-step-box">
-              <div class="flow-step-num">1. HTTP REQUEST</div>
-              <div class="flow-step-name">Header Authorization</div>
-              <div class="flow-step-desc">Client gửi kèm <code>Bearer &lt;token&gt;</code></div>
+          <div class="flow-steps" style="gap:8px;">
+            <!-- Bước 1 -->
+            <div class="flow-step-box" style="padding:8px 6px; flex:1;">
+              <div class="flow-step-num" style="color:var(--accent-coral);">1. CLIENT REQUEST</div>
+              <div class="flow-step-name" style="font-size:0.78rem;">Gửi Yêu Cầu</div>
+              <div class="flow-step-desc" style="font-size:0.68rem;">Ví dụ: <code>POST /api/login</code> hoặc <code>GET /api/admin</code></div>
             </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box coral">
-              <div class="flow-step-num">2. CUSTOM FILTER</div>
-              <div class="flow-step-name">JwtAuthenticationFilter</div>
-              <div class="flow-step-desc">Rút trích token, xác minh chữ ký HMAC-SHA256</div>
+            <div class="flow-arrow" style="font-size:0.85rem;">➔</div>
+            
+            <!-- Bước 2 -->
+            <div class="flow-step-box" style="padding:8px 6px; flex:1.1;">
+              <div class="flow-step-num" style="color:var(--accent-teal);">2. FILTER CHAIN</div>
+              <div class="flow-step-name" style="font-size:0.78rem;">SecurityFilterChain</div>
+              <div class="flow-step-desc" style="font-size:0.68rem;">Chặn bắt request, kiểm tra thông tin xác thực & quy tắc bảo mật</div>
             </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box active">
-              <div class="flow-step-num">3. SECURITY CONTEXT</div>
-              <div class="flow-step-name">SecurityContextHolder</div>
-              <div class="flow-step-desc">Gán đối tượng <code>UserPrincipal</code> và Authorities (ROLE_USER, ROLE_ADMIN)</div>
+            <div class="flow-arrow" style="font-size:0.85rem;">➔</div>
+
+            <!-- Bước 3 -->
+            <div class="flow-step-box active" style="padding:8px 6px; flex:1.25;">
+              <div class="flow-step-num">3. AUTHENTICATION</div>
+              <div class="flow-step-name" style="font-size:0.78rem;">Xác Thực Danh Tính</div>
+              <div class="flow-step-desc" style="font-size:0.68rem; text-align:left; padding-left:4px;">
+                • <strong>3A. Đã xác thực:</strong> Nạp <code>SecurityContextHolder</code><br>
+                • <strong>3B. Chưa xác thực:</strong> Từ chối (<code>401</code>) / Login
+              </div>
             </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box">
-              <div class="flow-step-num">4. CONTROLLER</div>
-              <div class="flow-step-name">@PreAuthorize</div>
-              <div class="flow-step-desc">Thực thi nghiệp vụ hoặc chặn nếu không đủ quyền</div>
+            <div class="flow-arrow" style="font-size:0.85rem;">➔</div>
+
+            <!-- Bước 4 -->
+            <div class="flow-step-box coral" style="padding:8px 6px; flex:1.25;">
+              <div class="flow-step-num">4. AUTHORIZATION</div>
+              <div class="flow-step-name" style="font-size:0.78rem;">Kiểm Tra Quyền Hạn</div>
+              <div class="flow-step-desc" style="font-size:0.68rem; text-align:left; padding-left:4px;">
+                • <strong>Cho phép:</strong> Role khớp ➔ Controller xử lý<br>
+                • <strong>Từ chối:</strong> Thiếu quyền ➔ Trả <code>HTTP 403</code>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="grid-3">
-          <div class="card">
-            <div class="card-title"><span class="card-icon">🔑</span> 2 Khái Niệm Then Chốt</div>
-            <p class="card-desc">
-              • <strong>Authentication (Xác thực):</strong> Trả lời câu hỏi <em>"Bạn là ai?"</em>. Kiểm tra email và mật khẩu hợp lệ.<br>
-              • <strong>Authorization (Phân quyền):</strong> Trả lời câu hỏi <em>"Bạn được phép làm gì?"</em>. Kiểm tra role người dùng trước khi gọi API.
-            </p>
+        <div class="grid-2" style="gap:14px;">
+          <!-- 1. AUTHENTICATION & AUTHORIZATION LÀ GÌ? -->
+          <div class="card" style="padding:12px 14px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.88rem;">
+              <span class="card-icon coral">🔑</span> 1. Authentication & Authorization Là Gì?
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+              <!-- Authentication -->
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:8px 10px;">
+                <div style="font-size:0.77rem; font-weight:700; color:var(--accent-teal); margin-bottom:3px; display:flex; align-items:center; gap:4px;">
+                  <span>👤</span> Authentication (Xác thực)
+                </div>
+                <div style="font-size:0.72rem; color:var(--text-muted); line-height:1.38;">
+                  Kiểm tra <strong>người dùng là ai</strong>:<br>
+                  • Nhập username/email + password.<br>
+                  • Hệ thống kiểm tra thông tin.<br>
+                  • Hợp lệ ➔ Xác định danh tính user.
+                </div>
+              </div>
+
+              <!-- Authorization -->
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:8px 10px;">
+                <div style="font-size:0.77rem; font-weight:700; color:var(--accent-coral); margin-bottom:3px; display:flex; align-items:center; gap:4px;">
+                  <span>🛡️</span> Authorization (Phân quyền)
+                </div>
+                <div style="font-size:0.72rem; color:var(--text-muted); line-height:1.38;">
+                  Kiểm tra <strong>được phép làm gì</strong>:<br>
+                  • User chỉ xem/sửa dữ liệu của mình.<br>
+                  • Admin có quyền quản trị hệ thống.<br>
+                  • Không đủ quyền ➔ Từ chối truy cập.
+                </div>
+              </div>
+            </div>
+
+            <!-- Câu so sánh nổi bật -->
+            <div class="card-project-apply coral" style="margin-top:0; margin-bottom:8px; padding:6px 10px; font-size:0.72rem;">
+              <div style="font-size:0.76rem; font-weight:800; color:var(--accent-coral); margin-bottom:2px;">
+                ⚖️ SO SÁNH: Authentication = "Bạn là ai?" &nbsp;|&nbsp; Authorization = "Bạn được làm gì?"
+              </div>
+              <div style="color:var(--text-main); line-height:1.35;">
+                <strong>Ví dụ:</strong> Người dùng đăng nhập thành công nhưng vào trang quản trị bị chặn ➔ <em>Xác thực thành công nhưng phân quyền thất bại</em> (trả HTTP 403 Forbidden).
+              </div>
+            </div>
+
+            <!-- 4 thành phần Spring Security -->
+            <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:6px 10px; font-size:0.69rem; color:var(--text-muted); line-height:1.35;">
+              <div style="font-weight:700; color:var(--text-main); margin-bottom:3px;">🧩 Các Thành Phần Cốt Lõi Trong Spring Security:</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px 8px;">
+                <div>• <code>SecurityFilterChain</code>: Khai báo quy tắc lọc</div>
+                <div>• <code>AuthenticationManager</code>: Xử lý xác thực</div>
+                <div>• <code>SecurityContextHolder</code>: Lưu danh tính hiện tại</div>
+                <div>• <code>GrantedAuthority</code>: Biểu diễn Role/Quyền hạn</div>
+              </div>
+            </div>
           </div>
 
-          <div class="card highlight-coral">
-            <div class="card-title"><span class="card-icon coral">⚖️</span> 401 Unauthorized vs 403 Forbidden</div>
-            <p class="card-desc">
-              • <strong>HTTP 401 Unauthorized:</strong> Người dùng <em>chưa chứng minh được danh tính</em> (chưa đăng nhập, thiếu token hoặc token hết hạn).<br>
-              • <strong>HTTP 403 Forbidden:</strong> Đã biết danh tính nhưng <em>không đủ quyền hạn</em> (User cố tình gọi API xóa tài khoản của Admin).
-            </p>
-          </div>
+          <!-- 3. VÍ DỤ CẤU HÌNH TRONG SPRING BOOT -->
+          <div class="card highlight" style="padding:12px 14px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.88rem; justify-content:space-between;">
+              <span><span class="card-icon">⚙️</span> 3. Ví Dụ Cấu Hình <code>SecurityConfig</code></span>
+              <span class="pill pill-teal" style="font-size:0.65rem;">Spring Boot 3</span>
+            </div>
 
-          <div class="card highlight">
-            <div class="card-title"><span class="card-icon">🎯</span> Áp Dụng Trong Dự Án</div>
-            <p class="card-desc">
-              Sử dụng <code>@PreAuthorize("hasRole('ADMIN')")</code> để bảo vệ các API quản lý: chỉ có Admin mới được xem toàn bộ phòng chat hoặc mở quyền hỗ trợ. Khách hàng thông thường (ROLE_USER) bị chặn ngay với mã lỗi 403.
-            </p>
+            <!-- Code block -->
+            <div class="code-container" style="font-size:0.68rem; line-height:1.38; padding:8px 10px; margin-bottom:6px;">
+              <span class="code-hl" style="color:#C084FC;">@Configuration</span><br>
+              <span class="code-hl" style="color:#C084FC;">@EnableWebSecurity</span><br>
+              <span class="code-hl" style="color:#38BDF8;">public class</span> <span style="color:#FDE047;">SecurityConfig</span> {<br>
+              &nbsp;&nbsp;<span class="code-hl" style="color:#C084FC;">@Bean</span><br>
+              &nbsp;&nbsp;<span class="code-hl" style="color:#38BDF8;">public</span> SecurityFilterChain <span style="color:#60A5FA;">securityFilterChain</span>(HttpSecurity http) <span class="code-hl" style="color:#38BDF8;">throws</span> Exception {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;http.authorizeHttpRequests(auth -> auth<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.requestMatchers(<span style="color:#A7F3D0;">"/api/public/**"</span>).<span style="color:#FDE047; font-weight:700;">permitAll()</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.requestMatchers(<span style="color:#A7F3D0;">"/api/admin/**"</span>).<span style="color:#FDE047; font-weight:700;">hasRole("ADMIN")</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.anyRequest().<span style="color:#FDE047; font-weight:700;">authenticated()</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;);<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl" style="color:#38BDF8;">return</span> http.build();<br>
+              &nbsp;&nbsp;}<br>
+              }
+            </div>
+
+            <!-- Bảng giải thích chi tiết -->
+            <table class="editorial-table" style="font-size:0.68rem; margin-bottom:6px;">
+              <thead>
+                <tr>
+                  <th style="padding:4px 8px;">Cấu Hình</th>
+                  <th style="padding:4px 8px;">Ý Nghĩa Chi Tiết</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:4px 8px;"><code>permitAll()</code></td>
+                  <td style="padding:4px 8px;">Cho phép truy cập công khai mà không cần đăng nhập</td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 8px;"><code>hasRole("ADMIN")</code></td>
+                  <td style="padding:4px 8px;">Yêu cầu người dùng phải có quyền/vai trò ROLE_ADMIN</td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 8px;"><code>authenticated()</code></td>
+                  <td style="padding:4px 8px;">Yêu cầu người dùng bắt buộc đã xác thực danh tính</td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 8px;"><code>SecurityFilterChain</code></td>
+                  <td style="padding:4px 8px;">Khai báo các quy tắc lọc và bảo mật cho HTTP request</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Lưu ý bổ sung -->
+            <div style="font-size:0.68rem; color:var(--text-muted); line-height:1.32; background:var(--bg-canvas); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+              <strong>💡 Lưu ý:</strong> Đoạn code trên minh họa phân quyền (Authorization). Cơ chế xác thực thực tế phụ thuộc cấu hình JWT Stateless hay Session. Không nên tắt CSRF một cách máy móc nếu ứng dụng dùng xác thực qua Cookie/Session trình duyệt.
+            </div>
           </div>
         </div>
       </div>
     </section>
 
 
-    <!-- ==================================================================
-         SLIDE 6: JWT — JSON WEB TOKEN CHI TIẾT
+        <!-- ==================================================================
+         SLIDE 6: JWT — CẤU TRÚC 3 PHẦN & CHIẾN LƯỢC DUAL-TOKEN
          ================================================================== -->
     <section class="slide" data-slide="6" data-title="JSON Web Token">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
             <span class="slide-category-tag coral">PHẦN 2 • BẢO MẬT & XÁC THỰC</span>
-            <h2 class="slide-title">JWT: Cấu Trúc 3 Phần & Chiến Lược Dual-Token</h2>
-            <p class="slide-subtitle">Bản chất Stateless, Cơ chế chống giả mạo bằng Chữ ký số và Cặp Access/Refresh Token</p>
+            <h2 class="slide-title">JSON Web Token: Cấu Trúc 3 Phần & Chiến Lược Dual-Token</h2>
+            <p class="slide-subtitle">Bản chất Stateless, Cơ chế chống giả mạo bằng Chữ ký HMAC-SHA256 và Cặp Access/Refresh Token</p>
           </div>
         </div>
 
-        <div class="grid-2" style="margin-bottom:12px;">
-          <!-- JWT 3 Parts -->
-          <div class="card highlight">
-            <div class="card-title"><span class="card-icon">🧩</span> Cấu Trúc 3 Phần Của JWT (Base64URL)</div>
-            <div class="card-desc" style="display:flex; flex-direction:column; gap:6px;">
-              <div>• <strong style="color:var(--accent-coral)">Header (Đỏ):</strong> Chứa kiểu token (JWT) và thuật toán băm (HMAC-SHA256).</div>
-              <div>• <strong style="color:var(--accent-navy)">Payload (Xanh):</strong> Chứa dữ liệu công khai (Claims): <code>userId</code>, <code>email</code>, <code>roles</code>, <code>exp</code>.</div>
-              <div>• <strong style="color:var(--accent-teal)">Signature (Teal - Bảo mật cốt tử):</strong> Chữ ký số tạo bằng <code>HMAC-SHA256(Header + Payload, SecretKey)</code>.</div>
+        <div class="grid-2" style="gap:14px;">
+          <!-- Cột Trái: Cấu Trúc JWT Gồm 3 Phần -->
+          <div class="card highlight" style="padding:12px 14px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.88rem; justify-content:space-between;">
+              <span><span class="card-icon">🧩</span> Cấu Trúc JWT Gồm 3 Phần</span>
+              <span class="pill pill-teal" style="font-size:0.65rem;">Base64URL</span>
             </div>
-            <div class="card-project-apply">
-              <strong>Chống giả mạo:</strong> Header và Payload chỉ mã hóa Base64 nên ai cũng đọc được. Nhưng nếu hacker sửa role từ USER thành ADMIN trong Payload, chữ ký Signature sẽ lập tức sai lệch và bị Spring Security từ chối!
-            </div>
-          </div>
 
-          <!-- Why Dual Token -->
-          <div class="card highlight-coral">
-            <div class="card-title"><span class="card-icon coral">🛡️</span> Tại Sao Cần Cả Access & Refresh Token?</div>
-            <p class="card-desc">
-              Đây là bài toán cân bằng giữa <strong>Bảo mật</strong> và <strong>Trải nghiệm người dùng (UX)</strong>:
+            <p class="card-desc" style="font-size:0.73rem; margin-bottom:6px; line-height:1.35;">
+              Ba phần được nối với nhau bằng dấu chấm (<code>.</code>) và mã hóa theo định dạng <strong>Base64URL</strong>.
             </p>
-            <div class="card-desc" style="margin-top:6px; line-height:1.45;">
-              • Nếu chỉ có 1 token dài hạn (30 ngày): Kẻ gian lấy được token sẽ chiếm quyền suốt 30 ngày mà server không thể thu hồi.<br>
-              • Nếu chỉ có 1 token ngắn hạn (15 phút): Hết 15 phút, người dùng lại phải gõ lại password gây ức chế.
+
+            <!-- Khối công thức: HEADER . PAYLOAD . SIGNATURE -->
+            <div style="display:flex; align-items:center; justify-content:center; gap:8px; background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:6px 10px; margin-bottom:8px; font-weight:800; font-family:var(--font-mono); font-size:0.74rem;">
+              <span style="color:#FB7185; background:rgba(251,113,133,0.1); padding:2px 8px; border-radius:4px; border:1px solid rgba(251,113,133,0.25);">HEADER</span>
+              <span style="color:var(--text-muted); font-size:1.1rem; line-height:1;">.</span>
+              <span style="color:#38BDF8; background:rgba(56,189,248,0.1); padding:2px 8px; border-radius:4px; border:1px solid rgba(56,189,248,0.25);">PAYLOAD</span>
+              <span style="color:var(--text-muted); font-size:1.1rem; line-height:1;">.</span>
+              <span style="color:#2DD4BF; background:rgba(45,212,191,0.1); padding:2px 8px; border-radius:4px; border:1px solid rgba(45,212,191,0.25);">SIGNATURE</span>
             </div>
-            <div class="card-project-apply coral">
-              <strong>Giải pháp:</strong> Access Token (15 phút) gửi mỗi request; Refresh Token (7 ngày) nằm an toàn trong Database để cấp lại Access Token mới.
-            </div>
-          </div>
-        </div>
 
-        <!-- Token Comparison Table -->
-        <table class="editorial-table">
-          <thead>
-            <tr>
-              <th>Tiêu chí</th>
-              <th>Access Token</th>
-              <th>Refresh Token</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Thời gian sống</strong></td>
-              <td>Ngắn hạn: <strong>15 phút</strong> (hạn chế rủi ro lộ lọt)</td>
-              <td>Dài hạn: <strong>7 ngày</strong> (tiện lợi cho người dùng)</td>
-            </tr>
-            <tr>
-              <td><strong>Trạng thái lưu trữ</strong></td>
-              <td><strong>Stateless:</strong> Không lưu database, server chỉ giải mã chữ ký</td>
-              <td><strong>Stateful:</strong> Lưu bản băm SHA-256 trong Database để kiểm soát</td>
-            </tr>
-            <tr>
-              <td><strong>Mục đích sử dụng</strong></td>
-              <td>Đính kèm Header mọi request gọi API nghiệp vụ</td>
-              <td>Chỉ dùng 1 việc duy nhất: Gửi lên <code>/api/v1/auth/refresh</code> để đổi token mới</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-
-    <!-- ==================================================================
-         SLIDE 7: BẢO MẬT NÂNG CAO — TOKEN ROTATION & HASH
-         ================================================================== -->
-    <section class="slide" data-slide="7" data-title="Token Rotation">
-      <div class="slide-inner">
-        <div class="slide-header">
-          <div>
-            <span class="slide-category-tag coral">PHẦN 2 • BẢO MẬT & XÁC THỰC</span>
-            <h2 class="slide-title">Bảo Mật Nâng Cao: Token Rotation & Zero Enumeration</h2>
-            <p class="slide-subtitle">Cơ chế tự động phát hiện token bị đánh cắp và Phân biệt mục đích giữa SHA-256 vs BCrypt</p>
-          </div>
-        </div>
-
-        <!-- 2 Branches Diagram -->
-        <div class="flowchart-wrapper">
-          <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--text-main); margin-bottom:8px;">
-            Sơ Đồ Xoay Vòng Refresh Token (Token Rotation Workflow)
-          </div>
-          <div class="grid-2">
-            <div style="background:var(--accent-sage-light); border:1px solid var(--accent-sage-border); border-radius:var(--radius-sm); padding:10px 14px;">
-              <div style="font-weight:700; color:var(--accent-sage); font-size:0.83rem;">✓ KỊCH BẢN BÌNH THƯỜNG (NGƯỜI DÙNG HỢP LỆ)</div>
-              <div style="font-size:0.76rem; color:var(--text-main); margin-top:4px; line-height:1.4;">
-                1. Client gửi Refresh Token cũ lên server để xin cấp mới.<br>
-                2. Server tìm bản băm SHA-256 trong DB ➔ Hợp lệ và chưa thu hồi.<br>
-                3. Đánh dấu thu hồi token cũ + Cấp ngay 1 cặp Token hoàn toàn mới.
+            <!-- Khung chuỗi JWT thực tế mã hóa màu -->
+            <div class="code-container" style="font-size:0.67rem; line-height:1.36; padding:8px 10px; margin-bottom:8px; background:#0F172A; word-break:break-all;">
+              <span style="color:#FB7185; font-weight:700;">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span><span style="color:#FFFFFF; font-weight:900;">.</span><span style="color:#38BDF8; font-weight:700;">eyJ1c2VySWQiOiIxMjNlNDU2NyIsImVtYWlsIjoidXNlckBleGFtcGxlLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdfQ</span><span style="color:#FFFFFF; font-weight:900;">.</span><span style="color:#2DD4BF; font-weight:700;">SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span>
+              <div style="font-size:0.64rem; color:#94A3B8; margin-top:3px; font-weight:600; font-family:var(--font-mono);">
+                <span style="color:#FB7185;">Header</span>.<span style="color:#38BDF8;">Payload</span>.<span style="color:#2DD4BF;">Signature</span>
               </div>
             </div>
 
-            <div style="background:var(--accent-coral-light); border:1px solid var(--accent-coral-border); border-radius:var(--radius-sm); padding:10px 14px;">
-              <div style="font-weight:700; color:var(--accent-coral); font-size:0.83rem;">⚠️ KỊCH BẢN PHÁT HIỆN HACKER (REPLAY ATTACK)</div>
-              <div style="font-size:0.76rem; color:var(--text-main); margin-top:4px; line-height:1.4;">
-                1. Hacker lấy trộm token cũ và gửi lên để xin cấp Access Token.<br>
-                2. Server tra cứu DB ➔ Phát hiện token này <strong>ĐÃ TỪNG BỊ THU HỒI!</strong><br>
-                3. <strong>Báo động đỏ:</strong> Lập tức hủy bỏ toàn bộ phiên làm việc của user đó.
+            <!-- 3 Phần chi tiết theo yêu cầu người dùng -->
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <!-- 1. Header -->
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #FB7185; border-radius:var(--radius-sm); padding:6px 9px;">
+                <div style="font-weight:700; color:#FB7185; font-size:0.75rem; margin-bottom:2px; display:flex; justify-content:space-between; align-items:center;">
+                  <span>1. Header — Thông tin thuật toán</span>
+                  <code style="font-size:0.64rem;">{"alg":"HS256","typ":"JWT"}</code>
+                </div>
+                <div style="font-size:0.71rem; color:var(--text-muted); line-height:1.35;">
+                  Cho biết loại token và thuật toán ký, ví dụ <code>HS256</code>.<br>
+                  Ví dụ: <code>{"alg":"HS256","typ":"JWT"}</code>
+                </div>
+              </div>
+
+              <!-- 2. Payload -->
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:6px 9px;">
+                <div style="font-weight:700; color:#0284C7; font-size:0.75rem; margin-bottom:2px;">
+                  2. Payload — Thông tin người dùng
+                </div>
+                <div style="font-size:0.71rem; color:var(--text-muted); line-height:1.35;">
+                  Chứa Claims như <code>userId</code>, <code>roles</code>, <code>exp</code> (thời điểm hết hạn), tùy thiết kế token.<br>
+                  <span style="color:var(--accent-coral); font-weight:600;">⚠️ Có thể đọc được; không nên chứa mật khẩu hay dữ liệu bí mật.</span>
+                </div>
+              </div>
+
+              <!-- 3. Signature -->
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #2DD4BF; border-radius:var(--radius-sm); padding:6px 9px;">
+                <div style="font-weight:700; color:#0F766E; font-size:0.75rem; margin-bottom:2px;">
+                  3. Signature — Chữ ký xác minh
+                </div>
+                <div style="font-size:0.71rem; color:var(--text-muted); line-height:1.35;">
+                  Được tạo từ Header và Payload bằng khóa bí mật. Server dùng chữ ký để phát hiện token bị sửa đổi.
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="grid-2">
-          <!-- BCrypt vs SHA-256 -->
-          <div class="card">
-            <div class="card-title"><span class="card-icon">🔒</span> Tại Sao Password Dùng BCrypt, Token Dùng SHA-256?</div>
-            <div class="card-desc" style="display:flex; flex-direction:column; gap:6px;">
-              <div>• <strong>Mật khẩu:</strong> Do người dùng đặt (ngắn, dễ đoán) ➔ Bắt buộc dùng <em>BCrypt</em> (có muối Salt ngẫu nhiên, thuật toán tính toán chậm để chống vét cạn Brute-force).</div>
-              <div>• <strong>Refresh Token:</strong> Chuỗi ngẫu nhiên 64 ký tự (bản thân nó đã đủ mạnh) ➔ Dùng <em>SHA-256</em> để tìm kiếm <code>WHERE token_hash = ?</code> với tốc độ <strong>O(1)</strong> siêu tốc.</div>
+          <!-- Cột Phải: Chiến lược Dual-Token & Bảng so sánh -->
+          <div class="card highlight-coral" style="padding:12px 14px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.88rem; justify-content:space-between;">
+              <span><span class="card-icon coral">⚖️</span> Chiến Lược Dual-Token (Access & Refresh)</span>
+              <span class="pill pill-coral" style="font-size:0.65rem;">Cân bằng Security & UX</span>
             </div>
-          </div>
 
-          <!-- Zero User Enumeration -->
-          <div class="card highlight-coral">
-            <div class="card-title"><span class="card-icon coral">🛡️</span> Zero User Enumeration (Phòng Vệ Dò Email)</div>
-            <p class="card-desc">
-              Nếu nhập sai password mà server báo <em>"Mật khẩu không đúng"</em>, hacker sẽ biết email đó có thật trong hệ thống.
+            <p class="card-desc" style="font-size:0.72rem; margin-bottom:6px; line-height:1.38;">
+              Giải quyết bài toán tiến thoái lưỡng nan: Token sống dài (30 ngày) dễ bị cướp quyền; Token sống ngắn (15 phút) bắt user đăng nhập liên tục gây khó chịu.
             </p>
-            <div class="card-project-apply coral">
-              <strong>Áp dụng vào dự án:</strong> Dù email không tồn tại hay sai password, hệ thống luôn trả về cùng một thông báo chung: <em>"Email hoặc mật khẩu không chính xác"</em>. Chống hacker quét dò danh sách email khách hàng.
+
+            <!-- Bảng so sánh Access vs Refresh Token -->
+            <table class="editorial-table" style="font-size:0.68rem; margin-bottom:6px;">
+              <thead>
+                <tr>
+                  <th style="padding:4px 8px;">Tiêu Chí</th>
+                  <th style="padding:4px 8px;">Access Token</th>
+                  <th style="padding:4px 8px;">Refresh Token</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:4px 8px;"><strong>Thời gian sống</strong></td>
+                  <td style="padding:4px 8px;">Ngắn hạn: <strong>15 phút</strong> (hạn chế rủi ro lộ)</td>
+                  <td style="padding:4px 8px;">Dài hạn: <strong>7 ngày</strong> (trải nghiệm mượt mà)</td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 8px;"><strong>Lưu trữ</strong></td>
+                  <td style="padding:4px 8px;"><strong>Stateless:</strong> Server không lưu DB, chỉ kiểm tra chữ ký</td>
+                  <td style="padding:4px 8px;"><strong>Stateful:</strong> Lưu bản băm SHA-256 trong Database để thu hồi</td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 8px;"><strong>Mục đích</strong></td>
+                  <td style="padding:4px 8px;">Gắn vào Header <code>Bearer</code> cho mọi API nghiệp vụ</td>
+                  <td style="padding:4px 8px;">Chỉ gửi lên <code>/api/v1/auth/refresh</code> để đổi token mới</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="font-size:0.68rem; color:var(--text-muted); line-height:1.32; background:var(--bg-canvas); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+              <strong>💡 Dự án áp dụng:</strong> Khi Access Token hết hạn, ứng dụng tự động gửi Refresh Token lấy cặp token mới mà người dùng không hề bị gián đoạn hay phải nhập lại mật khẩu.
             </div>
           </div>
         </div>
@@ -1246,10 +1429,10 @@
     </section>
 
 
-    <!-- ==================================================================
-         SLIDE 8: MICROSERVICES LÀ GÌ? — SO SÁNH VỚI MONOLITH
+        <!-- ==================================================================
+         SLIDE 7: MICROSERVICES LÀ GÌ? — SO SÁNH VỚI MONOLITH
          ================================================================== -->
-    <section class="slide" data-slide="8" data-title="Kiến Trúc Microservices">
+    <section class="slide" data-slide="7" data-title="Kiến Trúc Microservices">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
@@ -1314,9 +1497,9 @@
 
 
     <!-- ==================================================================
-         SLIDE 9: GIAO TIẾP GIỮA CÁC MICROSERVICES
+         SLIDE 8: GIAO TIẾP GIỮA CÁC MICROSERVICES
          ================================================================== -->
-    <section class="slide" data-slide="9" data-title="Giao Tiếp Microservices">
+    <section class="slide" data-slide="8" data-title="Giao Tiếp Microservices">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
@@ -1375,9 +1558,9 @@
 
 
     <!-- ==================================================================
-         SLIDE 10: APACHE KAFKA — KIẾN THỨC NỀN TẢNG
+         SLIDE 9: APACHE KAFKA — KIẾN THỨC NỀN TẢNG
          ================================================================== -->
-    <section class="slide" data-slide="10" data-title="Apache Kafka">
+    <section class="slide" data-slide="9" data-title="Apache Kafka">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
@@ -1440,9 +1623,9 @@
 
 
     <!-- ==================================================================
-         SLIDE 11: SPRING KAFKA — TRANSACTIONAL OUTBOX PATTERN
+         SLIDE 10: SPRING KAFKA — TRANSACTIONAL OUTBOX PATTERN
          ================================================================== -->
-    <section class="slide" data-slide="11" data-title="Transactional Outbox">
+    <section class="slide" data-slide="10" data-title="Transactional Outbox">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
@@ -1511,299 +1694,124 @@
     </section>
 
 
-    <!-- ==================================================================
-         SLIDE 12: REDIS — IN-MEMORY DATA STORE
+        <!-- ==================================================================
+         SLIDE 11: REDIS — LỢI ÍCH, CẤU TRÚC DỮ LIỆU & SO SÁNH POSTGRESQL
          ================================================================== -->
-    <section class="slide" data-slide="12" data-title="Redis: Bộ Nhớ RAM">
+    <section class="slide" data-slide="11" data-title="Redis: Bộ Nhớ RAM">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
             <span class="slide-category-tag">PHẦN 5 • TỐC ĐỘ & BỘ NHỚ ĐỆM</span>
-            <h2 class="slide-title">Redis: Sức Mạnh Bộ Nhớ Đệm In-Memory RAM</h2>
-            <p class="slide-subtitle">Tốc độ truy xuất micro-giây, Tính năng tự động hết hạn TTL và So sánh với PostgreSQL</p>
+            <h2 class="slide-title">Redis: Sức Mạnh In-Memory, Cấu Trúc Dữ Liệu & So Sánh PostgreSQL</h2>
+            <p class="slide-subtitle">Lợi ích thực tế khi đưa vào hệ thống, Các kiểu dữ liệu hỗ trợ và Bảng đối chiếu với Cơ sở dữ liệu quan hệ</p>
           </div>
         </div>
 
-        <div class="grid-4" style="margin-bottom:14px;">
-          <div class="card highlight">
-            <div class="card-title"><span class="card-icon">⚡</span> Tốc Độ Micro-giây</div>
-            <p class="card-desc">Lưu trữ toàn bộ trên bộ nhớ RAM, đọc ghi dưới 0.2 mili-giây, nhanh hơn hàng trăm lần so với đọc ghi trên ổ đĩa cứng (SSD/HDD).</p>
-          </div>
-          <div class="card">
-            <div class="card-title"><span class="card-icon">⏱️</span> Tính Năng TTL</div>
-            <p class="card-desc">Time-To-Live: Tự động giải phóng và xóa key sau khoảng thời gian định sẵn (ví dụ 900s), không cần lập trình viên viết cronjob dọn rác.</p>
-          </div>
-          <div class="card">
-            <div class="card-title"><span class="card-icon">🔑</span> Cấu Trúc Đa Dạng</div>
-            <p class="card-desc">Không chỉ là Key-Value chuỗi đơn thuần mà còn hỗ trợ Hash, Set, List, Sorted Set phục vụ cache phân tán và xếp hạng.</p>
-          </div>
-          <div class="card highlight-coral">
-            <div class="card-title"><span class="card-icon coral">🛡️</span> Phòng Vệ Hệ Thống</div>
-            <p class="card-desc">Xử lý hàng trăm ngàn lệnh/giây giúp chặn đứng các đợt tấn công dò mật khẩu ngay tại tầng RAM trước khi chạm vào Database.</p>
-          </div>
-        </div>
-
-        <!-- Comparison Table -->
-        <table class="editorial-table" style="margin-bottom:12px;">
-          <thead>
-            <tr>
-              <th>Tiêu chí so sánh</th>
-              <th>PostgreSQL (Cơ Sở Dữ Liệu Quan Hệ)</th>
-              <th>Redis (In-Memory Key-Value)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Môi trường lưu trữ</strong></td>
-              <td>Ổ cứng (Disk) ➔ Bền vững tuyệt đối (ACID)</td>
-              <td>Bộ nhớ <strong>RAM</strong> ➔ Tốc độ siêu tốc, độ trễ cực thấp</td>
-            </tr>
-            <tr>
-              <td><strong>Mục đích trong dự án</strong></td>
-              <td>Lưu thông tin tài khoản, mật khẩu băm, tin nhắn chat</td>
-              <td><strong>Cache hồ sơ user</strong> và <strong>Đếm số lần đăng nhập sai</strong></td>
-            </tr>
-            <tr>
-              <td><strong>Chịu tải tấn công</strong></td>
-              <td>Dễ cạn kiệt Connection Pool nếu bị spam request liên tục</td>
-              <td>Chịu tải hàng trăm ngàn request/giây nhẹ nhàng</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="card-project-apply">
-          <strong>Triết lý thiết kế:</strong> Dùng đúng công cụ cho đúng bài toán — PostgreSQL cho lưu trữ nghiệp vụ lâu dài, Redis cho đệm tốc độ và phòng vệ cửa ngõ!
-        </div>
-      </div>
-    </section>
-
-
-    <!-- ==================================================================
-         SLIDE 13: ÁP DỤNG REDIS VÀO DỰ ÁN
-         ================================================================== -->
-    <section class="slide" data-slide="13" data-title="Áp Dụng Redis">
-      <div class="slide-inner">
-        <div class="slide-header">
-          <div>
-            <span class="slide-category-tag">PHẦN 5 • TỐC ĐỘ & BỘ NHỚ ĐỆM</span>
-            <h2 class="slide-title">Áp Dụng Redis: Chống Brute-Force & Cache Hồ Sơ</h2>
-            <p class="slide-subtitle">Bảo vệ an toàn tài khoản với mã lỗi HTTP 429 và Khả năng chịu lỗi Graceful Degradation</p>
-          </div>
-        </div>
-
-        <div class="grid-2" style="margin-bottom:12px;">
-          <!-- Brute-Force Defense -->
-          <div class="card highlight-coral">
-            <div class="card-title"><span class="card-icon coral">🛡️</span> 1. Phòng Vệ Đăng Nhập Brute-Force (0.2ms)</div>
-            <p class="card-desc">
-              Khi user đăng nhập thất bại: Tăng biến đếm <code>login:attempts:{email}</code> trong Redis và đặt TTL 900 giây (15 phút).<br>
-              • <strong>Nếu sai ≥ 5 lần:</strong> Redis chặn ngay lập tức và ném lỗi <strong>HTTP 429 Too Many Requests</strong>.<br>
-              • <strong>Nếu đăng nhập đúng:</strong> Xóa ngay key đó bằng lệnh <code>DEL</code> để reset bộ đếm về 0.<br>
-              • <strong>Kết quả:</strong> Toàn bộ tải tấn công dò mật khẩu bị chặn đứng tại RAM, PostgreSQL không tốn 1% CPU!
-            </p>
-          </div>
-
-          <!-- User Cache & Graceful Degradation -->
-          <div class="card highlight">
-            <div class="card-title"><span class="card-icon">⚡</span> 2. Cache Hồ Sơ & Chịu Lỗi (Graceful Degradation)</div>
-            <p class="card-desc">
-              Khi Admin mở phòng chat, <code>chat-service</code> gọi sang lấy thông tin khách hàng: <code>user-service</code> đọc trực tiếp từ Spring Cache <code>user:profile</code> trong Redis chỉ mất 0.2ms.<br>
-              • <strong>Kháng lỗi (Resilience):</strong> Cấu hình <code>CacheErrorHandler</code> tùy chỉnh. Nếu Redis tạm thời bị sập hoặc timeout, service <strong>tự động fallback đọc PostgreSQL</strong> và ghi log cảnh báo, tuyệt đối không quăng exception làm hỏng luồng chat!
-            </p>
-          </div>
-        </div>
-
-        <!-- Flowchart Redis Rate Limit -->
-        <div class="flowchart-wrapper">
-          <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--text-main); margin-bottom:8px;">
-            Quy Trình Kiểm Tra Rate Limit Khi Đăng Nhập
-          </div>
-          <div class="flow-steps">
-            <div class="flow-step-box">
-              <div class="flow-step-num">BƯỚC 1: REQUEST</div>
-              <div class="flow-step-name">Gửi Email & Pass</div>
-              <div class="flow-step-desc">Đăng nhập tài khoản</div>
+        <!-- Hàng Trên: 2 Cột (Lợi ích dự án & Các kiểu dữ liệu) -->
+        <div class="grid-2" style="gap:12px; margin-bottom:10px;">
+          <!-- Cột 1: Lợi ích của Redis trong dự án -->
+          <div class="card highlight" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
+              <span><span class="card-icon">⚡</span> 1. Lợi Ích Của Redis Khi Áp Dụng Vào Dự Án</span>
+              <span class="pill pill-teal" style="font-size:0.63rem;">Tối ưu hệ thống</span>
             </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box active">
-              <div class="flow-step-num">BƯỚC 2: CHECK REDIS</div>
-              <div class="flow-step-name">login:attempts:{email}</div>
-              <div class="flow-step-desc">Đọc bộ đếm trong RAM (&lt; 0.2ms)</div>
+            <div style="display:flex; flex-direction:column; gap:5px; font-size:0.71rem; line-height:1.36;">
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:var(--accent-teal);">• Tốc độ siêu tốc (&lt; 0.2ms):</strong> Lưu toàn bộ dữ liệu trên RAM, xử lý tức thì, nhanh gấp hàng trăm lần việc đọc ổ đĩa cứng (SSD/HDD).
+              </div>
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:#0284C7;">• Giảm tải 80–90% cho PostgreSQL:</strong> Làm lớp Cache đệm (hồ sơ người dùng), giải phóng Connection Pool và tránh nghẽn DB chính khi lượng truy cập tăng vọt.
+              </div>
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-coral); border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:var(--accent-coral);">• Tự động thu dọn dữ liệu (TTL):</strong> Tự hủy key sau thời gian hết hạn (Time-To-Live, ví dụ 15 phút), không cần viết batch cronjob quét dọn rác thủ công.
+              </div>
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #F59E0B; border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:#D97706;">• Phòng vệ cửa ngõ (Rate Limit / Brute-force):</strong> Sử dụng lệnh tăng biến đếm nguyên tử <code>INCR</code> để chặn đứng đợt tấn công dò mật khẩu ngay tại tầng RAM.
+              </div>
             </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box coral">
-              <div class="flow-step-num">NẾU SAI &ge; 5 LẦN</div>
-              <div class="flow-step-name">Khóa Tạm 15 Phút</div>
-              <div class="flow-step-desc">Trả HTTP 429 Too Many Requests</div>
+          </div>
+
+          <!-- Cột 2: Redis lưu trữ được các loại dữ liệu nào -->
+          <div class="card" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
+              <span><span class="card-icon">🧱</span> 2. Redis Lưu Trữ Được Các Loại Dữ Liệu Nào?</span>
+              <span class="pill pill-coral" style="font-size:0.63rem;">Data Structures</span>
             </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box">
-              <div class="flow-step-num">NẾU &lt; 5 LẦN</div>
-              <div class="flow-step-name">Kiểm Tra Mật Khẩu</div>
-              <div class="flow-step-desc">Đúng: Xóa key • Sai: INCR + 900s</div>
+            <div style="display:flex; flex-direction:column; gap:4px; font-size:0.7rem; line-height:1.35;">
+              <div style="display:flex; gap:6px; align-items:flex-start;">
+                <code style="min-width:65px; font-size:0.67rem; text-align:center; background:#1E293B; color:#38BDF8;">String</code>
+                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Chuỗi / JSON:</strong> Dùng cache hồ sơ <code>user:profile</code>, lưu biến đếm <code>login:attempts</code> (hỗ trợ lệnh <code>INCR</code>).</div>
+              </div>
+              <div style="display:flex; gap:6px; align-items:flex-start;">
+                <code style="min-width:65px; font-size:0.67rem; text-align:center; background:#1E293B; color:#A7F3D0;">Hash</code>
+                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Field-Value:</strong> Lưu object nhiều trường (ví dụ <code>user:100 -> name, role</code>), đọc/sửa từng trường mà không cần serialize lại.</div>
+              </div>
+              <div style="display:flex; gap:6px; align-items:flex-start;">
+                <code style="min-width:65px; font-size:0.67rem; text-align:center; background:#1E293B; color:#FDE047;">List</code>
+                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Danh sách thứ tự:</strong> Hoạt động như Queue (<code>LPUSH/RPOP</code>) để xử lý tác vụ nền hoặc lưu lịch sử thông báo gần nhất.</div>
+              </div>
+              <div style="display:flex; gap:6px; align-items:flex-start;">
+                <code style="min-width:65px; font-size:0.67rem; text-align:center; background:#1E293B; color:#F472B6;">Set</code>
+                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Tập hợp duy nhất:</strong> Không trùng lặp; dùng lưu danh sách Blacklist token đã thu hồi, danh sách User Online.</div>
+              </div>
+              <div style="display:flex; gap:6px; align-items:flex-start;">
+                <code style="min-width:65px; font-size:0.67rem; text-align:center; background:#1E293B; color:#C084FC;">Sorted Set</code>
+                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Tập có điểm (ZSet):</strong> Tự động sắp xếp theo Score; ứng dụng cho Bảng xếp hạng hoặc Sliding Window Rate Limiter.</div>
+              </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Hàng Dưới: Bảng So Sánh PostgreSQL vs Redis -->
+        <div class="card" style="padding:10px 12px;">
+          <div class="card-title" style="margin-bottom:6px; font-size:0.86rem;">
+            <span class="card-icon">⚖️</span> 3. Bảng So Sánh PostgreSQL vs Redis
+          </div>
+
+          <table class="editorial-table" style="font-size:0.69rem; margin-bottom:6px;">
+            <thead>
+              <tr>
+                <th style="padding:4px 8px; width:22%;">Tiêu Chí So Sánh</th>
+                <th style="padding:4px 8px; width:39%;">PostgreSQL (Relational Database)</th>
+                <th style="padding:4px 8px; width:39%;">Redis (In-Memory Key-Value)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:4px 8px;"><strong>Môi trường lưu trữ</strong></td>
+                <td style="padding:4px 8px;">Lưu trên <strong>Ổ cứng (Disk)</strong> ➔ Bền vững tuyệt đối, chuẩn ACID</td>
+                <td style="padding:4px 8px;">Lưu trên <strong>Bộ nhớ RAM</strong> ➔ Tốc độ truy xuất siêu tốc, độ trễ cực thấp</td>
+              </tr>
+              <tr>
+                <td style="padding:4px 8px;"><strong>Tốc độ truy xuất</strong></td>
+                <td style="padding:4px 8px;">Độ trễ mili-giây (5–50ms tùy độ phức tạp query và JOIN)</td>
+                <td style="padding:4px 8px;">Độ trễ micro-giây (<strong>&lt; 0.2ms</strong>), xử lý hàng trăm ngàn req/s</td>
+              </tr>
+              <tr>
+                <td style="padding:4px 8px;"><strong>Cấu trúc dữ liệu</strong></td>
+                <td style="padding:4px 8px;">Bảng quan hệ 2 chiều (Row/Column), khóa ngoại, Schema chặt chẽ</td>
+                <td style="padding:4px 8px;">Key-Value đa cấu trúc: String, Hash, List, Set, Sorted Set linh hoạt</td>
+              </tr>
+              <tr>
+                <td style="padding:4px 8px;"><strong>Vai trò trong dự án</strong></td>
+                <td style="padding:4px 8px;"><strong>Nguồn chân lý (Source of Truth):</strong> Lưu User, Role, Tin nhắn chat</td>
+                <td style="padding:4px 8px;"><strong>Lớp đệm tốc độ &amp; phòng vệ:</strong> Cache User, Đếm số lần đăng nhập sai</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="font-size:0.69rem; color:var(--text-muted); line-height:1.32; background:var(--bg-canvas); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+            <strong>💡 Triết lý thiết kế:</strong> Dùng đúng công cụ cho đúng bài toán — <strong>PostgreSQL</strong> đảm bảo an toàn toàn vẹn dữ liệu nghiệp vụ lâu dài, còn <strong>Redis</strong> gánh tải tốc độ và dựng tường lửa phòng vệ ở cửa ngõ!
           </div>
         </div>
       </div>
     </section>
 
 
-    <!-- ==================================================================
-         SLIDE 14: SPRING CLOUD GATEWAY — CỬA NGÕ HỆ THỐNG
+        <!-- ==================================================================
+         SLIDE 12: WEBSOCKET & STOMP — CHAT REALTIME ADMIN - USER
          ================================================================== -->
-    <section class="slide" data-slide="14" data-title="Spring Cloud Gateway">
-      <div class="slide-inner">
-        <div class="slide-header">
-          <div>
-            <span class="slide-category-tag">PHẦN 6 • CỬA NGÕ & ĐIỀU HƯỚNG</span>
-            <h2 class="slide-title">Spring Cloud Gateway: Single Entry Point</h2>
-            <p class="slide-subtitle">Khắc phục 5 rủi ro khi gọi trực tiếp và Sức mạnh Netty Reactive phi phong tỏa</p>
-          </div>
-        </div>
-
-        <div class="grid-2" style="margin-bottom:12px;">
-          <!-- 5 Risks -->
-          <div class="card highlight-coral">
-            <div class="card-title"><span class="card-icon coral">❌</span> 5 Rủi Ro Chí Mạng Khi Không Có Gateway</div>
-            <div class="card-desc" style="display:flex; flex-direction:column; gap:5px; font-size:0.79rem;">
-              <div>1. <strong>Lộ port nội bộ:</strong> Phải mở cổng 8081, 8082, 8083 ra ngoài Internet rất nguy hiểm.</div>
-              <div>2. <strong>CORS phức tạp:</strong> Từng service phải tự viết cấu hình CORS, dễ sai sót và xung đột.</div>
-              <div>3. <strong>Xác thực lặp thừa:</strong> Mỗi service lại phải parse JWT gây lãng phí tài nguyên CPU.</div>
-              <div>4. <strong>Mất dấu vết (Traceability):</strong> Không có điểm tập trung sinh mã truy vết xuyên suốt.</div>
-              <div>5. <strong>Khớp nối chặt (Coupling):</strong> Đổi IP/port nội bộ thì Frontend bắt buộc phải sửa code theo.</div>
-            </div>
-          </div>
-
-          <!-- Netty vs Tomcat -->
-          <div class="card highlight">
-            <div class="card-title"><span class="card-icon">⚡</span> Netty Reactive vs Tomcat Truyền Thống</div>
-            <table class="editorial-table" style="font-size:0.77rem; margin-top:6px;">
-              <thead>
-                <tr>
-                  <th>Tiêu chí</th>
-                  <th>Tomcat Blocking (Servlet)</th>
-                  <th>Netty Non-Blocking (Gateway)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Mô hình luồng</strong></td>
-                  <td>1 Request = 1 Thread cố định</td>
-                  <td><strong>Event Loop phi phong tỏa</strong></td>
-                </tr>
-                <tr>
-                  <td><strong>10.000 requests</strong></td>
-                  <td>Cần 10.000 thread ➔ Tràn RAM</td>
-                  <td>Chỉ cần vài Thread lõi CPU</td>
-                </tr>
-                <tr>
-                  <td><strong>Phù hợp</strong></td>
-                  <td>Xử lý CRUD nghiệp vụ nặng</td>
-                  <td><strong>Làm Gateway chuyển tiếp lưu lượng</strong></td>
-                </tr>
-              </tbody>
-            </table>
-            <div style="margin-top:8px; font-size:0.75rem; color:var(--text-muted)">
-              Công thức định tuyến: <code>Route = Predicate (Khớp URL) + Filter (Xử lý tiền/hậu kỳ)</code>.
-            </div>
-          </div>
-        </div>
-
-        <div class="card-project-apply">
-          <strong>Vai trò trong dự án:</strong> Toàn bộ Frontend (React/Vue/Postman) chỉ cần kết nối duy nhất vào <code>http://localhost:8080</code>. Gateway đóng vai trò "người gác cổng" định tuyến thông minh vào trong.
-        </div>
-      </div>
-    </section>
-
-
-    <!-- ==================================================================
-         SLIDE 15: ÁP DỤNG GATEWAY VÀO DỰ ÁN
-         ================================================================== -->
-    <section class="slide" data-slide="15" data-title="Áp Dụng Gateway">
-      <div class="slide-inner">
-        <div class="slide-header">
-          <div>
-            <span class="slide-category-tag">PHẦN 6 • CỬA NGÕ & ĐIỀU HƯỚNG</span>
-            <h2 class="slide-title">Áp Dụng Gateway: Header Enrichment & Tracing</h2>
-            <p class="slide-subtitle">Định tuyến WebSocket ws://, Bơm header xác thực và Xử lý lỗi toàn cục ErrorWebExceptionHandler</p>
-          </div>
-        </div>
-
-        <div class="grid-2" style="margin-bottom:12px;">
-          <!-- Header Enrichment Code -->
-          <div class="card highlight">
-            <div class="card-title"><span class="card-icon">💎</span> Kỹ Thuật Header Enrichment</div>
-            <p class="card-desc" style="margin-bottom:6px;">
-              Gateway giải mã token đúng 1 lần duy nhất, sau đó bóc tách dữ liệu và gắn vào Request Header trước khi chuyển tiếp vào các service nội bộ:
-            </p>
-            <div class="code-container" style="font-size:0.75rem;">
-              X-Trace-Id: <span style="color:#38BDF8">"a1b2c3d4-e5f6-7890..."</span><br>
-              X-User-Id: <span style="color:#4ADE80">"987e6543-e21b-12d3..."</span><br>
-              X-User-Email: <span style="color:#FBBF24">"admin@company.com"</span><br>
-              X-User-Roles: <span style="color:#F43F5E">"ROLE_ADMIN"</span>
-            </div>
-            <div class="card-project-apply">
-              <strong>Lợi ích vượt trội:</strong> Các service phía sau (user-service, chat-service) chỉ việc đọc Header là biết ai đang gọi mà không cần thư viện JWT hay giải mã lặp lại!
-            </div>
-          </div>
-
-          <!-- Routing & Error Handling -->
-          <div class="card highlight-coral">
-            <div class="card-title"><span class="card-icon coral">⚙️</span> Định Tuyến Thực Tế & Bắt Lỗi Toàn Cục</div>
-            <div class="card-desc" style="display:flex; flex-direction:column; gap:6px;">
-              <div>• <strong>Định tuyến REST:</strong> <code>/api/v1/users/**</code> ➔ :8081, <code>/api/v1/chat/**</code> ➔ :8083.</div>
-              <div>• <strong>Định tuyến WebSocket:</strong> <code>/ws-chat/**</code> chuyển sang <code>ws://chat-service:8083</code> với giao thức WebSocket thuần Netty.</div>
-              <div>• <strong>CORS tập trung:</strong> Cấu hình <code>globalcors</code> cho phép mọi domain frontend gọi an toàn.</div>
-              <div>• <strong>ErrorWebExceptionHandler:</strong> Khi service nội bộ sập, Gateway tự động trả JSON chuẩn HTTP 503 kèm <code>traceId</code>, không hiển thị trang trắng HTML lỗi.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 5 Steps Flow -->
-        <div class="flowchart-wrapper">
-          <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); margin-bottom:8px;">
-            Pipeline 5 Bước Xử Lý Request Tại API Gateway
-          </div>
-          <div class="flow-steps">
-            <div class="flow-step-box">
-              <div class="flow-step-num">1. TRACE ID</div>
-              <div class="flow-step-name">Gắn X-Trace-Id</div>
-              <div class="flow-step-desc">Định danh vết lỗi</div>
-            </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box active">
-              <div class="flow-step-num">2. AUTHENTICATE</div>
-              <div class="flow-step-name">JwtAuthFilter</div>
-              <div class="flow-step-desc">Kiểm tra token Bearer</div>
-            </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box">
-              <div class="flow-step-num">3. ENRICH HEADER</div>
-              <div class="flow-step-name">Bơm X-User-*</div>
-              <div class="flow-step-desc">Gắn danh tính vào Header</div>
-            </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box coral">
-              <div class="flow-step-num">4. ROUTING</div>
-              <div class="flow-step-name">Forward Service</div>
-              <div class="flow-step-desc">Chuyển tiếp qua Netty</div>
-            </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box">
-              <div class="flow-step-num">5. RETURN</div>
-              <div class="flow-step-name">Phản Hồi Client</div>
-              <div class="flow-step-desc">Ghi log thời gian chạy</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- ==================================================================
-         SLIDE 16: WEBSOCKET & STOMP — CHAT REALTIME ADMIN - USER
-         ================================================================== -->
-    <section class="slide" data-slide="16" data-title="WebSocket & STOMP">
+    <section class="slide" data-slide="12" data-title="WebSocket & STOMP">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
@@ -1870,119 +1878,112 @@
     </section>
 
 
-    <!-- ==================================================================
-         SLIDE 17: ÁP DỤNG CHAT REALTIME VÀO DỰ ÁN
+        <!-- ==================================================================
+         SLIDE 13: ÁP DỤNG CHAT REALTIME VÀO DỰ ÁN — KỸ THUẬT & KẾT NỐI
          ================================================================== -->
-    <section class="slide" data-slide="17" data-title="Áp Dụng Chat Realtime">
+    <section class="slide" data-slide="13" data-title="Áp Dụng Chat Realtime">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
             <span class="slide-category-tag">PHẦN 7 • GIAO TIẾP THỜI GIAN THỰC</span>
-            <h2 class="slide-title">Áp Dụng Chat Realtime: Xác Thực JWT & Sơ Đồ 3 Luồng</h2>
-            <p class="slide-subtitle">Sơ đồ luồng kết nối qua Gateway, Bảo mật Interceptor Stateless, Lưu PostgreSQL và Tải lịch sử tin nhắn</p>
+            <h2 class="slide-title">Kỹ Thuật Kết Nối &amp; Xác Thực WebSocket STOMP</h2>
+            <p class="slide-subtitle">Quy trình bắt tay Handshake, Bộ chặn ChannelInterceptor xác thực JWT và Cơ chế Pub/Sub qua Simple Broker</p>
           </div>
         </div>
 
-        <!-- Flowchart 3 Flows -->
-        <div class="flowchart-wrapper">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--text-main);">Sơ Đồ Luồng Chat Thực Tế Giữa Admin & User</span>
-            <span class="pill pill-teal">Chat-Service (:8083)</span>
+        <div class="grid-2" style="gap:12px; margin-bottom:10px;">
+          <!-- Cột 1: Quy trình kết nối & Xác thực JWT -->
+          <div class="card highlight" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
+              <span><span class="card-icon">🔌</span> 1. Quy Trình Bắt Tay (Handshake) &amp; Xác Thực JWT</span>
+              <span class="pill pill-teal" style="font-size:0.63rem;">Frame CONNECT</span>
+            </div>
+
+            <div style="font-size:0.71rem; color:var(--text-muted); line-height:1.36; margin-bottom:6px;">
+              Do WebSocket duy trì kết nối TCP lâu dài, không thể gửi header HTTP ở từng tin nhắn. Dự án giải quyết xác thực bằng <strong>3 bước kỹ thuật chuẩn RFC</strong>:
+            </div>
+
+            <!-- Các bước chi tiết -->
+            <div style="display:flex; flex-direction:column; gap:5px; font-size:0.7rem; line-height:1.35;">
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:var(--accent-teal);">• Bước 1 — Handshake URL:</strong> Client gọi <code>GET /ws-chat</code>. Server nâng cấp giao thức từ HTTP sang kết nối hai chiều <strong>HTTP 101 Switching Protocols</strong>.
+              </div>
+
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:#0284C7;">• Bước 2 — Gửi Frame STOMP CONNECT:</strong> Ngay sau khi mở socket, Client gửi Frame STOMP đầu tiên đính kèm JWT:
+                <div class="code-container" style="font-size:0.65rem; line-height:1.3; padding:4px 8px; margin-top:3px; background:#0F172A;">
+                  <span style="color:#FDE047; font-weight:700;">CONNECT</span><br>
+                  <span style="color:#38BDF8;">Authorization:</span> <span style="color:#A7F3D0;">Bearer eyJhbGciOiJIUzI1Ni...</span><br>
+                  <span style="color:#38BDF8;">accept-version:</span> 1.2
+                </div>
+              </div>
+
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-coral); border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:var(--accent-coral);">• Bước 3 — WebSocketAuthChannelInterceptor:</strong> Bắt sự kiện tại <code>preSend()</code> ➔ Giải mã token, kiểm tra hạn dùng ➔ Tạo <code>UserPrincipal</code> (userId, email, roles) ➔ Gán vĩnh viễn vào phiên: <code>accessor.setUser(auth)</code>.
+              </div>
+            </div>
           </div>
 
-          <!-- Luồng 1: Kết nối & Auth -->
-          <div style="font-size:0.75rem; font-weight:700; color:var(--accent-teal); margin-bottom:4px;">1. THIẾT LẬP KẾT NỐI & XÁC THỰC JWT STATELESS</div>
-          <div class="flow-steps" style="margin-bottom:12px;">
-            <div class="flow-step-box">
-              <div class="flow-step-num">GATEWAY ROUTE</div>
-              <div class="flow-step-name">GET /ws-chat</div>
-              <div class="flow-step-desc">Nâng cấp Netty sang ws://</div>
+          <!-- Cột 2: Cơ chế Gửi/Nhận tin & Chống giả mạo -->
+          <div class="card highlight-coral" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
+              <span><span class="card-icon coral">💬</span> 2. Cơ Chế Pub/Sub &amp; Bảo Mật Danh Tính</span>
+              <span class="pill pill-coral" style="font-size:0.63rem;">@MessageMapping</span>
             </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box active">
-              <div class="flow-step-num">STOMP CONNECT</div>
-              <div class="flow-step-name">Bearer Token</div>
-              <div class="flow-step-desc">Gửi JWT trong Header</div>
-            </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box coral">
-              <div class="flow-step-num">INTERCEPTOR</div>
-              <div class="flow-step-name">ChannelInterceptor</div>
-              <div class="flow-step-desc">Xác minh chữ ký & gán Principal</div>
-            </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box">
-              <div class="flow-step-num">SUBSCRIBE</div>
-              <div class="flow-step-name">/topic/rooms.{id}</div>
-              <div class="flow-step-desc">Lắng nghe tin phòng chat</div>
-            </div>
-          </div>
 
-          <!-- Luồng 2: User gửi & Admin nhận -->
-          <div style="font-size:0.75rem; font-weight:700; color:var(--accent-coral); margin-bottom:4px;">2. USER GỬI CÂU HỎI ➔ LƯU DATABASE ➔ ADMIN NHẬN TỨC THÌ</div>
-          <div class="flow-steps">
-            <div class="flow-step-box coral">
-              <div class="flow-step-num">USER SEND</div>
-              <div class="flow-step-name">/app/chat.sendMessage</div>
-              <div class="flow-step-desc">Gửi kèm roomId, content</div>
+            <div style="font-size:0.71rem; color:var(--text-muted); line-height:1.36; margin-bottom:6px;">
+              Sau khi kết nối thành công, Client tương tác qua mô hình Publish - Subscribe định tuyến bởi <strong>Simple Broker</strong> trong RAM:
             </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box">
-              <div class="flow-step-num">CONTROLLER</div>
-              <div class="flow-step-name">ChatWebSocketController</div>
-              <div class="flow-step-desc">Tiêm an toàn Principal (chống giả ID)</div>
-            </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box active">
-              <div class="flow-step-num">PERSISTENCE</div>
-              <div class="flow-step-name">Lưu PostgreSQL chat_messages</div>
-              <div class="flow-step-desc">Lưu bền vững lịch sử tin nhắn</div>
-            </div>
-            <div class="flow-arrow">➔</div>
-            <div class="flow-step-box coral">
-              <div class="flow-step-num">BROKER PUSH</div>
-              <div class="flow-step-name">/topic/rooms.{id}</div>
-              <div class="flow-step-desc">Admin nhận tin nhắn realtime!</div>
+
+            <!-- Các bước Pub/Sub -->
+            <div style="display:flex; flex-direction:column; gap:5px; font-size:0.7rem; line-height:1.35;">
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:5px 8px;">
+                <div style="font-weight:700; color:#4ADE80; margin-bottom:1px;">👂 Lắng Nghe Tin Nhắn (SUBSCRIBE):</div>
+                Client gửi frame <code>SUBSCRIBE /topic/rooms.{roomId}</code>. Bất kỳ khi nào phòng có tin nhắn mới, Broker lập tức đẩy tin xuống tức thì (&lt; 0.5ms).
+              </div>
+
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:5px 8px;">
+                <div style="font-weight:700; color:#FBBF24; margin-bottom:1px;">✉️ Gửi Tin Nhắn (SEND) &amp; Chống Giả Mạo:</div>
+                Client gửi tin tới <code>/app/chat.sendMessage</code>. Body chỉ chứa: <code>{"roomId": "...", "content": "..."}</code>.<br>
+                <span style="color:var(--accent-coral); font-weight:600;">🔒 Chống giả mạo 100%:</span> Controller tự động tiêm <code>Principal</code> từ phiên đã xác thực để lấy <code>senderId</code>. Client <strong>tuyệt đối không được tự truyền senderId</strong>!
+              </div>
+
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:5px 8px;">
+                <div style="font-weight:700; color:#38BDF8; margin-bottom:1px;">💾 Lưu Trữ &amp; Bắn Realtime:</div>
+                <code>ChatMessageService</code> lưu vào PostgreSQL (bảng <code>chat_messages</code>) ➔ Dùng <code>messagingTemplate.convertAndSend("/topic/rooms." + roomId, dto)</code> đẩy tin cho cả Admin và User.
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-title"><span class="card-icon">📜</span> Tải Lịch Sử Tin Nhắn Qua REST API</div>
-            <p class="card-desc">
-              Khi người dùng vừa bấm mở khung chat: Ứng dụng gọi REST API <code>GET /api/v1/chat/rooms/{roomId}/messages</code> để tải toàn bộ lịch sử trò chuyện đã lưu trong PostgreSQL (sắp xếp theo thời gian tăng dần), sau đó mới chuyển sang kết nối WebSocket realtime.
-            </p>
+        <!-- Băng ngang dưới: Mô hình kết hợp REST + WebSocket -->
+        <div class="card" style="padding:8px 12px; font-size:0.71rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <div>
+            <strong style="color:var(--accent-teal);">💡 Mô Hình Kết Hợp Chuẩn Doanh Nghiệp (REST API + WebSocket):</strong> Khi vừa mở khung chat, ứng dụng gọi REST <code>GET /api/v1/chat/rooms/{roomId}/messages</code> để tải lịch sử trò chuyện cũ từ PostgreSQL. Sau đó, ứng dụng mở kết nối WebSocket STOMP để truyền nhận các tin nhắn mới tức thời hai chiều!
           </div>
-
-          <div class="card highlight">
-            <div class="card-title"><span class="card-icon">🛡️</span> Bảo Mật Principal Chống Giả Mạo Người Gửi</div>
-            <p class="card-desc">
-              Client không được phép tự gửi trường <code>senderId</code> trong body JSON. Server tự động bóc tách <code>UserPrincipal</code> từ Authentication context đã xác thực ở frame CONNECT ➔ Đảm bảo chính xác 100% người gửi mà không ai có thể giả mạo!
-            </p>
-          </div>
+          <span class="pill pill-teal" style="font-size:0.63rem; white-space:nowrap;">REST + Socket</span>
         </div>
       </div>
     </section>
 
 
     <!-- ==================================================================
-         SLIDE 18: TỔNG KẾT HỆ THỐNG & HỎI ĐÁP (Q&A)
+         SLIDE 14: TỔNG KẾT HỆ THỐNG & HỎI ĐÁP (Q&A)
          ================================================================== -->
-    <section class="slide" data-slide="18" data-title="Tổng Kết & Q&A">
+    <section class="slide" data-slide="14" data-title="Tổng Kết & Q&A">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
             <span class="slide-category-tag">TỔNG KẾT BÁO CÁO</span>
             <h2 class="slide-title">Tổng Kết Toàn Bộ Hệ Thống & Hỏi Đáp (Q&A)</h2>
-            <p class="slide-subtitle">Sự kết hợp hoàn chỉnh giữa 7 khối công nghệ phân tán và bài học đạt được</p>
+            <p class="slide-subtitle">Sự kết hợp hoàn chỉnh giữa các khối công nghệ phân tán và bài học đạt được</p>
           </div>
         </div>
 
         <!-- System Architecture Summary Box -->
         <div class="card highlight" style="margin-bottom:14px;">
           <div style="font-size:0.77rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); margin-bottom:8px;">
-            Mô Hình Tổng Thể 7 Khối Công Nghệ Phân Tán Đã Xây Dựng
+            Mô Hình Tổng Thể Các Khối Công Nghệ Phân Tán Đã Xây Dựng
           </div>
           <div class="grid-4" style="font-size:0.77rem; gap:10px;">
             <div style="background:var(--bg-canvas); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
@@ -2039,7 +2040,7 @@
        ================================================================== -->
   <footer class="bottom-bar">
     <button class="nav-btn" id="btnPrev" title="Slide trước (←)">‹</button>
-    <div class="slide-counter" id="slideCounter">01 / 19</div>
+    <div class="slide-counter" id="slideCounter">00 / 14</div>
     <button class="nav-btn" id="btnNext" title="Slide tiếp (→)">›</button>
     <div style="height:16px; width:1px; background:var(--border-light); margin:0 2px;"></div>
     <button class="nav-btn" id="btnToc" title="Mục lục (M)" style="font-size:0.75rem; font-weight:700;">M</button>
@@ -2070,7 +2071,7 @@
   <div class="toc-modal-overlay" id="tocModalOverlay">
     <div class="toc-modal">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:10px;">
-        <div style="font-size:1.05rem; font-weight:800; color:var(--text-main);">Mục Lục 19 Slide Báo Cáo</div>
+        <div style="font-size:1.05rem; font-weight:800; color:var(--text-main);">Mục Lục 15 Slide Báo Cáo</div>
         <button id="btnCloseToc" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-dim);">✕</button>
       </div>
       <div class="toc-grid" id="tocGrid">
@@ -2084,7 +2085,7 @@
        JAVASCRIPT: SLIDE ENGINE & SPEAKER NOTES
        ================================================================== -->
   <script>
-    // 19 Complete Speaker Notes Tailored for 4th-Year Intern Level
+    // 15 Complete Speaker Notes Tailored for 4th-Year Intern Level
     const speakerNotes = [
       {
         title: "Slide 0: Trang Bìa",
@@ -2092,75 +2093,59 @@
       },
       {
         title: "Slide 1: Mục Lục",
-        script: "Nội dung bài nói gồm 7 phần được tổ chức theo mạch tư duy liền mạch: đi từ đóng gói môi trường với Docker, thiết lập bảo vệ ứng dụng với Spring Security, phân chia kiến trúc Microservices, giao tiếp bất đồng bộ qua Kafka, tăng tốc và phòng vệ bộ nhớ với Redis, định tuyến qua API Gateway và giao tiếp thời gian thực với WebSocket."
+        script: "Nội dung bài nói gồm 6 chuyên đề được tổ chức theo mạch tư duy liền mạch: đi từ đóng gói môi trường với Docker, thiết lập bảo vệ ứng dụng với Spring Security, phân chia kiến trúc Microservices, giao tiếp bất đồng bộ chịu lỗi qua Kafka & Outbox, tăng tốc và phòng vệ bộ nhớ với Redis, đến giao tiếp thời gian thực với WebSocket & STOMP."
       },
       {
         title: "Slide 2: Docker Là Gì?",
         script: "Trước đây, bài toán 'trên máy tôi chạy được nhưng máy khác thì lỗi' xảy ra liên tục do lệch phiên bản Java hay thiếu thư viện. Em áp dụng Docker để đóng gói toàn bộ code, JRE và cấu hình vào một Container duy nhất, bảo đảm chạy đồng nhất trên mọi máy tính."
       },
       {
-        title: "Slide 3: Dockerfile & Multi-Stage Build",
-        script: "Trong dự án, em áp dụng kỹ thuật Multi-stage build: Stage 1 dùng Maven và JDK đầy đủ để biên dịch JAR; Stage 2 chỉ lấy đúng file JAR đặt vào môi trường JRE Alpine tối giản. Nhờ đó giảm kích thước Image từ 800MB xuống còn 300MB. Đồng thời em tạo user appuser riêng để chạy ứng dụng, tuân thủ nguyên tắc bảo mật Non-Root của OWASP."
+        title: "Slide 3: Dockerfile Là Gì?",
+        script: "Dockerfile là tệp văn bản chứa các chỉ thị hướng dẫn Docker xây dựng một Image hoàn chỉnh. Mạch luồng bắt đầu từ Dockerfile cộng với mã nguồn, qua lệnh 'docker build' sẽ nung thành Docker Image tĩnh chỉ đọc, và khi chạy 'docker run' sẽ tạo ra một Container độc lập. Các chỉ thị cốt lõi gồm FROM chọn môi trường JRE 21, WORKDIR tạo thư mục làm việc, COPY đưa file JAR vào, EXPOSE khai báo cổng và ENTRYPOINT chỉ định lệnh khởi chạy cố định."
       },
       {
-        title: "Slide 4: Docker Compose 8 Container",
-        script: "Thay vì chạy từng container riêng lẻ, em dùng Docker Compose để khởi động toàn bộ cụm 8 container chỉ với 1 câu lệnh. Em sử dụng thuộc tính depends_on kết hợp healthcheck để bảo đảm cơ sở dữ liệu và Kafka sẵn sàng trước khi các service Spring Boot khởi động."
+        title: "Slide 4: Docker Compose Là Gì?",
+        script: "Khi hệ thống có nhiều thành phần như Backend và Database, Docker Compose giúp ta định nghĩa toàn bộ hạ tầng trong một tệp YAML duy nhất thay vì gõ từng lệnh riêng lẻ. Các thuộc tính quan trọng gồm services khai báo dịch vụ, ports ánh xạ cổng, environment bảo mật cấu hình bằng biến môi trường và volumes giữ bền vững dữ liệu. Bên cạnh đó, các câu lệnh Docker thường dùng như docker ps, docker logs, docker exec và docker compose down giúp lập trình viên dễ dàng giám sát, gỡ lỗi và vận hành toàn bộ hệ thống."
       },
       {
         title: "Slide 5: Spring Security & RBAC",
-        script: "Em phân định rạch ròi 2 khái niệm: Authentication là kiểm tra bạn là ai qua username/password; còn Authorization là kiểm tra bạn được làm gì qua vai trò ROLE_USER hay ROLE_ADMIN. Chưa đăng nhập sẽ trả về HTTP 401 Unauthorized, còn thiếu quyền truy cập sẽ bị chặn với HTTP 403 Forbidden."
+        script: "Em phân định rõ hai khái niệm cốt lõi: Authentication trả lời câu hỏi 'Bạn là ai?' qua thông tin đăng nhập; còn Authorization trả lời câu hỏi 'Bạn được phép làm gì?' bằng cách đối chiếu role. Khi request đi vào, SecurityFilterChain kiểm tra xác thực trước; nếu chưa xác thực sẽ bị từ chối 401 hoặc chuyển hướng đăng nhập. Nếu đã xác thực, hệ thống đối chiếu GrantedAuthority với quy tắc phân quyền; nếu thiếu quyền sẽ trả về HTTP 403 Forbidden. Trong mã nguồn, em cấu hình SecurityFilterChain phân tách rõ endpoint permitAll, hasRole ADMIN và authenticated."
       },
       {
-        title: "Slide 6: JWT & Cặp Access/Refresh Token",
-        script: "JWT là token dạng stateless tự chứa thông tin mà server không cần lưu session. Em áp dụng chiến lược cặp đôi: Access Token sống ngắn 15 phút để giảm thiểu rủi ro khi bị lộ; còn Refresh Token sống 7 ngày lưu bản băm trong database để tự động cấp token mới, mang lại trải nghiệm đăng nhập mượt mà cho người dùng."
+        title: "Slide 6: Cấu Trúc JWT & Dual-Token",
+        script: "Một chuỗi JWT gồm 3 phần nối bằng dấu chấm: Header khai báo thuật toán, Payload chứa dữ liệu người dùng được mã hóa Base64URL, và Signature là chữ ký bảo mật tạo từ HMAC-SHA256 kết hợp khóa bí mật SecretKey. Vì Payload chỉ là Base64 công khai nên ai cũng đọc được, nhưng nếu hacker sửa đổi quyền hạn từ USER thành ADMIN thì chữ ký lập tức bị sai lệch và server sẽ chặn ngay. Để cân bằng giữa bảo mật và trải nghiệm, em áp dụng mô hình Dual-Token: Access Token sống ngắn 15 phút không lưu database, còn Refresh Token sống 7 ngày lưu bản băm SHA-256 để tự động cấp mới."
       },
       {
-        title: "Slide 7: Token Rotation & Zero Enumeration",
-        script: "Em áp dụng cơ chế Token Rotation: mỗi lần đổi Access Token mới thì Refresh Token cũ lập tức bị thu hồi. Nếu hacker dùng lại token cũ, hệ thống sẽ phát hiện ngay đợt tấn công Replay và hủy bỏ toàn bộ phiên làm việc. Mật khẩu người dùng em băm bằng BCrypt có muối ngẫu nhiên, còn Refresh Token băm bằng SHA-256 để tìm kiếm siêu tốc O(1)."
-      },
-      {
-        title: "Slide 8: Microservices vs Monolith",
+        title: "Slide 7: Microservices vs Monolith",
         script: "Khác với Monolith gộp chung tất cả vào một khối dễ sập dây chuyền, em phân rã hệ thống thành 4 microservices riêng biệt. Mỗi service sở hữu cơ sở dữ liệu độc lập theo mẫu Database-per-Service, bảo đảm cách ly sự cố: dịch vụ Chat lỗi thì dịch vụ User và Đăng nhập vẫn hoạt động bình thường."
       },
       {
-        title: "Slide 9: Giao Tiếp Sync REST vs Async Kafka",
+        title: "Slide 8: Giao Tiếp Sync REST vs Async Kafka",
         script: "Em áp dụng quy tắc phân chia: Khi cần kết quả ngay để hiển thị giao diện, em dùng REST đồng bộ (ví dụ Chat Service gọi sang User Service lấy avatar). Khi là tác vụ chạy ngầm tốn thời gian, em dùng Kafka bất đồng bộ (ví dụ bắn sự kiện đăng ký để gửi email ngầm), giúp hệ thống không bao giờ bị nghẽn chờ đợi."
       },
       {
-        title: "Slide 10: Apache Kafka Nền Tảng",
+        title: "Slide 9: Apache Kafka Nền Tảng",
         script: "Kafka đóng vai trò bộ đệm truyền tin phân tán chịu tải cao. Khi có người dùng đăng ký, User Service bắn sự kiện vào topic user-events, sau đó Notification Service sẽ kéo về gửi email. Dù dịch vụ gửi email có bị chậm hay gián đoạn, tin nhắn vẫn nằm an toàn trên Kafka mà không bị mất mát."
       },
       {
-        title: "Slide 11: Transactional Outbox Pattern",
+        title: "Slide 10: Transactional Outbox Pattern",
         script: "Nếu lưu database xong rồi gọi Kafka trực tiếp, lỡ Kafka rớt mạng thì sẽ gặp lỗi Dual-Write mất sự kiện. Em giải quyết bằng Transactional Outbox Pattern: lưu user và lưu sự kiện vào bảng outbox_events trong cùng 1 Database Transaction. Tiến trình định kỳ quét bảng outbox để đẩy lên Kafka, bảo đảm độ tin cậy At-Least-Once."
       },
       {
-        title: "Slide 12: Redis In-Memory Data Store",
+        title: "Slide 11: Redis In-Memory Data Store",
         script: "Redis lưu trữ dữ liệu trực tiếp trên bộ nhớ RAM với độ trễ micro-giây. Em kết hợp Redis bên cạnh PostgreSQL: PostgreSQL lưu trữ bền vững lâu dài trên đĩa, còn Redis phục vụ bộ nhớ đệm cache và đếm số lần đăng nhập sai với tính năng tự hủy TTL."
       },
       {
-        title: "Slide 13: Áp Dụng Redis Vào Dự Án",
-        script: "Em áp dụng Redis cho 2 tính năng thực tế: Thứ nhất là chống dò mật khẩu Brute-force, nếu nhập sai quá 5 lần thì Redis chặn ngay với mã lỗi HTTP 429 chỉ trong 0.2 mili-giây mà không cần truy vấn DB. Thứ hai là cache hồ sơ khách hàng khi Admin xem chat, có cấu hình CacheErrorHandler tự động fallback về DB nếu Redis tạm thời gặp lỗi."
-      },
-      {
-        title: "Slide 14: Spring Cloud Gateway",
-        script: "Nếu không có Gateway, Frontend phải gọi thẳng vào từng port nội bộ rất nguy hiểm và phức tạp CORS. Em chọn Spring Cloud Gateway chạy trên Netty Reactive với mô hình Event Loop phi phong tỏa, chỉ cần vài Thread là xử lý được hàng chục nghìn request cùng lúc."
-      },
-      {
-        title: "Slide 15: Header Enrichment & Tracing",
-        script: "Tại Gateway, em áp dụng kỹ thuật Header Enrichment: Gateway giải mã JWT đúng 1 lần duy nhất, sau đó gắn X-User-Id và X-User-Roles vào Header để chuyển tiếp vào trong. Các service nội bộ chỉ việc đọc header là biết ai đang gọi. Đồng thời TraceIdGlobalFilter sinh mã X-Trace-Id xuyên suốt để truy vết lỗi phân tán."
-      },
-      {
-        title: "Slide 16: WebSocket & STOMP Chat",
+        title: "Slide 12: WebSocket & STOMP Chat",
         script: "Thay vì dùng cơ chế HTTP Polling liên tục gửi request thăm dò gây nghẽn mạng, WebSocket duy trì 1 kết nối hai chiều duy nhất qua /ws-chat. Em kết hợp giao thức STOMP để định tuyến tin nhắn theo destination: gửi tin lên /app/chat.sendMessage và nhận tin theo phòng qua /topic/rooms.{roomId}."
       },
       {
-        title: "Slide 17: Áp Dụng Chat Realtime Trong Dự Án",
-        script: "Khi client kết nối, ChannelInterceptor sẽ chặn frame CONNECT để xác thực JWT và gán UserPrincipal vào phiên. Controller tiêm an toàn Principal từ context để chống giả mạo người gửi. Sau khi lưu tin nhắn vào PostgreSQL, In-Memory Simple Broker tự động đẩy tin nhắn tức thời tới cả Admin và User trong phòng chat."
+        title: "Slide 13: Kỹ Thuật Kết Nối WebSocket STOMP",
+        script: "Trong dự án, quy trình kết nối và chat realtime diễn ra qua 3 bước kỹ thuật rõ ràng: Đầu tiên, Client kết nối tới /ws-chat và nâng cấp giao thức HTTP 101 sang WebSocket. Tiếp theo, Client gửi frame STOMP CONNECT mang theo JWT Bearer Token. Tại tầng server, WebSocketAuthChannelInterceptor sẽ chặn lại để xác thực chữ ký token và gán UserPrincipal vào phiên làm việc. Khi gửi tin nhắn lên /app/chat.sendMessage, Controller tự động tiêm Principal để lấy đúng danh tính người gửi nhằm chống giả mạo. Sau khi lưu tin nhắn vào PostgreSQL, SimpMessagingTemplate phát tin tức thời tới kênh /topic/rooms.{id} cho cả Admin và User."
       },
       {
-        title: "Slide 18: Tổng Kết & Q&A",
-        script: "Em đã tổng hợp toàn bộ 7 khối công nghệ phân tán trong hệ thống. Qua dự án này, em đã nắm vững tư duy kiến trúc phân tán, bảo mật theo chiều sâu và đảm bảo tính nhất quán dữ liệu. Em xin chân thành cảm ơn Thầy Cô và mời Thầy Cô đặt câu hỏi cho em!"
+        title: "Slide 14: Tổng Kết & Q&A",
+        script: "Em đã tổng hợp toàn bộ các khối công nghệ phân tán trong hệ thống. Qua dự án này, em đã nắm vững tư duy kiến trúc phân tán, bảo mật theo chiều sâu và đảm bảo tính nhất quán dữ liệu. Em xin chân thành cảm ơn Thầy Cô và mời Thầy Cô đặt câu hỏi cho em!"
       }
     ];
 
