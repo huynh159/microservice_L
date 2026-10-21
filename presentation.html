@@ -781,11 +781,11 @@
           </div>
           <div class="card highlight" onclick="goToSlide(7)" style="cursor:pointer">
             <div class="card-title"><span class="card-icon">03</span> Kiến Trúc Microservices</div>
-            <p class="card-desc">Monolith vs Microservices, Database-per-service và giao tiếp Sync vs Async.</p>
+            <p class="card-desc">Monolith vs Microservices, 3 nguyên tắc phân rã và Database-per-service.</p>
           </div>
-          <div class="card highlight" onclick="goToSlide(9)" style="cursor:pointer">
-            <div class="card-title"><span class="card-icon">04</span> Apache Kafka & Outbox</div>
-            <p class="card-desc">Event-driven, giải quyết Dual-Write bằng Transactional Outbox Pattern.</p>
+          <div class="card highlight" onclick="goToSlide(8)" style="cursor:pointer">
+            <div class="card-title"><span class="card-icon">04</span> Spring Kafka &amp; Outbox</div>
+            <p class="card-desc">Bản chất Spring Kafka, Event-driven và giải quyết Dual-Write bằng Outbox.</p>
           </div>
         </div>
 
@@ -794,7 +794,7 @@
             <div class="card-title"><span class="card-icon coral">05</span> Redis In-Memory</div>
             <p class="card-desc">Bộ nhớ đệm RAM micro-giây, chống Brute-force mật khẩu (TTL 900s) và Cache hồ sơ user.</p>
           </div>
-          <div class="card highlight-coral" onclick="goToSlide(12)" style="cursor:pointer">
+          <div class="card highlight-coral" onclick="goToSlide(13)" style="cursor:pointer">
             <div class="card-title"><span class="card-icon coral">06</span> WebSocket & STOMP Chat</div>
             <p class="card-desc">Kết nối hai chiều Full-duplex thay thế Polling, chat Admin – User tức thời.</p>
           </div>
@@ -1437,26 +1437,38 @@
         <div class="slide-header">
           <div>
             <span class="slide-category-tag">PHẦN 3 • THIẾT KẾ HỆ THỐNG</span>
-            <h2 class="slide-title">Microservices: Phân Rã & 3 Nguyên Tắc Cốt Tử</h2>
+            <h2 class="slide-title">Microservices: Phân Rã Kiến Trúc &amp; 3 Lợi Ích Cốt Lõi</h2>
             <p class="slide-subtitle">Khắc phục điểm nghẽn của Monolith và triển khai mô hình Database-per-Service trong dự án</p>
           </div>
         </div>
 
         <div class="grid-2" style="margin-bottom:12px;">
+          <!-- Card 1: Khái niệm Microservices & Phân chia service trong dự án -->
           <div class="card">
-            <div class="card-title"><span class="card-icon coral">🏢</span> Monolith (Kiến Trúc Nguyên Khối)</div>
-            <p class="card-desc">
-              Toàn bộ tính năng User, Chat, Notification đóng gói chung vào 1 file .war/.jar duy nhất và trỏ vào 1 database dùng chung.<br>
-              <strong>Hạn chế chí mạng:</strong> Chỉ cần một lỗi rò rỉ bộ nhớ ở chức năng Chat có thể làm sập toàn bộ hệ thống, khiến việc Đăng nhập cũng ngưng trệ!
-            </p>
+            <div class="card-title"><span class="card-icon">🧩</span> Khái Niệm Microservices &amp; Phân Chia Dự Án</div>
+            <div class="card-desc" style="display:flex; flex-direction:column; gap:4px; font-size:0.71rem; line-height:1.35;">
+              <div>
+                <strong>Khái niệm cốt lõi:</strong> Kiến trúc phân rã ứng dụng thành các dịch vụ nhỏ độc lập (loose coupling), mỗi service phụ trách một nghiệp vụ riêng (Bounded Context), sở hữu database riêng và giao tiếp qua mạng (REST, WebSocket, Kafka).
+              </div>
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:5px 8px; margin-top:2px;">
+                <strong style="color:var(--accent-teal);">Dự án của em chia làm 4 services độc lập:</strong>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; margin-top:3px; font-size:0.68rem;">
+                  <div>• <code>api-gateway (:8080)</code>: Cổng vào duy nhất</div>
+                  <div>• <code>user-service (:8081)</code>: Auth, User, Redis</div>
+                  <div>• <code>notification-service (:8082)</code>: Gửi email</div>
+                  <div>• <code>chat-service (:8083)</code>: Chat WebSocket</div>
+                </div>
+              </div>
+            </div>
           </div>
 
+          <!-- Card 2: 3 Lợi ích cốt lõi -->
           <div class="card highlight">
-            <div class="card-title"><span class="card-icon">🚀</span> 3 Nguyên Tắc Của Microservices</div>
-            <div class="card-desc" style="display:flex; flex-direction:column; gap:5px;">
-              <div>• <strong>Cách ly lỗi (Fault Isolation):</strong> Chat-service lỗi thì User-service vẫn vận hành bình thường.</div>
-              <div>• <strong>Triển khai độc lập (Independent Deployment):</strong> Cập nhật tính năng Chat không cần deploy lại User.</div>
-              <div>• <strong>Mở rộng linh hoạt (Targeted Scalability):</strong> Khi chat đông, chỉ cần nhân bản riêng container chat-service.</div>
+            <div class="card-title"><span class="card-icon">🚀</span> 3 Lợi Ích Cốt Lõi Của Microservices</div>
+            <div class="card-desc" style="display:flex; flex-direction:column; gap:4px; font-size:0.71rem; line-height:1.35;">
+              <div>• <strong>Cách ly lỗi (Fault Isolation):</strong> Một service lỗi (như Chat lỗi bộ nhớ) thì User và Đăng nhập vẫn vận hành bình thường, không gây sập dây chuyền.</div>
+              <div>• <strong>Triển khai độc lập (Independent Deployment):</strong> Đội ngũ cập nhật tính năng Chat không cần build lại hay deploy lại toàn bộ User Service.</div>
+              <div>• <strong>Mở rộng có trọng điểm (Targeted Scalability):</strong> Khi lưu lượng chat tăng vọt, chỉ cần nhân bản (scale) riêng container <code>chat-service</code> mà không lãng phí tài nguyên.</div>
             </div>
           </div>
         </div>
@@ -1497,61 +1509,93 @@
 
 
     <!-- ==================================================================
-         SLIDE 8: GIAO TIẾP GIỮA CÁC MICROSERVICES
+         SLIDE 8: SPRING KAFKA — BẢN CHẤT & CHỨC NĂNG TRONG THỰC TẾ
          ================================================================== -->
-    <section class="slide" data-slide="8" data-title="Giao Tiếp Microservices">
+    <section class="slide" data-slide="8" data-title="Spring Kafka & Thực Tế">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
-            <span class="slide-category-tag">PHẦN 3 • THIẾT KẾ HỆ THỐNG</span>
-            <h2 class="slide-title">Giao Tiếp Giữa Các Service: Sync REST vs Async Kafka</h2>
-            <p class="slide-subtitle">Mô hình cây quyết định lựa chọn cơ chế giao tiếp phù hợp với từng bài toán nghiệp vụ</p>
+            <span class="slide-category-tag coral">PHẦN 4 • XỬ LÝ BẤT ĐỒNG BỘ</span>
+            <h2 class="slide-title">Spring Kafka Là Gì? Bản Chất &amp; 4 Chức Năng Trong Thực Tế</h2>
+            <p class="slide-subtitle">Trừu tượng hóa cấp cao của Spring Boot với Apache Kafka, cơ chế Producer – Consumer và giá trị thực tiễn</p>
           </div>
         </div>
 
-        <div class="grid-2" style="margin-bottom:14px;">
-          <!-- Sync REST -->
-          <div class="card highlight">
-            <div class="card-title"><span class="card-icon">📞</span> Đồng Bộ: Synchronous (REST API)</div>
-            <p class="card-desc">
-              Bên gửi gửi request HTTP và <strong>chờ đợi</strong> bên nhận phản hồi mới tiếp tục công việc.<br>
-              • <strong>Ưu điểm:</strong> Đơn giản, nhận ngay kết quả để hiển thị giao diện.<br>
-              • <strong>Nhược điểm:</strong> Khớp nối chặt (Coupling); nếu service nhận bị chậm sẽ làm nghẽn luôn service gửi.
-            </p>
-            <div class="card-project-apply">
-              <strong>Ví dụ dự án:</strong> Khi Admin mở phòng chat, <code>chat-service</code> gọi HTTP GET sang <code>user-service</code> lấy tên và avatar khách hàng.
+        <!-- Khung Top: Định nghĩa Spring Kafka vs Kafka thuần (2 Cột) -->
+        <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="card-icon" style="font-size:0.85rem; width:24px; height:24px;">🍃</span>
+              <span style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.04em;">
+                ĐỊNH NGHĨA: SPRING KAFKA (SPRING FOR APACHE KAFKA) LÀ GÌ?
+              </span>
             </div>
+            <span class="pill pill-teal" style="font-size:0.62rem;">spring-kafka starter</span>
           </div>
 
-          <!-- Async Kafka -->
-          <div class="card highlight-coral">
-            <div class="card-title"><span class="card-icon coral">📨</span> Bất Đồng Bộ: Asynchronous (Apache Kafka)</div>
-            <p class="card-desc">
-              Bên gửi bắn sự kiện vào hàng đợi (Event Broker) rồi <strong>tiếp tục ngay lập tức</strong> mà không cần chờ đợi.<br>
-              • <strong>Ưu điểm:</strong> Tách rời hoàn toàn (Decoupled); nếu bên nhận tạm chết thì tin nhắn vẫn nằm an toàn trên Kafka.<br>
-              • <strong>Nhược điểm:</strong> Dữ liệu có độ trễ nhất định (Eventual Consistency).
-            </p>
-            <div class="card-project-apply coral">
-              <strong>Ví dụ dự án:</strong> Khi khách đăng ký tài khoản, <code>user-service</code> gửi event sang Kafka để <code>notification-service</code> gửi email ngầm.
+          <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:10px;">
+            <div style="background:var(--bg-canvas); border-left:3px solid var(--accent-coral); padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
+              <strong style="color:var(--accent-coral);">⚠️ Nếu Dùng Apache Kafka Client Thuần (Native):</strong><br>
+              Phải tự khởi tạo <code>KafkaProducer/KafkaConsumer</code> với hàng chục dòng boilerplate code; tự viết vòng lặp vô hạn <code>while(true) poll()</code>; tự tuần tự hóa byte array; tự quản lý đa luồng và commit offset thủ công rất dễ rò rỉ kết nối hoặc mất message.
+            </div>
+
+            <div style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
+              <strong style="color:var(--accent-teal);">✅ Khi Dùng Spring Kafka (Spring Boot Trừu Tượng Hóa):</strong><br>
+              Đóng gói toàn bộ độ phức tạp theo phong cách <strong>Declarative (khai báo)</strong>: Cung cấp <code>KafkaTemplate</code> gửi tin non-blocking, annotation <code>@KafkaListener</code> nhận tin tự động, tự nạp Object qua Jackson, và cấu hình tập trung trong <code>application.yml</code>.
             </div>
           </div>
         </div>
 
-        <!-- Decision Flow -->
-        <div class="flowchart-wrapper">
-          <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--text-main); margin-bottom:6px;">
-            Cây Quyết Định (Decision Rule): Khi Nào Dùng REST? Khi Nào Dùng Kafka?
-          </div>
-          <div class="grid-2">
-            <div style="background:var(--accent-teal-light); border-left:3px solid var(--accent-teal); padding:8px 12px; border-radius:var(--radius-sm); font-size:0.78rem;">
-              <strong>Cần kết quả tức thì để hiển thị cho người dùng ➔ DÙNG REST API:</strong><br>
-              Ví dụ: Kiểm tra số dư tài khoản, lấy chi tiết hồ sơ cá nhân, truy vấn lịch sử đơn hàng.
+        <!-- Khung Giữa: 4 Chức Năng Cốt Tử Của Spring Kafka Trong Thực Tế (Grid 4) -->
+        <div class="grid-4" style="gap:10px; margin-bottom:10px;">
+          <!-- Card 1 -->
+          <div class="card highlight" style="padding:10px 10px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.78rem;">
+              <span class="card-icon" style="width:22px; height:22px; font-size:0.75rem;">⚡</span> 1. Giao Tiếp Bất Đồng Bộ
             </div>
-            <div style="background:var(--accent-coral-light); border-left:3px solid var(--accent-coral); padding:8px 12px; border-radius:var(--radius-sm); font-size:0.78rem;">
-              <strong>Tác vụ xử lý tốn thời gian, không cần chờ kết quả ngay ➔ DÙNG KAFKA EVENT:</strong><br>
-              Ví dụ: Gửi email kích hoạt, xuất hóa đơn PDF, thông báo đẩy, cập nhật dữ liệu thống kê.
+            <div style="font-size:0.68rem; color:var(--text-muted); line-height:1.35;">
+              <strong>Không bị chặn (Non-blocking):</strong> Khi khách đăng ký, <code>user-service</code> gọi <code>kafkaTemplate.send()</code> chỉ tốn <strong>&lt; 5ms</strong> rồi trả ngay HTTP 201. Luồng đăng ký hoàn thành tức thì mà không cần chờ 2–4s kết nối SMTP gửi mail.
             </div>
           </div>
+
+          <!-- Card 2 -->
+          <div class="card highlight-coral" style="padding:10px 10px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.78rem;">
+              <span class="card-icon coral" style="width:22px; height:22px; font-size:0.75rem;">🛡️</span> 2. Đệm Chịu Tải Cao
+            </div>
+            <div style="font-size:0.68rem; color:var(--text-muted); line-height:1.35;">
+              <strong>San phẳng lưu lượng (Peak-load):</strong> Giờ cao điểm có hàng ngàn user đăng ký/giây, tin nhắn nằm an toàn trên đĩa Kafka. <code>@KafkaListener</code> kéo (pull) tin về xử lý tuần tự theo khả năng của máy chủ, tránh sập hoặc tràn RAM (OOM).
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="card highlight" style="padding:10px 10px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.78rem;">
+              <span class="card-icon" style="width:22px; height:22px; font-size:0.75rem;">🔄</span> 3. Tự Động Tuần Tự Hóa
+            </div>
+            <div style="font-size:0.68rem; color:var(--text-muted); line-height:1.35;">
+              <strong>Auto SerDe &amp; Routing:</strong> Tích hợp Jackson tự động chuyển đổi Object DTO $\leftrightarrow$ chuỗi JSON byte. Đồng thời, tự động băm <code>key = userId</code> vào Partition cố định, bảo đảm sự kiện của cùng 1 user luôn chuẩn thứ tự.
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="card highlight-coral" style="padding:10px 10px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.78rem;">
+              <span class="card-icon coral" style="width:22px; height:22px; font-size:0.75rem;">🛑</span> 4. Tự Phục Hồi &amp; DLT
+            </div>
+            <div style="font-size:0.68rem; color:var(--text-muted); line-height:1.35;">
+              <strong>Retry &amp; Dead Letter Topic:</strong> Nếu gửi email lỗi mạng, Spring kích hoạt <code>DefaultErrorHandler</code> thử lại 3 lần. Nếu lỗi cú pháp (Poison Pill), tự đẩy sang <code>user-events.DLT</code> mà không làm nghẽn luồng xử lý chính.
+            </div>
+          </div>
+        </div>
+
+        <!-- Băng ngang dưới: Minh chứng thực tế trong dự án -->
+        <div class="card" style="padding:8px 12px; font-size:0.71rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <div>
+            <strong style="color:var(--accent-teal);">💡 Minh Chứng Trong Dự Án Của Em:</strong> 
+            <code>user-service</code> sử dụng <code>KafkaOperations/KafkaTemplate</code> để xuất bản sự kiện <code>UserRegisteredEvent</code> (key = <code>userId</code>). Ở phía nhận, <code>notification-service</code> khai báo <code>@KafkaListener(topics = "user-events", groupId = "notification-service-group")</code> tự động nạp DTO, trích xuất <code>X-Trace-Id</code> và gửi email chào mừng qua Mailpit!
+          </div>
+          <span class="pill pill-teal" style="font-size:0.63rem; white-space:nowrap;">KafkaTemplate + @KafkaListener</span>
         </div>
       </div>
     </section>
@@ -1694,128 +1738,247 @@
     </section>
 
 
-        <!-- ==================================================================
-         SLIDE 11: REDIS — LỢI ÍCH, CẤU TRÚC DỮ LIỆU & SO SÁNH POSTGRESQL
+    <!-- ==================================================================
+         SLIDE 11: NỀN TẢNG REDIS — ĐỊNH NGHĨA, KIỂU DỮ LIỆU & SO SÁNH POSTGRESQL
          ================================================================== -->
-    <section class="slide" data-slide="11" data-title="Redis: Bộ Nhớ RAM">
+    <section class="slide" data-slide="11" data-title="Redis: Nền Tảng & Kiểu Dữ Liệu">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
             <span class="slide-category-tag">PHẦN 5 • TỐC ĐỘ & BỘ NHỚ ĐỆM</span>
-            <h2 class="slide-title">Redis: Sức Mạnh In-Memory, Cấu Trúc Dữ Liệu & So Sánh PostgreSQL</h2>
-            <p class="slide-subtitle">Lợi ích thực tế khi đưa vào hệ thống, Các kiểu dữ liệu hỗ trợ và Bảng đối chiếu với Cơ sở dữ liệu quan hệ</p>
+            <h2 class="slide-title">Redis Là Gì? Cấu Trúc Dữ Liệu &amp; So Sánh PostgreSQL</h2>
+            <p class="slide-subtitle">Định nghĩa In-Memory Data Store, 5 cấu trúc dữ liệu cốt lõi và Đối chiếu mô hình lưu trữ RAM vs Ổ cứng</p>
           </div>
         </div>
 
-        <!-- Hàng Trên: 2 Cột (Lợi ích dự án & Các kiểu dữ liệu) -->
+        <!-- Khung Top: Định Nghĩa Redis & Công Dụng Thực Tế (3 Cột) -->
+        <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="card-icon" style="font-size:0.85rem; width:24px; height:24px;">⚡</span>
+              <span style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.04em;">
+                ĐỊNH NGHĨA REDIS LÀ GÌ? LÀM VIỆC GÌ TRONG HỆ THỐNG?
+              </span>
+            </div>
+            <span class="pill pill-teal" style="font-size:0.62rem;">In-Memory Key-Value</span>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;">
+            <div style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
+              <div style="font-weight:700; color:var(--accent-teal); margin-bottom:2px;">1. Bản Chất In-Memory RAM</div>
+              Kho dữ liệu Key-Value hoạt động <strong>100% trên RAM</strong>. Không tốn thời gian đọc/ghi đĩa từ (Disk I/O), đạt độ trễ siêu tốc <strong>sub-millisecond (&lt; 1ms)</strong>.
+            </div>
+            <div style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
+              <div style="font-weight:700; color:#0284C7; margin-bottom:2px;">2. Đảm Nhận 3 Nhiệm Vụ Chính</div>
+              Làm <strong>Bộ nhớ đệm (Cache)</strong> tăng tốc độ đọc dữ liệu; làm <strong>Bộ đếm thời gian thực (Atomic Counter)</strong> chống spam/brute-force; và làm <strong>Message Broker (Pub/Sub)</strong>.
+            </div>
+            <div style="background:var(--bg-canvas); border-left:3px solid var(--accent-coral); padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
+              <div style="font-weight:700; color:var(--accent-coral); margin-bottom:2px;">3. Tự Động Hết Hạn (TTL)</div>
+              Mỗi key có thể gắn thời hạn sống (Time-To-Live). Hết hạn, Redis <strong>tự động dọn rác giải phóng RAM</strong> mà không cần viết batch cronjob thủ công.
+            </div>
+          </div>
+        </div>
+
         <div class="grid-2" style="gap:12px; margin-bottom:10px;">
-          <!-- Cột 1: Lợi ích của Redis trong dự án -->
+          <!-- Cột 1: 5 Kiểu Dữ Liệu Cốt Lõi -->
           <div class="card highlight" style="padding:10px 12px;">
             <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
-              <span><span class="card-icon">⚡</span> 1. Lợi Ích Của Redis Khi Áp Dụng Vào Dự Án</span>
-              <span class="pill pill-teal" style="font-size:0.63rem;">Tối ưu hệ thống</span>
+              <span><span class="card-icon">🧱</span> 1. Redis Lưu Trữ Được Các Loại Dữ Liệu Nào?</span>
+              <span class="pill pill-teal" style="font-size:0.63rem;">Data Structures</span>
             </div>
-            <div style="display:flex; flex-direction:column; gap:5px; font-size:0.71rem; line-height:1.36;">
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:var(--accent-teal);">• Tốc độ siêu tốc (&lt; 0.2ms):</strong> Lưu toàn bộ dữ liệu trên RAM, xử lý tức thì, nhanh gấp hàng trăm lần việc đọc ổ đĩa cứng (SSD/HDD).
+
+            <div style="display:flex; flex-direction:column; gap:5px; font-size:0.69rem; line-height:1.35;">
+              <div style="display:flex; gap:6px; align-items:flex-start;">
+                <code style="min-width:68px; font-size:0.66rem; text-align:center; background:#1E293B; color:#38BDF8; padding:2px 4px; border-radius:3px;">String</code>
+                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Chuỗi / JSON / Số:</strong> Lưu chuỗi text, JSON Object hoặc biến đếm số nguyên tử hỗ trợ lệnh <code>INCR/DECR</code>. <em>VD: cache profile, đếm login sai.</em></div>
               </div>
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:#0284C7;">• Giảm tải 80–90% cho PostgreSQL:</strong> Làm lớp Cache đệm (hồ sơ người dùng), giải phóng Connection Pool và tránh nghẽn DB chính khi lượng truy cập tăng vọt.
+              <div style="display:flex; gap:6px; align-items:flex-start;">
+                <code style="min-width:68px; font-size:0.66rem; text-align:center; background:#1E293B; color:#A7F3D0; padding:2px 4px; border-radius:3px;">Hash</code>
+                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Field-Value:</strong> Bản đồ chứa nhiều trường bên trong 1 key. Đọc/sửa từng trường mà không cần tải lại cả object. <em>VD: user:100 ➔ name, role.</em></div>
               </div>
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-coral); border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:var(--accent-coral);">• Tự động thu dọn dữ liệu (TTL):</strong> Tự hủy key sau thời gian hết hạn (Time-To-Live, ví dụ 15 phút), không cần viết batch cronjob quét dọn rác thủ công.
+              <div style="display:flex; gap:6px; align-items:flex-start;">
+                <code style="min-width:68px; font-size:0.66rem; text-align:center; background:#1E293B; color:#FDE047; padding:2px 4px; border-radius:3px;">List</code>
+                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Danh sách thứ tự:</strong> Danh sách liên kết hai đầu (Linked List), thao tác cực nhanh với <code>LPUSH/RPOP</code>. <em>VD: hàng đợi job queue, thông báo gần nhất.</em></div>
               </div>
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #F59E0B; border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:#D97706;">• Phòng vệ cửa ngõ (Rate Limit / Brute-force):</strong> Sử dụng lệnh tăng biến đếm nguyên tử <code>INCR</code> để chặn đứng đợt tấn công dò mật khẩu ngay tại tầng RAM.
+              <div style="display:flex; gap:6px; align-items:flex-start;">
+                <code style="min-width:68px; font-size:0.66rem; text-align:center; background:#1E293B; color:#F472B6; padding:2px 4px; border-radius:3px;">Set</code>
+                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Tập hợp duy nhất:</strong> Các phần tử không trùng lặp, hỗ trợ phép toán giao/hợp nhanh. <em>VD: Blacklist token đã thu hồi, danh sách user online.</em></div>
+              </div>
+              <div style="display:flex; gap:6px; align-items:flex-start;">
+                <code style="min-width:68px; font-size:0.66rem; text-align:center; background:#1E293B; color:#C084FC; padding:2px 4px; border-radius:3px;">Sorted Set</code>
+                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Tập có điểm (ZSet):</strong> Tự động sắp xếp phần tử theo trọng số (Score). <em>VD: Bảng xếp hạng Leaderboard, Sliding Window Rate Limiting.</em></div>
               </div>
             </div>
           </div>
 
-          <!-- Cột 2: Redis lưu trữ được các loại dữ liệu nào -->
-          <div class="card" style="padding:10px 12px;">
+          <!-- Cột 2: Bảng So Sánh PostgreSQL vs Redis -->
+          <div class="card highlight-coral" style="padding:10px 12px;">
             <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
-              <span><span class="card-icon">🧱</span> 2. Redis Lưu Trữ Được Các Loại Dữ Liệu Nào?</span>
-              <span class="pill pill-coral" style="font-size:0.63rem;">Data Structures</span>
+              <span><span class="card-icon coral">⚖️</span> 2. So Sánh Lưu Dữ Liệu: Redis vs PostgreSQL</span>
+              <span class="pill pill-coral" style="font-size:0.63rem;">RAM vs Disk</span>
             </div>
-            <div style="display:flex; flex-direction:column; gap:4px; font-size:0.7rem; line-height:1.35;">
-              <div style="display:flex; gap:6px; align-items:flex-start;">
-                <code style="min-width:65px; font-size:0.67rem; text-align:center; background:#1E293B; color:#38BDF8;">String</code>
-                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Chuỗi / JSON:</strong> Dùng cache hồ sơ <code>user:profile</code>, lưu biến đếm <code>login:attempts</code> (hỗ trợ lệnh <code>INCR</code>).</div>
-              </div>
-              <div style="display:flex; gap:6px; align-items:flex-start;">
-                <code style="min-width:65px; font-size:0.67rem; text-align:center; background:#1E293B; color:#A7F3D0;">Hash</code>
-                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Field-Value:</strong> Lưu object nhiều trường (ví dụ <code>user:100 -> name, role</code>), đọc/sửa từng trường mà không cần serialize lại.</div>
-              </div>
-              <div style="display:flex; gap:6px; align-items:flex-start;">
-                <code style="min-width:65px; font-size:0.67rem; text-align:center; background:#1E293B; color:#FDE047;">List</code>
-                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Danh sách thứ tự:</strong> Hoạt động như Queue (<code>LPUSH/RPOP</code>) để xử lý tác vụ nền hoặc lưu lịch sử thông báo gần nhất.</div>
-              </div>
-              <div style="display:flex; gap:6px; align-items:flex-start;">
-                <code style="min-width:65px; font-size:0.67rem; text-align:center; background:#1E293B; color:#F472B6;">Set</code>
-                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Tập hợp duy nhất:</strong> Không trùng lặp; dùng lưu danh sách Blacklist token đã thu hồi, danh sách User Online.</div>
-              </div>
-              <div style="display:flex; gap:6px; align-items:flex-start;">
-                <code style="min-width:65px; font-size:0.67rem; text-align:center; background:#1E293B; color:#C084FC;">Sorted Set</code>
-                <div style="color:var(--text-muted);"><strong style="color:var(--text-main);">Tập có điểm (ZSet):</strong> Tự động sắp xếp theo Score; ứng dụng cho Bảng xếp hạng hoặc Sliding Window Rate Limiter.</div>
-              </div>
-            </div>
+
+            <table class="editorial-table" style="font-size:0.67rem; margin-bottom:5px;">
+              <thead>
+                <tr>
+                  <th style="padding:3px 6px; width:25%;">Tiêu Chí</th>
+                  <th style="padding:3px 6px; width:38%;">PostgreSQL (RDBMS)</th>
+                  <th style="padding:3px 6px; width:37%;">Redis (In-Memory)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:3px 6px;"><strong>Vị trí lưu</strong></td>
+                  <td style="padding:3px 6px;"><strong>Ổ cứng (Disk)</strong> ➔ Bền vững tuyệt đối, chuẩn ACID</td>
+                  <td style="padding:3px 6px;"><strong>Bộ nhớ RAM</strong> ➔ Tốc độ siêu tốc, bay màu khi sập</td>
+                </tr>
+                <tr>
+                  <td style="padding:3px 6px;"><strong>Mô hình</strong></td>
+                  <td style="padding:3px 6px;">Bảng quan hệ 2 chiều, Khóa ngoại, Schema chặt chẽ</td>
+                  <td style="padding:3px 6px;">Key-Value NoSQL đa cấu trúc, Schema-less linh hoạt</td>
+                </tr>
+                <tr>
+                  <td style="padding:3px 6px;"><strong>Độ trễ</strong></td>
+                  <td style="padding:3px 6px;">Mili-giây (5–50ms tùy độ sâu query và JOIN)</td>
+                  <td style="padding:3px 6px;"><strong>Sub-millisecond (&lt; 1ms)</strong>, đáp ứng tải cực cao</td>
+                </tr>
+                <tr>
+                  <td style="padding:3px 6px;"><strong>Độ bền</strong></td>
+                  <td style="padding:3px 6px;">Ghi log WAL, không mất dữ liệu dù mất điện</td>
+                  <td style="padding:3px 6px;">Snapshot RDB / AOF định kỳ, chấp nhận mất mát nhẹ</td>
+                </tr>
+                <tr>
+                  <td style="padding:3px 6px;"><strong>Vai trò</strong></td>
+                  <td style="padding:3px 6px;"><strong>Nguồn chân lý (Source of Truth)</strong> cốt lõi</td>
+                  <td style="padding:3px 6px;"><strong>Lớp đệm tốc độ &amp; phòng vệ cửa ngõ</strong></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <!-- Hàng Dưới: Bảng So Sánh PostgreSQL vs Redis -->
-        <div class="card" style="padding:10px 12px;">
-          <div class="card-title" style="margin-bottom:6px; font-size:0.86rem;">
-            <span class="card-icon">⚖️</span> 3. Bảng So Sánh PostgreSQL vs Redis
+        <!-- Băng ngang dưới: Triết lý kiến trúc -->
+        <div class="card" style="padding:8px 12px; font-size:0.71rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <div>
+            <strong style="color:var(--accent-teal);">💡 Triết Lý Kiến Trúc Kết Hợp:</strong> Không dùng Redis để thay thế PostgreSQL vì chi phí RAM đắt đỏ và tính bay hơi; mà dùng <strong>PostgreSQL làm kho lưu trữ bền vững lâu dài</strong>, kết hợp <strong>Redis làm lá chắn phía trước</strong> để gánh 80% tải đọc và bảo vệ an ninh!
           </div>
-
-          <table class="editorial-table" style="font-size:0.69rem; margin-bottom:6px;">
-            <thead>
-              <tr>
-                <th style="padding:4px 8px; width:22%;">Tiêu Chí So Sánh</th>
-                <th style="padding:4px 8px; width:39%;">PostgreSQL (Relational Database)</th>
-                <th style="padding:4px 8px; width:39%;">Redis (In-Memory Key-Value)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="padding:4px 8px;"><strong>Môi trường lưu trữ</strong></td>
-                <td style="padding:4px 8px;">Lưu trên <strong>Ổ cứng (Disk)</strong> ➔ Bền vững tuyệt đối, chuẩn ACID</td>
-                <td style="padding:4px 8px;">Lưu trên <strong>Bộ nhớ RAM</strong> ➔ Tốc độ truy xuất siêu tốc, độ trễ cực thấp</td>
-              </tr>
-              <tr>
-                <td style="padding:4px 8px;"><strong>Tốc độ truy xuất</strong></td>
-                <td style="padding:4px 8px;">Độ trễ mili-giây (5–50ms tùy độ phức tạp query và JOIN)</td>
-                <td style="padding:4px 8px;">Độ trễ micro-giây (<strong>&lt; 0.2ms</strong>), xử lý hàng trăm ngàn req/s</td>
-              </tr>
-              <tr>
-                <td style="padding:4px 8px;"><strong>Cấu trúc dữ liệu</strong></td>
-                <td style="padding:4px 8px;">Bảng quan hệ 2 chiều (Row/Column), khóa ngoại, Schema chặt chẽ</td>
-                <td style="padding:4px 8px;">Key-Value đa cấu trúc: String, Hash, List, Set, Sorted Set linh hoạt</td>
-              </tr>
-              <tr>
-                <td style="padding:4px 8px;"><strong>Vai trò trong dự án</strong></td>
-                <td style="padding:4px 8px;"><strong>Nguồn chân lý (Source of Truth):</strong> Lưu User, Role, Tin nhắn chat</td>
-                <td style="padding:4px 8px;"><strong>Lớp đệm tốc độ &amp; phòng vệ:</strong> Cache User, Đếm số lần đăng nhập sai</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div style="font-size:0.69rem; color:var(--text-muted); line-height:1.32; background:var(--bg-canvas); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-            <strong>💡 Triết lý thiết kế:</strong> Dùng đúng công cụ cho đúng bài toán — <strong>PostgreSQL</strong> đảm bảo an toàn toàn vẹn dữ liệu nghiệp vụ lâu dài, còn <strong>Redis</strong> gánh tải tốc độ và dựng tường lửa phòng vệ ở cửa ngõ!
-          </div>
+          <span class="pill pill-teal" style="font-size:0.63rem; white-space:nowrap;">Cache + RDBMS</span>
         </div>
       </div>
     </section>
 
 
-        <!-- ==================================================================
-         SLIDE 12: WEBSOCKET & STOMP — CHAT REALTIME ADMIN - USER
+    <!-- ==================================================================
+         SLIDE 12: PHẦN ĐÃ LÀM TRONG DỰ ÁN — ÁP DỤNG REDIS VÀO USER-SERVICE
          ================================================================== -->
-    <section class="slide" data-slide="12" data-title="WebSocket & STOMP">
+    <section class="slide" data-slide="12" data-title="Dự Án: Áp Dụng Redis">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
-            <span class="slide-category-tag">PHẦN 7 • GIAO TIẾP THỜI GIAN THỰC</span>
+            <span class="slide-category-tag coral">PHẦN 5 • HIỆN THỰC HÓA TRONG DỰ ÁN</span>
+            <h2 class="slide-title">Phần Đã Làm Trong Dự Án: Áp Dụng Redis Vào User-Service</h2>
+            <p class="slide-subtitle">Triển khai thực tế trong user-service: Caching hồ sơ người dùng (Cache-Aside), Chống Brute-force và Cơ chế chịu lỗi</p>
+          </div>
+        </div>
+
+        <!-- Khung Top: Vị trí hạ tầng & Trọng trách trong dự án (3 Cột) -->
+        <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="card-icon" style="font-size:0.85rem; width:24px; height:24px;">🎯</span>
+              <span style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.04em;">
+                VỊ TRÍ &amp; TRỌNG TRÁCH CỦA REDIS TRONG DỰ ÁN (USER-SERVICE :8081)
+              </span>
+            </div>
+            <span class="pill pill-teal" style="font-size:0.62rem;">redis:7-alpine :6379</span>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;">
+            <div style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
+              <div style="font-weight:700; color:var(--accent-teal); margin-bottom:2px;">1. Hạ Tầng Container Độc Lập</div>
+              Chạy container <code>microservice_redis</code> (port 6379), xác thực qua <code>${REDIS_PASSWORD}</code>, gắn volume <code>redis_data</code> lưu snapshot trên đĩa.
+            </div>
+            <div style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
+              <div style="font-weight:700; color:#0284C7; margin-bottom:2px;">2. Tăng Tốc Profile (Cache-Aside)</div>
+              Giảm 80% truy vấn đọc đến PostgreSQL khi người dùng tải trang <code>/users/me</code>; tự động hủy sau <strong>TTL 10 phút</strong>.
+            </div>
+            <div style="background:var(--bg-canvas); border-left:3px solid var(--accent-coral); padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
+              <div style="font-weight:700; color:var(--accent-coral); margin-bottom:2px;">3. Lá Chắn Chống Brute-Force</div>
+              Dùng lệnh nguyên tử <code>INCR</code> trên RAM đếm số lần sai theo email; khóa tài khoản tạm thời <strong>15 phút (HTTP 429)</strong> nếu sai ≥ 5 lần.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="gap:12px; margin-bottom:10px;">
+          <!-- Cột 1: Caching Profile Người Dùng -->
+          <div class="card highlight" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
+              <span><span class="card-icon">⚡</span> 1. Caching Hồ Sơ Người Dùng (User Profile Cache)</span>
+              <span class="pill pill-teal" style="font-size:0.63rem;">@Cacheable</span>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:5px; font-size:0.7rem; line-height:1.35;">
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:var(--accent-teal);">• Luồng Cache-Aside (GET /users/me):</strong> 
+                Kiểm tra vùng <code>user_profiles</code> trong Redis trước ➔ Nếu <strong>Cache Hit</strong> (&lt; 1ms), trả về ngay không chạm DB ➔ Nếu <strong>Cache Miss</strong>, đọc PostgreSQL rồi ghi vào Redis với <strong>TTL 10 phút</strong>.
+              </div>
+
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:#0284C7;">• Đồng Bộ Dữ Liệu (@CacheEvict):</strong> 
+                Khi người dùng cập nhật hồ sơ hoặc đổi mật khẩu, hàm kích hoạt <code>@CacheEvict(key = "#userId")</code> xóa ngay key trong Redis, đảm bảo client không bao giờ đọc phải dữ liệu cũ (Stale Data).
+              </div>
+
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #F59E0B; border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:#D97706;">• Jackson JSON Serializer:</strong> 
+                Dùng <code>GenericJackson2JsonRedisSerializer</code> kèm metadata <code>@class</code> và đăng ký <code>JavaTimeModule</code> để lưu ngày tháng chuẩn ISO-8601 (Instant), dễ dàng soi dữ liệu bằng <code>redis-cli</code>.
+              </div>
+            </div>
+          </div>
+
+          <!-- Cột 2: Chống Brute-Force Đăng Nhập -->
+          <div class="card highlight-coral" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
+              <span><span class="card-icon coral">🛡️</span> 2. Chống Tấn Công Brute-Force Đăng Nhập</span>
+              <span class="pill pill-coral" style="font-size:0.63rem;">LoginAttemptService</span>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:5px; font-size:0.7rem; line-height:1.35;">
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:5px 8px;">
+                <div style="font-weight:700; color:#38BDF8; margin-bottom:1px;">🔢 Đếm Bằng Lệnh Nguyên Tử (INCR):</div>
+                Khi nhập sai mật khẩu, gọi <code>redisOperations.opsForValue().increment("login:attempts:" + email)</code>. Lệnh chạy cực nhanh trên RAM và an toàn tuyệt đối khi scale đa instance (không tranh chấp).
+              </div>
+
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:5px 8px;">
+                <div style="font-weight:700; color:#FBBF24; margin-bottom:1px;">⏱️ Khóa Tự Động Với TTL 15 Phút:</div>
+                Ở lần nhập sai đầu tiên (<code>attempts == 1</code>), gán hạn <strong>TTL 15 phút</strong> qua <code>expire()</code>. Sau 15 phút, Redis tự hủy bộ đếm, tự mở khóa mà không cần admin can thiệp.
+              </div>
+
+              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:5px 8px;">
+                <div style="font-weight:700; color:var(--accent-coral); margin-bottom:1px;">🚫 Chặn Đứng Tại Cửa Ngõ (HTTP 429):</div>
+                Nếu số lần sai <strong>≥ 5 lần</strong>, hệ thống từ chối ngay lập tức và trả về mã <strong>HTTP 429 Too Many Requests</strong>, bảo vệ DB hoàn toàn khỏi các cuộc dò mật khẩu tự động.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Băng ngang dưới: Cơ chế chịu lỗi thông minh (Graceful Degradation) -->
+        <div class="card" style="padding:8px 12px; font-size:0.71rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <div>
+            <strong style="color:var(--accent-teal);">💡 Cơ Chế Chịu Lỗi Thông Minh (Graceful Degradation):</strong> 
+            Dự án override <code>CacheErrorHandler</code> trong <code>RedisConfig.java</code>. Nếu Redis tạm thời mất kết nối hoặc quá tải, hệ thống <strong>không làm chết request (không ném lỗi HTTP 500)</strong> mà tự động ghi log cảnh báo và <strong>Fallback đọc trực tiếp từ PostgreSQL</strong> để người dùng vẫn sử dụng được bình thường!
+          </div>
+          <span class="pill pill-teal" style="font-size:0.63rem; white-space:nowrap;">Graceful Fallback</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 13: WEBSOCKET & STOMP — CHAT REALTIME ADMIN - USER
+         ================================================================== -->
+    <section class="slide" data-slide="13" data-title="WebSocket & STOMP">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag">PHẦN 6 • GIAO TIẾP THỜI GIAN THỰC</span>
             <h2 class="slide-title">WebSocket & STOMP: Chat Realtime Admin – User</h2>
             <p class="slide-subtitle">Vấn đề của HTTP Polling, Kết nối hai chiều Full-Duplex và Giao thức định tuyến STOMP</p>
           </div>
@@ -1878,39 +2041,70 @@
     </section>
 
 
-        <!-- ==================================================================
-         SLIDE 13: ÁP DỤNG CHAT REALTIME VÀO DỰ ÁN — KỸ THUẬT & KẾT NỐI
+    <!-- ==================================================================
+         SLIDE 14: PHẦN ĐÃ LÀM TRONG DỰ ÁN — ÁP DỤNG WEBSOCKET & STOMP CHAT REALTIME
          ================================================================== -->
-    <section class="slide" data-slide="13" data-title="Áp Dụng Chat Realtime">
+    <section class="slide" data-slide="14" data-title="Dự Án: WebSocket Chat">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
-            <span class="slide-category-tag">PHẦN 7 • GIAO TIẾP THỜI GIAN THỰC</span>
-            <h2 class="slide-title">Kỹ Thuật Kết Nối &amp; Xác Thực WebSocket STOMP</h2>
-            <p class="slide-subtitle">Quy trình bắt tay Handshake, Bộ chặn ChannelInterceptor xác thực JWT và Cơ chế Pub/Sub qua Simple Broker</p>
+            <span class="slide-category-tag coral">PHẦN 6 • HIỆN THỰC HÓA TRONG DỰ ÁN</span>
+            <h2 class="slide-title">Phần Đã Làm Trong Dự Án: Áp Dụng WebSocket &amp; STOMP Chat Realtime</h2>
+            <p class="slide-subtitle">Triển khai thực tế module chat-service: Cấu hình STOMP Broker, Bộ chặn JWT ChannelInterceptor, Phân quyền chống mạo danh và Kết hợp REST API</p>
+          </div>
+        </div>
+
+        <!-- Quy trình 4 bước hoạt động thực tế trong dự án (Workflow Banner) -->
+        <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="card-icon" style="font-size:0.85rem; width:24px; height:24px;">🔄</span>
+              <span style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.04em;">
+                QUY TRÌNH HOẠT ĐỘNG THỰC TẾ TRONG CHAT-SERVICE (END-TO-END FLOW)
+              </span>
+            </div>
+            <span class="pill pill-teal" style="font-size:0.62rem;">Spring Boot STOMP</span>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;">
+            <div style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.68rem; line-height:1.32;">
+              <div style="font-weight:700; color:var(--accent-teal); margin-bottom:1px;">1. Handshake URL</div>
+              Client gọi <code>GET /ws-chat</code>. Server nâng cấp giao thức sang <strong>HTTP 101 Switching Protocols</strong> (hỗ trợ SockJS fallback).
+            </div>
+            <div style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.68rem; line-height:1.32;">
+              <div style="font-weight:700; color:#0284C7; margin-bottom:1px;">2. Frame CONNECT</div>
+              Gửi frame STOMP đầu kèm <code>Authorization: Bearer</code> ➔ Interceptor giải mã JWT, gán <code>UserPrincipal</code> vào phiên.
+            </div>
+            <div style="background:var(--bg-canvas); border-left:3px solid #F59E0B; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.68rem; line-height:1.32;">
+              <div style="font-weight:700; color:#D97706; margin-bottom:1px;">3. Subscribe Phòng</div>
+              Client gửi frame <code>SUBSCRIBE /topic/rooms.{id}</code> ➔ In-Memory Simple Broker phân phối tin tức thời (&lt; 0.5ms).
+            </div>
+            <div style="background:var(--bg-canvas); border-left:3px solid var(--accent-coral); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.68rem; line-height:1.32;">
+              <div style="font-weight:700; color:var(--accent-coral); margin-bottom:1px;">4. Gửi &amp; Chống Giả Mạo</div>
+              Client gửi <code>/app/chat.sendMessage</code>. Server tự trích xuất <code>senderId</code> từ <code>Principal</code> ➔ Lưu DB &amp; Broadcast.
+            </div>
           </div>
         </div>
 
         <div class="grid-2" style="gap:12px; margin-bottom:10px;">
-          <!-- Cột 1: Quy trình kết nối & Xác thực JWT -->
+          <!-- Cột 1: Cấu hình Kỹ thuật & Bộ chặn xác thực JWT -->
           <div class="card highlight" style="padding:10px 12px;">
             <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
-              <span><span class="card-icon">🔌</span> 1. Quy Trình Bắt Tay (Handshake) &amp; Xác Thực JWT</span>
-              <span class="pill pill-teal" style="font-size:0.63rem;">Frame CONNECT</span>
+              <span><span class="card-icon">🔌</span> 1. Cấu Hình Endpoint &amp; Xác Thực JWT (chat-service)</span>
+              <span class="pill pill-teal" style="font-size:0.63rem;">WebSocketConfig</span>
             </div>
 
             <div style="font-size:0.71rem; color:var(--text-muted); line-height:1.36; margin-bottom:6px;">
-              Do WebSocket duy trì kết nối TCP lâu dài, không thể gửi header HTTP ở từng tin nhắn. Dự án giải quyết xác thực bằng <strong>3 bước kỹ thuật chuẩn RFC</strong>:
+              Do kết nối TCP bền vững không gửi header HTTP ở từng tin, dự án xử lý cấu hình và xác thực bằng <strong>3 thành phần cốt lõi đã viết</strong>:
             </div>
 
-            <!-- Các bước chi tiết -->
+            <!-- Các bước chi tiết Cột 1 -->
             <div style="display:flex; flex-direction:column; gap:5px; font-size:0.7rem; line-height:1.35;">
               <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:var(--accent-teal);">• Bước 1 — Handshake URL:</strong> Client gọi <code>GET /ws-chat</code>. Server nâng cấp giao thức từ HTTP sang kết nối hai chiều <strong>HTTP 101 Switching Protocols</strong>.
+                <strong style="color:var(--accent-teal);">• Cấu hình WebSocketConfig:</strong> Đăng ký endpoint <code>/ws-chat</code> (kèm SockJS fallback). Kích hoạt <strong>Simple Broker</strong> với tiền tố <code>/topic</code> (phòng chat broadcast), <code>/queue</code> (tin nhắn riêng) và tiền tố gửi <code>/app</code>.
               </div>
 
               <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:#0284C7;">• Bước 2 — Gửi Frame STOMP CONNECT:</strong> Ngay sau khi mở socket, Client gửi Frame STOMP đầu tiên đính kèm JWT:
+                <strong style="color:#0284C7;">• Frame STOMP CONNECT:</strong> Ngay sau khi mở socket, Client gửi Frame STOMP đầu tiên đính kèm JWT Bearer:
                 <div class="code-container" style="font-size:0.65rem; line-height:1.3; padding:4px 8px; margin-top:3px; background:#0F172A;">
                   <span style="color:#FDE047; font-weight:700;">CONNECT</span><br>
                   <span style="color:#38BDF8;">Authorization:</span> <span style="color:#A7F3D0;">Bearer eyJhbGciOiJIUzI1Ni...</span><br>
@@ -1919,23 +2113,23 @@
               </div>
 
               <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-coral); border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:var(--accent-coral);">• Bước 3 — WebSocketAuthChannelInterceptor:</strong> Bắt sự kiện tại <code>preSend()</code> ➔ Giải mã token, kiểm tra hạn dùng ➔ Tạo <code>UserPrincipal</code> (userId, email, roles) ➔ Gán vĩnh viễn vào phiên: <code>accessor.setUser(auth)</code>.
+                <strong style="color:var(--accent-coral);">• WebSocketAuthChannelInterceptor:</strong> Bắt sự kiện tại <code>preSend()</code> ➔ Giải mã token bằng <code>JwtService</code> ➔ Tạo <code>UserPrincipal</code> (userId, email, roles) ➔ Gán vĩnh viễn vào phiên: <code>accessor.setUser(auth)</code>.
               </div>
             </div>
           </div>
 
-          <!-- Cột 2: Cơ chế Gửi/Nhận tin & Chống giả mạo -->
+          <!-- Cột 2: Nghiệp vụ chat, phân quyền & chống mạo danh -->
           <div class="card highlight-coral" style="padding:10px 12px;">
             <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
-              <span><span class="card-icon coral">💬</span> 2. Cơ Chế Pub/Sub &amp; Bảo Mật Danh Tính</span>
-              <span class="pill pill-coral" style="font-size:0.63rem;">@MessageMapping</span>
+              <span><span class="card-icon coral">💬</span> 2. Xử Lý Nghiệp Vụ Chat &amp; Chống Giả Mạo Danh Tính</span>
+              <span class="pill pill-coral" style="font-size:0.63rem;">Controller &amp; Service</span>
             </div>
 
             <div style="font-size:0.71rem; color:var(--text-muted); line-height:1.36; margin-bottom:6px;">
-              Sau khi kết nối thành công, Client tương tác qua mô hình Publish - Subscribe định tuyến bởi <strong>Simple Broker</strong> trong RAM:
+              Sau khi kết nối, Client gửi/nhận tin nhắn qua Controller và Service với <strong>cơ chế bảo mật và phân quyền nghiêm ngặt</strong>:
             </div>
 
-            <!-- Các bước Pub/Sub -->
+            <!-- Các bước chi tiết Cột 2 -->
             <div style="display:flex; flex-direction:column; gap:5px; font-size:0.7rem; line-height:1.35;">
               <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:5px 8px;">
                 <div style="font-weight:700; color:#4ADE80; margin-bottom:1px;">👂 Lắng Nghe Tin Nhắn (SUBSCRIBE):</div>
@@ -1943,34 +2137,34 @@
               </div>
 
               <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:5px 8px;">
-                <div style="font-weight:700; color:#FBBF24; margin-bottom:1px;">✉️ Gửi Tin Nhắn (SEND) &amp; Chống Giả Mạo:</div>
-                Client gửi tin tới <code>/app/chat.sendMessage</code>. Body chỉ chứa: <code>{"roomId": "...", "content": "..."}</code>.<br>
-                <span style="color:var(--accent-coral); font-weight:600;">🔒 Chống giả mạo 100%:</span> Controller tự động tiêm <code>Principal</code> từ phiên đã xác thực để lấy <code>senderId</code>. Client <strong>tuyệt đối không được tự truyền senderId</strong>!
+                <div style="font-weight:700; color:#FBBF24; margin-bottom:1px;">🔒 Chống Giả Mạo Danh Tính 100% (ChatWebSocketController):</div>
+                Client gửi tin tới <code>/app/chat.sendMessage</code> với payload chỉ gồm <code>{"roomId": "...", "content": "..."}</code>. Controller <strong>tự động tiêm Principal</strong> từ phiên để lấy <code>senderId</code>. Client <strong>tuyệt đối không được tự truyền senderId</strong>!
               </div>
 
               <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:5px 8px;">
-                <div style="font-weight:700; color:#38BDF8; margin-bottom:1px;">💾 Lưu Trữ &amp; Bắn Realtime:</div>
-                <code>ChatMessageService</code> lưu vào PostgreSQL (bảng <code>chat_messages</code>) ➔ Dùng <code>messagingTemplate.convertAndSend("/topic/rooms." + roomId, dto)</code> đẩy tin cho cả Admin và User.
+                <div style="font-weight:700; color:#38BDF8; margin-bottom:1px;">💾 Phân Quyền &amp; Bắn Realtime (ChatMessageServiceImpl):</div>
+                Kiểm tra quyền: Khách hàng chỉ nhắn vào phòng của mình (<code>room.userId == senderId</code>); Admin nhắn được mọi phòng. Lưu PostgreSQL (bảng <code>chat_messages</code>) ➔ Dùng <code>messagingTemplate.convertAndSend()</code> phát tức thời cho cả 2 bên.
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Băng ngang dưới: Mô hình kết hợp REST + WebSocket -->
+        <!-- Băng ngang dưới: Mô hình kết hợp REST + WebSocket thực tế trong dự án -->
         <div class="card" style="padding:8px 12px; font-size:0.71rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
           <div>
-            <strong style="color:var(--accent-teal);">💡 Mô Hình Kết Hợp Chuẩn Doanh Nghiệp (REST API + WebSocket):</strong> Khi vừa mở khung chat, ứng dụng gọi REST <code>GET /api/v1/chat/rooms/{roomId}/messages</code> để tải lịch sử trò chuyện cũ từ PostgreSQL. Sau đó, ứng dụng mở kết nối WebSocket STOMP để truyền nhận các tin nhắn mới tức thời hai chiều!
+            <strong style="color:var(--accent-teal);">💡 Mô Hình Kết Hợp Thực Chiến Trong Dự Án (REST API + WebSocket STOMP):</strong> 
+            Khi vừa mở khung chat, client gọi REST API <code>GET /api/v1/chat/rooms/{roomId}/messages</code> để tải toàn bộ lịch sử trò chuyện cũ từ PostgreSQL. Sau đó, ứng dụng duy trì kết nối WebSocket STOMP để truyền nhận các tin nhắn mới tức thời hai chiều (độ trễ &lt; 1ms, tiết kiệm 95% tài nguyên so với HTTP Polling)!
           </div>
-          <span class="pill pill-teal" style="font-size:0.63rem; white-space:nowrap;">REST + Socket</span>
+          <span class="pill pill-teal" style="font-size:0.63rem; white-space:nowrap;">REST + STOMP Thực Tế</span>
         </div>
       </div>
     </section>
 
 
     <!-- ==================================================================
-         SLIDE 14: TỔNG KẾT HỆ THỐNG & HỎI ĐÁP (Q&A)
+         SLIDE 15: TỔNG KẾT HỆ THỐNG & HỎI ĐÁP (Q&A)
          ================================================================== -->
-    <section class="slide" data-slide="14" data-title="Tổng Kết & Q&A">
+    <section class="slide" data-slide="15" data-title="Tổng Kết & Q&A">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
@@ -2040,7 +2234,7 @@
        ================================================================== -->
   <footer class="bottom-bar">
     <button class="nav-btn" id="btnPrev" title="Slide trước (←)">‹</button>
-    <div class="slide-counter" id="slideCounter">00 / 14</div>
+    <div class="slide-counter" id="slideCounter">00 / 15</div>
     <button class="nav-btn" id="btnNext" title="Slide tiếp (→)">›</button>
     <div style="height:16px; width:1px; background:var(--border-light); margin:0 2px;"></div>
     <button class="nav-btn" id="btnToc" title="Mục lục (M)" style="font-size:0.75rem; font-weight:700;">M</button>
@@ -2071,7 +2265,7 @@
   <div class="toc-modal-overlay" id="tocModalOverlay">
     <div class="toc-modal">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:10px;">
-        <div style="font-size:1.05rem; font-weight:800; color:var(--text-main);">Mục Lục 15 Slide Báo Cáo</div>
+        <div style="font-size:1.05rem; font-weight:800; color:var(--text-main);">Mục Lục 16 Slide Báo Cáo</div>
         <button id="btnCloseToc" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-dim);">✕</button>
       </div>
       <div class="toc-grid" id="tocGrid">
@@ -2085,7 +2279,7 @@
        JAVASCRIPT: SLIDE ENGINE & SPEAKER NOTES
        ================================================================== -->
   <script>
-    // 15 Complete Speaker Notes Tailored for 4th-Year Intern Level
+    // 16 Complete Speaker Notes Tailored for 4th-Year Intern Level
     const speakerNotes = [
       {
         title: "Slide 0: Trang Bìa",
@@ -2116,12 +2310,12 @@
         script: "Một chuỗi JWT gồm 3 phần nối bằng dấu chấm: Header khai báo thuật toán, Payload chứa dữ liệu người dùng được mã hóa Base64URL, và Signature là chữ ký bảo mật tạo từ HMAC-SHA256 kết hợp khóa bí mật SecretKey. Vì Payload chỉ là Base64 công khai nên ai cũng đọc được, nhưng nếu hacker sửa đổi quyền hạn từ USER thành ADMIN thì chữ ký lập tức bị sai lệch và server sẽ chặn ngay. Để cân bằng giữa bảo mật và trải nghiệm, em áp dụng mô hình Dual-Token: Access Token sống ngắn 15 phút không lưu database, còn Refresh Token sống 7 ngày lưu bản băm SHA-256 để tự động cấp mới."
       },
       {
-        title: "Slide 7: Microservices vs Monolith",
-        script: "Khác với Monolith gộp chung tất cả vào một khối dễ sập dây chuyền, em phân rã hệ thống thành 4 microservices riêng biệt. Mỗi service sở hữu cơ sở dữ liệu độc lập theo mẫu Database-per-Service, bảo đảm cách ly sự cố: dịch vụ Chat lỗi thì dịch vụ User và Đăng nhập vẫn hoạt động bình thường."
+        title: "Slide 7: Microservices: Phân Rã Kiến Trúc & 3 Lợi Ích",
+        script: "Microservices là kiến trúc phân rã hệ thống thành các dịch vụ độc lập, mỗi dịch vụ phụ trách một nghiệp vụ riêng và sở hữu cơ sở dữ liệu độc lập. Trong dự án, em chia thành 4 service gồm: api-gateway làm cửa ngõ định tuyến duy nhất, user-service quản lý người dùng và xác thực, notification-service nhận Kafka gửi email ngầm, và chat-service phục vụ chat realtime qua WebSocket. Kiến trúc này mang lại 3 lợi ích cốt lõi: cách ly lỗi hoàn toàn, cho phép phát triển và triển khai độc lập từng thành phần, đồng thời dễ dàng mở rộng có trọng điểm khi có lượng truy cập tăng vọt."
       },
       {
-        title: "Slide 8: Giao Tiếp Sync REST vs Async Kafka",
-        script: "Em áp dụng quy tắc phân chia: Khi cần kết quả ngay để hiển thị giao diện, em dùng REST đồng bộ (ví dụ Chat Service gọi sang User Service lấy avatar). Khi là tác vụ chạy ngầm tốn thời gian, em dùng Kafka bất đồng bộ (ví dụ bắn sự kiện đăng ký để gửi email ngầm), giúp hệ thống không bao giờ bị nghẽn chờ đợi."
+        title: "Slide 8: Spring Kafka & Chức Năng Thực Tế",
+        script: "Spring Kafka là tầng trừu tượng cấp cao của Spring Boot bao bọc quanh Apache Kafka Client, giúp loại bỏ toàn bộ boilerplate code phức tạp bằng các công cụ mạnh mẽ như KafkaTemplate và @KafkaListener. Trong thực tế hệ thống phân tán, Spring Kafka giải quyết 4 bài toán trọng yếu: Thứ nhất là giao tiếp bất đồng bộ phi khóa giúp giải phóng tài nguyên, luồng đăng ký phản hồi ngay dưới 5ms mà không bị nghẽn bởi gửi email. Thứ hai là đệm chịu tải và san phẳng lưu lượng trong giờ cao điểm. Thứ ba là tự động tuần tự hóa JSON và định tuyến partition theo userId. Thứ tư là cơ chế phục hồi lỗi tự động với Retry và Dead Letter Topic DLT, bảo đảm các message lỗi cú pháp không làm tắc nghẽn toàn bộ hệ thống."
       },
       {
         title: "Slide 9: Apache Kafka Nền Tảng",
@@ -2132,20 +2326,24 @@
         script: "Nếu lưu database xong rồi gọi Kafka trực tiếp, lỡ Kafka rớt mạng thì sẽ gặp lỗi Dual-Write mất sự kiện. Em giải quyết bằng Transactional Outbox Pattern: lưu user và lưu sự kiện vào bảng outbox_events trong cùng 1 Database Transaction. Tiến trình định kỳ quét bảng outbox để đẩy lên Kafka, bảo đảm độ tin cậy At-Least-Once."
       },
       {
-        title: "Slide 11: Redis In-Memory Data Store",
-        script: "Redis lưu trữ dữ liệu trực tiếp trên bộ nhớ RAM với độ trễ micro-giây. Em kết hợp Redis bên cạnh PostgreSQL: PostgreSQL lưu trữ bền vững lâu dài trên đĩa, còn Redis phục vụ bộ nhớ đệm cache và đếm số lần đăng nhập sai với tính năng tự hủy TTL."
+        title: "Slide 11: Redis Nền Tảng & Kiểu Dữ Liệu",
+        script: "Redis là hệ quản trị cơ sở dữ liệu in-memory lưu trữ dạng key-value, hoạt động hoàn toàn trên RAM với độ trễ siêu thấp cỡ micro-giây. Redis hỗ trợ đa dạng cấu trúc dữ liệu gồm String, Hash, List, Set và Sorted Set. So sánh với PostgreSQL: PostgreSQL tối ưu cho dữ liệu quan hệ ACID bền vững trên đĩa cứng còn Redis tối ưu cho bộ nhớ đệm, session và bộ đếm tốc độ cao. Hai công nghệ này không triệt tiêu mà bổ trợ cho nhau: PostgreSQL là nguồn chân lý lưu trữ, còn Redis là lá chắn tăng tốc phía trước."
       },
       {
-        title: "Slide 12: WebSocket & STOMP Chat",
-        script: "Thay vì dùng cơ chế HTTP Polling liên tục gửi request thăm dò gây nghẽn mạng, WebSocket duy trì 1 kết nối hai chiều duy nhất qua /ws-chat. Em kết hợp giao thức STOMP để định tuyến tin nhắn theo destination: gửi tin lên /app/chat.sendMessage và nhận tin theo phòng qua /topic/rooms.{roomId}."
+        title: "Slide 12: Dự Án: Áp Dụng Redis Thực Tế",
+        script: "Trong dự án, em áp dụng Redis vào hai bài toán trọng yếu của User Service: Thứ nhất là Cache-Aside cho User Profile với TTL 10 phút, tự động xóa cache khi người dùng đổi thông tin. Em dùng GenericJackson2JsonRedisSerializer để lưu JSON kèm class type và cấu hình Graceful Degradation để nếu Redis có sự cố thì ứng dụng tự động truy vấn thẳng vào PostgreSQL mà không gây gián đoạn người dùng. Thứ hai là phòng vệ tấn công Brute-force: em dùng lệnh nguyên tử INCR để đếm số lần nhập sai mật khẩu và gắn TTL 15 phút. Khi đạt 5 lần sai, hệ thống lập tức khóa và trả mã HTTP 429 Too Many Requests."
       },
       {
-        title: "Slide 13: Kỹ Thuật Kết Nối WebSocket STOMP",
-        script: "Trong dự án, quy trình kết nối và chat realtime diễn ra qua 3 bước kỹ thuật rõ ràng: Đầu tiên, Client kết nối tới /ws-chat và nâng cấp giao thức HTTP 101 sang WebSocket. Tiếp theo, Client gửi frame STOMP CONNECT mang theo JWT Bearer Token. Tại tầng server, WebSocketAuthChannelInterceptor sẽ chặn lại để xác thực chữ ký token và gán UserPrincipal vào phiên làm việc. Khi gửi tin nhắn lên /app/chat.sendMessage, Controller tự động tiêm Principal để lấy đúng danh tính người gửi nhằm chống giả mạo. Sau khi lưu tin nhắn vào PostgreSQL, SimpMessagingTemplate phát tin tức thời tới kênh /topic/rooms.{id} cho cả Admin và User."
+        title: "Slide 13: WebSocket & STOMP (Lý Thuyết)",
+        script: "Để giải quyết bài toán giao tiếp thời gian thực, thay vì để Client liên tục gửi request HTTP Polling gây lãng phí tài nguyên và trễ cao, em sử dụng WebSocket để duy trì một kết nối hai chiều Full-Duplex duy nhất. Trên nền WebSocket, em tích hợp giao thức STOMP định dạng tin nhắn theo mô hình Publish/Subscribe. Client gửi tin nhắn qua tiền tố /app và lắng nghe nhận tin qua tiền tố /topic hoặc /user."
       },
       {
-        title: "Slide 14: Tổng Kết & Q&A",
-        script: "Em đã tổng hợp toàn bộ các khối công nghệ phân tán trong hệ thống. Qua dự án này, em đã nắm vững tư duy kiến trúc phân tán, bảo mật theo chiều sâu và đảm bảo tính nhất quán dữ liệu. Em xin chân thành cảm ơn Thầy Cô và mời Thầy Cô đặt câu hỏi cho em!"
+        title: "Slide 14: Dự Án: Áp Dụng WebSocket Chat",
+        script: "Trong dự án thực tế, hệ thống kết nối và truyền tin diễn ra qua 3 bước chặt chẽ: Đầu tiên, Client bắt tay tại endpoint /ws-chat và nâng cấp giao thức HTTP 101 sang WebSocket. Tiếp theo, ở frame STOMP CONNECT, WebSocketAuthChannelInterceptor sẽ chặn lại để giải mã JWT Bearer Token, nạp UserPrincipal vào phiên kết nối. Cuối cùng, khi người dùng gửi tin nhắn lên /app/chat.sendMessage, Controller tiêm Principal tự động để chống giả mạo danh tính, lưu tin nhắn vào PostgreSQL rồi dùng SimpMessagingTemplate phát tin tức thời tới kênh /topic/rooms.{id} cho cả Admin và User."
+      },
+      {
+        title: "Slide 15: Tổng Kết & Q&A",
+        script: "Em đã tổng hợp toàn bộ các khối kiến thức và công nghệ cốt lõi đã áp dụng trong hệ thống Microservices: từ Docker hóa, bảo mật Spring Security & JWT, kiến trúc hướng sự kiện Kafka Outbox, tăng tốc với Redis, đến chat realtime hai chiều với WebSocket. Qua dự án này, em đã rèn luyện được tư duy kiến trúc phân tán, bảo mật theo chiều sâu và đảm bảo tính nhất quán dữ liệu. Em xin chân thành cảm ơn Thầy Cô và mời Thầy Cô đặt câu hỏi cho em!"
       }
     ];
 

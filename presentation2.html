@@ -1,0 +1,2506 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo Cáo Seminar: Kiến Thức Nền Tảng Backend & Áp Dụng Thực Chiến (Bản Đọc Chi Tiết A-Z)</title>
+  <meta name="description"
+    content="Bản báo cáo seminar chi tiết đầy đủ nội dung đọc từ A-Z, đồng bộ 100% giữa slide và kịch bản thuyết trình thực tế.">
+
+  <!-- Google Fonts: Be Vietnam Pro & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM (WARM EDITORIAL TECH PALETTE)
+       ========================================================================== */
+    :root {
+      --bg-canvas: #F8F7F2;
+      --bg-surface: #FFFFFF;
+      --bg-subtle: #F0EFEA;
+      --bg-tag: #EBE9E1;
+
+      --text-main: #202B3C;
+      --text-muted: #5A677B;
+      --text-dim: #8896A6;
+
+      --accent-teal: #287C78;
+      --accent-teal-light: #EBF5F4;
+      --accent-teal-border: #BCE2DF;
+
+      --accent-coral: #E58B68;
+      --accent-coral-light: #FCF1EC;
+      --accent-coral-border: #F5CEBE;
+
+      --accent-navy: #1E3A5F;
+      --accent-navy-light: #EEF3F8;
+
+      --border-light: #E5E3DC;
+      --shadow-sm: 0 2px 6px -1px rgba(32, 43, 60, 0.04), 0 1px 3px rgba(32, 43, 60, 0.02);
+      --shadow-card: 0 6px 18px -3px rgba(32, 43, 60, 0.05), 0 2px 6px -1px rgba(32, 43, 60, 0.02);
+      --shadow-hover: 0 12px 28px -4px rgba(32, 43, 60, 0.08), 0 4px 8px -1px rgba(32, 43, 60, 0.03);
+
+      --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .bg-grid-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: radial-gradient(rgba(32, 43, 60, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.7;
+    }
+
+    /* Slides Fullscreen Scroll Engine */
+    .slides-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      position: relative;
+      z-index: 1;
+      scrollbar-width: none;
+    }
+
+    .slides-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .slide {
+      width: 100%;
+      height: 100vh;
+      min-height: 100vh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 36px 56px 64px 56px;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .slide-inner {
+      width: 100%;
+      max-width: 1380px;
+      max-height: 89vh;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      animation: fadeInSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInSlide {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Header & Badges */
+    .slide-header {
+      margin-bottom: 14px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 10px;
+    }
+
+    .slide-category-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: var(--radius-sm);
+      background: var(--accent-teal-light);
+      color: var(--accent-teal);
+      border: 1px solid var(--accent-teal-border);
+      margin-bottom: 4px;
+    }
+
+    .slide-category-tag.coral {
+      background: var(--accent-coral-light);
+      color: var(--accent-coral);
+      border-color: var(--accent-coral-border);
+    }
+
+    .slide-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+
+    .slide-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .card.highlight {
+      border-left: 4px solid var(--accent-teal);
+    }
+
+    .card.highlight-coral {
+      border-left: 4px solid var(--accent-coral);
+    }
+
+    .card-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 0.77rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Read Along Direct On-Slide Box */
+    .read-along-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      margin-top: 10px;
+      box-shadow: 0 4px 14px rgba(32, 43, 60, 0.04);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .read-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      background: var(--accent-teal);
+      color: #FFF;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+    }
+
+    .read-text {
+      font-size: 0.79rem;
+      line-height: 1.55;
+      color: var(--text-main);
+      flex: 1;
+    }
+
+    .read-text strong {
+      color: var(--accent-teal);
+    }
+
+    /* Card Project Application */
+    .card-project-apply {
+      margin-top: 8px;
+      background: var(--accent-teal-light);
+      border: 1px solid var(--accent-teal-border);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      font-size: 0.73rem;
+      color: var(--text-main);
+      line-height: 1.42;
+    }
+
+    .card-project-apply.coral {
+      background: var(--accent-coral-light);
+      border-color: var(--accent-coral-border);
+    }
+
+    /* Flowcharts */
+    .flowchart-wrapper {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .flow-steps {
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
+      position: relative;
+    }
+
+    .flow-step-box {
+      flex: 1;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .flow-step-box.active {
+      border-color: var(--accent-teal);
+      background: var(--accent-teal-light);
+    }
+
+    .flow-step-box.coral {
+      border-color: var(--accent-coral);
+      background: var(--accent-coral-light);
+    }
+
+    .flow-step-num {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--accent-teal);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .flow-step-box.coral .flow-step-num {
+      color: var(--accent-coral);
+    }
+
+    .flow-step-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.25;
+    }
+
+    .flow-step-desc {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      line-height: 1.35;
+    }
+
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      font-size: 1rem;
+      font-weight: bold;
+      user-select: none;
+      padding: 0 2px;
+    }
+
+    /* Code Container */
+    .code-container {
+      background: #182230;
+      color: #E2E8F0;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      line-height: 1.45;
+      overflow-x: auto;
+    }
+
+    .code-hl {
+      color: #38BDF8;
+      font-weight: 600;
+    }
+
+    .code-cm {
+      color: #94A3B8;
+      font-style: italic;
+    }
+
+    /* Table */
+    .editorial-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.72rem;
+      background: var(--bg-surface);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+    }
+
+    .editorial-table th {
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: left;
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .editorial-table td {
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-muted);
+      vertical-align: top;
+      line-height: 1.4;
+    }
+
+    .editorial-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Pills */
+    .pill {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .pill-teal {
+      background: var(--accent-teal-light);
+      color: var(--accent-teal);
+      border: 1px solid var(--accent-teal-border);
+    }
+
+    .pill-coral {
+      background: var(--accent-coral-light);
+      color: var(--accent-coral);
+      border: 1px solid var(--accent-coral-border);
+    }
+
+    /* Bottom Controller */
+    .bottom-bar {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      padding: 6px 14px;
+      border-radius: 30px;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 8px 24px rgba(32, 43, 60, 0.08);
+      z-index: 100;
+    }
+
+    .slide-counter {
+      font-size: 0.82rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--accent-teal);
+      min-width: 68px;
+      text-align: center;
+    }
+
+    .nav-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-teal);
+      color: #FFF;
+      border-color: var(--accent-teal);
+    }
+
+    .progress-bar-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(40, 124, 120, 0.12);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-teal) 0%, var(--accent-coral) 100%);
+      transition: width 0.25s ease-out;
+    }
+
+    /* Side Navigator Dots */
+    .side-nav-dots {
+      position: fixed;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 90;
+    }
+
+    .dot-item {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #D4D1C7;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dot-item.active {
+      background: var(--accent-teal);
+      transform: scale(1.5);
+    }
+
+    .dot-item:hover {
+      background: var(--accent-coral);
+    }
+
+    /* Speaker Notes Drawer (N key) */
+    .speaker-drawer {
+      position: fixed;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 440px;
+      max-width: 90vw;
+      background: #FFFFFF;
+      border-left: 1px solid var(--border-light);
+      box-shadow: -8px 0 32px rgba(32, 43, 60, 0.12);
+      z-index: 1200;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+    }
+
+    .speaker-drawer.open {
+      transform: translateX(0);
+    }
+
+    .speaker-drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .speaker-drawer-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent-coral);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .speaker-drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 0.86rem;
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    .speaker-script-box {
+      background: var(--bg-canvas);
+      border-left: 3px solid var(--accent-coral);
+      padding: 12px 14px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: 14px;
+    }
+
+    /* TOC Modal */
+    .toc-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(32, 43, 60, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 1300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .toc-modal-overlay.open {
+      display: flex;
+    }
+
+    .toc-modal {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 920px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 48px rgba(32, 43, 60, 0.18);
+      border: 1px solid var(--border-light);
+      padding: 24px;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      overflow-y: auto;
+      margin-top: 14px;
+      padding-right: 4px;
+    }
+
+    .toc-item {
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .toc-item:hover {
+      background: var(--accent-teal-light);
+      border-color: var(--accent-teal-border);
+    }
+
+    .toc-num {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.72rem;
+      color: var(--accent-teal);
+    }
+
+    .toc-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-top: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-grid-overlay"></div>
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="side-nav-dots" id="sideNavDots"></div>
+
+  <!-- MAIN SLIDES CONTAINER -->
+  <main class="slides-container" id="slidesContainer">
+
+    <!-- ==================================================================
+         SLIDE 00: TRANG BÌA (Cover Slide)
+         ================================================================== -->
+    <section class="slide" data-slide="0" data-title="00. Trang Bìa">
+      <div class="slide-inner" style="max-width: 1200px;">
+        <div style="display:grid; grid-template-columns: 1.25fr 0.95fr; gap: 36px; align-items:center;">
+          <!-- Left Column -->
+          <div>
+            <div
+              style="display:inline-flex; align-items:center; gap:8px; padding:4px 12px; background:var(--accent-teal-light); border:1px solid var(--accent-teal-border); border-radius:30px; font-size:0.75rem; font-weight:700; color:var(--accent-teal); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:12px;">
+              <span>🎓</span> Báo Cáo Seminar Chuyên Đề Backend
+            </div>
+            <h1
+              style="font-size: 2.6rem; font-weight:800; color:var(--text-main); line-height: 1.18; letter-spacing:-0.03em; margin-bottom:12px;">
+              Kiến Thức Nền Tảng <br>
+              <span style="color:var(--accent-teal);">Backend & Áp Dụng</span>
+              <span style="color:var(--accent-coral);">Thực Chiến</span>
+            </h1>
+            <p
+              style="font-size: 0.98rem; color:var(--text-muted); line-height:1.55; margin-bottom: 20px; max-width: 560px;">
+              Hành trình hiện thực hóa hệ sinh thái phân tán: Từ đóng gói container, bảo mật phân quyền stateless, giao
+              tiếp bất đồng bộ chịu tải cao, tối ưu bộ đệm RAM đến truyền thông realtime hai chiều.
+            </p>
+
+            <div
+              style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:12px 18px; box-shadow:var(--shadow-sm); display:flex; justify-content:space-between; align-items:center; max-width: 520px; margin-bottom:16px;">
+              <div>
+                <div style="font-size:0.7rem; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Người
+                  Trình Bày</div>
+                <div style="font-size:0.92rem; font-weight:700; color:var(--text-main);">Sinh viên thực tập (Intern Java
+                  Backend)</div>
+              </div>
+              <div style="height:26px; width:1px; background:var(--border-light);"></div>
+              <div>
+                <div style="font-size:0.7rem; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Hệ
+                  Thống Thực Tế</div>
+                <div style="font-size:0.92rem; font-weight:700; color:var(--accent-teal);">4 Microservices + 8 Containers
+                </div>
+              </div>
+            </div>
+
+            <!-- Read Along Box Directly On Slide -->
+            <div class="read-along-card">
+              <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+              <div class="read-text">
+                "Kính thưa quý Thầy Cô và các bạn! Hôm nay em xin phép báo cáo seminar chuyên đề: <strong>Kiến Thức Nền
+                  Tảng Backend & Áp Dụng Thực Chiến</strong>. Đây là hành trình em hiện thực hóa một hệ sinh thái phân
+                tán gồm <strong>4 Microservices và 8 container Docker độc lập</strong>; giải quyết trọn vẹn từ đóng gói hạ
+                tầng, bảo mật stateless, giao tiếp bất đồng bộ chịu tải, tối ưu RAM đến nhắn tin realtime hai chiều. Rất
+                mong nhận được những góp ý quý báu từ Thầy Cô!"
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: 4 Tầng Công Nghệ -->
+          <div
+            style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-lg); padding:20px 22px; box-shadow:var(--shadow-card);">
+            <div
+              style="font-size:0.76rem; font-weight:700; text-transform:uppercase; color:var(--text-dim); letter-spacing:0.06em; margin-bottom:12px; display:flex; justify-content:space-between;">
+              <span>Sơ Đồ Phân Tầng Công Nghệ Đã Xây Dựng</span>
+              <span class="pill pill-teal">Spring Boot 3.x</span>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:9px 12px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:0.82rem; font-weight:700; color:var(--accent-navy);">1. Cửa Ngõ & Điều Phối
+                  </div>
+                  <div style="font-size:0.72rem; color:var(--text-muted)">Spring Cloud Gateway (:8080) • Điểm truy cập
+                    duy nhất</div>
+                </div>
+                <span class="pill pill-teal">Single Entry</span>
+              </div>
+
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:9px 12px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:0.82rem; font-weight:700; color:var(--accent-teal);">2. Bảo Mật & Bộ Đệm RAM
+                  </div>
+                  <div style="font-size:0.72rem; color:var(--text-muted)">Spring Security 6 • JWT Stateless • Redis
+                    (:6379)</div>
+                </div>
+                <span class="pill pill-coral">Chặn Brute-force</span>
+              </div>
+
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:9px 12px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:0.82rem; font-weight:700; color:var(--text-main);">3. Vi Dịch Vụ Nghiệp Vụ</div>
+                  <div style="font-size:0.72rem; color:var(--text-muted)">user-service (:8081) • chat-service (:8083) •
+                    DB riêng</div>
+                </div>
+                <span class="pill pill-teal">Database-per-Service</span>
+              </div>
+
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:9px 12px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:0.82rem; font-weight:700; color:var(--accent-coral);">4. Bất Đồng Bộ & Realtime
+                  </div>
+                  <div style="font-size:0.72rem; color:var(--text-muted)">Kafka Outbox (:9092) • WebSocket STOMP
+                    (/ws-chat)</div>
+                </div>
+                <span class="pill pill-coral">Eventual Consistency</span>
+              </div>
+            </div>
+
+            <div
+              style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--border-light); font-size:0.73rem; color:var(--text-dim); text-align:center;">
+              Đóng gói và vận hành đồng bộ trên <strong>Docker Compose (8 container độc lập)</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 01: MỤC LỤC — 6 CHUYÊN ĐỀ KIẾN THỨC & ỨNG DỤNG
+         ================================================================== -->
+    <section class="slide" data-slide="1" data-title="01. Mục Lục">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag">LỘ TRÌNH BÁO CÁO</span>
+            <h2 class="slide-title">Mục Lục: 6 Chuyên Đề Kiến Thức & Ứng Dụng Thực Chiến</h2>
+            <p class="slide-subtitle">Mạch tư duy kiến trúc liền mạch từ tầng đóng gói hạ tầng tới tương tác thời gian
+              thực</p>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-bottom:10px;">
+          <div class="card highlight" onclick="goToSlide(2)" style="cursor:pointer">
+            <div class="card-title"><span class="card-icon">01</span> Docker & Docker Compose</div>
+            <p class="card-desc">Chuẩn hóa môi trường chạy, giải quyết lỗi 'Trên máy tôi chạy được mà' và điều phối 8
+              container bằng một lệnh.</p>
+          </div>
+          <div class="card highlight" onclick="goToSlide(5)" style="cursor:pointer">
+            <div class="card-title"><span class="card-icon">02</span> Spring Security & JWT</div>
+            <p class="card-desc">Bảo vệ danh tính stateless với cặp Dual-Token (Access 15m + Refresh 7d) và phân quyền
+              truy cập qua SecurityFilterChain.</p>
+          </div>
+          <div class="card highlight" onclick="goToSlide(7)" style="cursor:pointer">
+            <div class="card-title"><span class="card-icon">03</span> Kiến Trúc Microservices</div>
+            <p class="card-desc">Phân rã Monolith sang 4 microservices độc lập theo chuẩn Database-per-Service, cách ly
+              lỗi và mở rộng linh hoạt.</p>
+          </div>
+          <div class="card highlight-coral" onclick="goToSlide(9)" style="cursor:pointer">
+            <div class="card-title"><span class="card-icon coral">04</span> Apache Kafka & Outbox</div>
+            <p class="card-desc">Xử lý giao tiếp bất đồng bộ, hóa giải bài toán Dual-Write qua Transactional Outbox
+              Pattern và Idempotent Consumer.</p>
+          </div>
+          <div class="card highlight-coral" onclick="goToSlide(11)" style="cursor:pointer">
+            <div class="card-title"><span class="card-icon coral">05</span> Redis In-Memory</div>
+            <p class="card-desc">Bộ nhớ đệm RAM tốc độ sub-millisecond, làm Cache hồ sơ user và chặn đứng brute-force
+              mật khẩu qua lệnh nguyên tử INCR.</p>
+          </div>
+          <div class="card highlight-coral" onclick="goToSlide(12)" style="cursor:pointer">
+            <div class="card-title"><span class="card-icon coral">06</span> WebSocket & STOMP Chat</div>
+            <p class="card-desc">Kết nối hai chiều Full-Duplex thay thế HTTP Polling, hỗ trợ Admin và Khách hàng trò
+              chuyện tức thời qua Simple Broker.</p>
+          </div>
+        </div>
+
+        <div
+          style="background:var(--bg-subtle); border-radius:var(--radius-sm); padding:8px 14px; font-size:0.77rem; color:var(--text-main); margin-bottom:10px;">
+          <strong>💡 Mạch kiến trúc cốt lõi:</strong> <em>Đóng gói ứng dụng ➔ Bảo vệ danh tính ➔ Chia nhỏ dịch vụ ➔ Giao
+            tiếp bất đồng bộ ➔ Tăng tốc & phòng thủ RAM ➔ Nhắn tin tức thời</em>.
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Bài báo cáo của em được thiết kế theo một mạch tư duy kiến trúc liền mạch từ hạ tầng tới trải nghiệm người
+            dùng, gồm 6 chuyên đề trên màn hình: <strong>Phần 1</strong> là chuẩn hóa môi trường với Docker;
+            <strong>Phần 2</strong> là bảo mật stateless bằng Spring Security và JWT; <strong>Phần 3</strong> là phân rã
+            Monolith sang Microservices tách biệt Database; <strong>Phần 4</strong> là giao tiếp bất đồng bộ chống mất
+            event với Kafka Outbox; <strong>Phần 5</strong> là tăng tốc bộ đệm và chống dò pass bằng Redis; và
+            <strong>Phần 6</strong> là kênh chat realtime hai chiều giữa Admin và Khách hàng qua WebSocket STOMP!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 02: DOCKER — BẢN CHẤT, NHU CẦU & KHÁI NIỆM CỐT LÕI
+         ================================================================== -->
+    <section class="slide" data-slide="2" data-title="02. Docker Bản Chất">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag">PHẦN 1 • CONTAINER HÓA</span>
+            <h2 class="slide-title">Docker Là Gì? Bản Chất, Nhu Cầu & Khái Niệm Cốt Lõi</h2>
+            <p class="slide-subtitle">Chuẩn hóa đóng gói mã nguồn và xóa bỏ hoàn toàn rào cản lệch môi trường máy dev -
+              server</p>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-bottom:10px;">
+          <!-- Card 1 -->
+          <div class="card">
+            <div class="card-title"><span class="card-icon coral">⚠️</span> 1. Vấn Đề Thực Tế</div>
+            <p class="card-desc">
+              <strong>"Trên máy tôi chạy được mà!"</strong> là bài toán đau đầu nhất khi làm phần mềm. Lệch Java 17 với
+              21, thiếu thư viện native trên Linux, hay cấu hình database khác nhau khiến việc chuyển giao dự án dễ đổ
+              vỡ.
+            </p>
+            <div class="card-project-apply coral">
+              <strong>Trong dự án:</strong> Cần chạy 4 microservices backend cùng PostgreSQL, Redis, Kafka KRaft và
+              Mailpit—tổng cộng <strong>8 container phối hợp</strong>, nếu cài thủ công trên server thì vận hành cực kỳ rủi
+              ro.
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="card highlight">
+            <div class="card-title"><span class="card-icon">📦</span> 2. Docker Giải Quyết Gì?</div>
+            <p class="card-desc">
+              Docker đóng gói toàn bộ: mã nguồn chương trình, Java Runtime (JRE), thư viện phụ thuộc và biến môi trường
+              vào một đơn vị độc lập gọi là <strong>Container</strong>. Chạy ổn định ở bất cứ nơi đâu có Docker Engine.
+            </p>
+            <div class="card-project-apply">
+              <strong>Lợi ích sống còn:</strong> Đảm bảo môi trường đồng nhất 100% giữa máy cá nhân của lập trình viên và
+              máy chủ production.
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="card">
+            <div class="card-title"><span class="card-icon">🧱</span> 3. Bốn Khái Niệm Cốt Lõi</div>
+            <div class="card-desc" style="display:flex; flex-direction:column; gap:4px; font-size:0.73rem;">
+              <div>• <strong>Image:</strong> Bản thiết kế tĩnh chỉ đọc chứa code và môi trường.</div>
+              <div>• <strong>Container:</strong> Thực thể đang chạy được sinh ra từ Image.</div>
+              <div>• <strong>Registry:</strong> Kho lưu trữ Image (Docker Hub, GitHub Registry).</div>
+              <div>• <strong>Volume:</strong> Vùng lưu trữ bền vững gắn ra ngoài máy chủ.</div>
+            </div>
+            <div class="card-project-apply">
+              <strong>Áp dụng:</strong> Em gắn Volume <code>postgres_user_data</code> để database không bao giờ bị mất khi
+              khởi động lại container.
+            </div>
+          </div>
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Bước vào Phần 1, câu hỏi đầu tiên là: <em>Tại sao hệ thống của em bắt buộc phải dùng Docker?</em><br>
+            Nhìn vào <strong>thẻ thứ nhất</strong>, lỗi kinh điển <em>'Trên máy tôi chạy được mà'</em> do lệch version
+            Java hay thư viện OS. Dự án của em gồm 4 microservices cùng PostgreSQL, Redis, Kafka và Mailpit—<strong>tổng
+              cộng 8 container phối hợp</strong>, nếu cài thủ công thì rất dễ lỗi.<br>
+            Ở <strong>thẻ thứ hai</strong>, Docker giải quyết bằng cách đóng gói mã nguồn, JRE 21 và cấu hình vào các
+            <strong>Container độc lập</strong>, cam kết máy dev và server đồng nhất 100%.<br>
+            Và ở <strong>thẻ thứ ba</strong>, em làm chủ 4 khái niệm Image, Container, Registry và Volume. Đặc biệt, em
+            dùng <strong>Volume <code>postgres_user_data</code></strong> gắn ra ổ cứng máy chủ, đảm bảo database không bao
+            giờ bị mất khi tắt container!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 03: TÌM HIỂU VỀ DOCKERFILE — CÔNG DỤNG & CÁCH DÙNG CƠ BẢN
+         ================================================================== -->
+    <section class="slide" data-slide="3" data-title="03. Tìm hiểu Dockerfile">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag">PHẦN 1 • CONTAINER HÓA</span>
+            <h2 class="slide-title">Tìm Hiểu Về Dockerfile: Công Dụng & Cách Dùng Cơ Bản</h2>
+            <p class="slide-subtitle">Bản công thức kịch bản chỉ dẫn Docker từng bước đóng gói mã nguồn Java thành Docker
+              Image</p>
+          </div>
+        </div>
+
+        <!-- 3 Công Dụng Lớn -->
+        <div
+          style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <strong
+              style="font-size:0.75rem; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.5px;">🎯 BA
+              CÔNG DỤNG CHÍNH CỦA DOCKERFILE:</strong>
+            <span class="pill pill-teal" style="font-size:0.65rem;">Khuôn Mẫu Đóng Gói (Blueprint)</span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+            <div
+              style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.71rem;">
+              <strong>1. Đóng Gói Thành Image:</strong> Gộp file <code>.jar</code> và JRE vào một gói Docker Image tĩnh
+              duy nhất.
+            </div>
+            <div
+              style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.71rem;">
+              <strong>2. Chạy Mọi Nơi Giống Nhau:</strong> Mọi thư viện cần thiết đều đã nạp sẵn bên trong, triệt tiêu
+              lỗi môi trường.
+            </div>
+            <div
+              style="background:var(--bg-canvas); border-left:3px solid var(--accent-coral); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.71rem;">
+              <strong>3. Tự Động Hóa Dựng Môi Trường:</strong> Không cần cài đặt Java thủ công trên máy chủ, chỉ cần 1
+              lệnh <code>docker build</code>.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="gap:12px; margin-bottom:10px;">
+          <!-- Cột Trái: 5 Chỉ Thị Cơ Bản -->
+          <div class="card" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem; justify-content:space-between;">
+              <span><span class="card-icon">🛠️</span> Cách Dùng: 5 Chỉ Thị Cơ Bản Trong Dockerfile</span>
+              <span class="pill pill-teal" style="font-size:0.63rem;">Java 21 JRE</span>
+            </div>
+            <div class="code-container" style="font-size:0.67rem; line-height:1.36; padding:8px 10px; margin-bottom:6px;">
+              <span class="code-cm"># 1. Chọn môi trường nền Java 21 nhẹ</span><br>
+              <span class="code-hl" style="color:#C084FC;">FROM</span> eclipse-temurin:21-jre-jammy<br>
+              <span class="code-cm"># 2. Tạo thư mục làm việc nội bộ</span><br>
+              <span class="code-hl" style="color:#C084FC;">WORKDIR</span> /app<br>
+              <span class="code-cm"># 3. Chép file .jar đã build vào container</span><br>
+              <span class="code-hl" style="color:#C084FC;">COPY</span> target/user-service.jar app.jar<br>
+              <span class="code-cm"># 4. Mở cổng service lắng nghe</span><br>
+              <span class="code-hl" style="color:#C084FC;">EXPOSE</span> 8081<br>
+              <span class="code-cm"># 5. Lệnh khởi chạy ứng dụng</span><br>
+              <span class="code-hl" style="color:#C084FC;">ENTRYPOINT</span> [<span
+                style="color:#A7F3D0;">"java"</span>, <span style="color:#A7F3D0;">"-jar"</span>, <span
+                style="color:#A7F3D0;">"app.jar"</span>]
+            </div>
+            <div style="font-size:0.71rem; color:var(--text-muted); line-height:1.35;">
+              <strong>💡 Phân biệt dễ nhớ:</strong> <strong>Image</strong> là chiếc khuôn bánh (tĩnh, chỉ đọc); còn
+              <strong>Container</strong> là chiếc bánh được tạo ra từ khuôn (tiến trình đang chạy).
+            </div>
+          </div>
+
+          <!-- Cột Phải: Quy Trình 3 Bước -->
+          <div class="card highlight" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem; justify-content:space-between;">
+              <span><span class="card-icon">🚀</span> Quy Trình 3 Bước: Từ Code Đến Container</span>
+              <span class="pill pill-coral" style="font-size:0.63rem;">Vòng Đời Cơ Bản</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px; font-size:0.73rem;">
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:6px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-teal);">Bước 1: Viết Dockerfile</strong><br>
+                Khai báo 5 chỉ thị (<code>FROM</code>, <code>WORKDIR</code>, <code>COPY</code>, <code>EXPOSE</code>,
+                <code>ENTRYPOINT</code>) đặt ở thư mục gốc của service.
+              </div>
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:6px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:#0284C7;">Bước 2: Lệnh Build tạo Docker Image</strong><br>
+                Gõ lệnh: <code>docker build -t user-service:1.0 .</code> ➔ Đóng gói thành Docker Image tĩnh.
+              </div>
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid var(--accent-coral); padding:6px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-coral);">Bước 3: Lệnh Run khởi chạy Container</strong><br>
+                Gõ lệnh: <code>docker run -d -p 8081:8081 --name my-app user-service:1.0</code> ➔ Bật container chạy ngầm
+                và mở cổng mạng.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Để biến mã nguồn Java thành Container, bước đầu tiên là viết <strong>Dockerfile</strong>. Nó có <strong>3
+              công dụng lớn</strong> ở trên cùng: Đóng gói file .jar và JRE thành Image; đảm bảo chạy ở đâu cũng giống
+            nhau; và tự động hóa toàn bộ việc dựng môi trường.<br>
+            Nhìn sang <strong>cột bên trái</strong>, trong dự án em khai báo 5 chỉ thị cơ bản: <code>FROM</code> chọn JRE 21
+            gọn nhẹ; <code>WORKDIR</code> đặt thư mục làm việc <code>/app</code>; <code>COPY</code> chép file jar vào;
+            <code>EXPOSE 8081</code> mở cổng nhận request; và <code>ENTRYPOINT</code> chạy ứng dụng với
+            <code>java -jar app.jar</code>.<br>
+            Quy trình 3 bước ở <strong>cột bên phải</strong> rất rõ ràng: Viết Dockerfile ➔ Gõ <code>docker build</code> để
+            nướng thành Docker Image ➔ Rồi gõ <code>docker run</code> để biến Image thành Container đang hoạt động thực
+            tế!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 04: DOCKER COMPOSE — CHẠY & QUẢN LÝ NHIỀU CONTAINER
+         ================================================================== -->
+    <section class="slide" data-slide="4" data-title="04. Docker Compose">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag">PHẦN 1 • CONTAINER HÓA</span>
+            <h2 class="slide-title">Docker Compose: Chạy & Quản Lý Nhiều Container Bằng 1 Lệnh</h2>
+            <p class="slide-subtitle">Định nghĩa toàn bộ hệ sinh thái dịch vụ, mạng nội bộ và ổ đĩa lưu trữ trong file
+              docker-compose.yml</p>
+          </div>
+        </div>
+
+        <!-- 3 Giá Trị Compose -->
+        <div
+          style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <strong
+              style="font-size:0.75rem; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.5px;">🐙 BA
+              GIÁ TRỊ THỰC TẾ CỦA DOCKER COMPOSE:</strong>
+            <span class="pill pill-teal" style="font-size:0.65rem;">Điều Phối Đa Container</span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+            <div
+              style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.71rem;">
+              <strong>1. Bật Toàn Bộ Cùng Lúc:</strong> Khởi chạy cả 8 container chỉ bằng đúng 1 câu lệnh
+              <code>docker compose up -d</code>.
+            </div>
+            <div
+              style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.71rem;">
+              <strong>2. Tự Kết Nối Mạng Nội Bộ (DNS):</strong> Backend gọi thẳng tới DB bằng tên
+              <code>postgres:5432</code> thay vì phải mò tìm IP tĩnh.
+            </div>
+            <div
+              style="background:var(--bg-canvas); border-left:3px solid var(--accent-coral); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.71rem;">
+              <strong>3. Quản Lý Tập Trung:</strong> Kiểm soát thứ tự bật với <code>depends_on</code> (đợi DB bật trước
+              rồi mới bật backend).
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="gap:12px; margin-bottom:10px;">
+          <!-- Cột Trái: Cấu Trúc YAML Thực Tế -->
+          <div class="card" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem; justify-content:space-between;">
+              <span><span class="card-icon">📋</span> Thành Phần Trong File docker-compose.yml</span>
+              <span class="pill pill-teal" style="font-size:0.63rem;">Internal DNS</span>
+            </div>
+            <div class="code-container" style="font-size:0.66rem; line-height:1.35; padding:8px 10px; margin-bottom:6px;">
+              <span class="code-hl" style="color:#38BDF8;">services:</span><br>
+              &nbsp;&nbsp;<span style="color:#FDE047; font-weight:700;">backend:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">build:</span> ./backend<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">ports:</span> [ <span style="color:#A7F3D0;">"8080:8080"</span>
+              ]<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">environment:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DB_URL: jdbc:postgresql://<span
+                style="color:#FDE047; font-weight:700;">postgres</span>:5432/mydb<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">depends_on:</span> [ <span
+                style="color:#FDE047;">postgres</span> ] <span class="code-cm"># Đợi DB bật trước</span><br><br>
+              &nbsp;&nbsp;<span style="color:#FDE047; font-weight:700;">postgres:</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">image:</span> postgres:17-alpine<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">volumes:</span> [ postgres_data:/var/lib/postgresql/data
+              ]<br><br>
+              <span class="code-hl" style="color:#38BDF8;">volumes:</span> { postgres_data: }
+            </div>
+          </div>
+
+          <!-- Cột Phải: Các Lệnh CLI Hàng Ngày -->
+          <div class="card highlight" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem; justify-content:space-between;">
+              <span><span class="card-icon">🚀</span> Các Lệnh CLI Thường Dùng Hàng Ngày</span>
+              <span class="pill pill-coral" style="font-size:0.63rem;">Thực Hành</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1.6fr 1fr; gap:3px 6px; font-size:0.69rem; line-height:1.35;">
+              <div><code>docker compose up -d</code></div>
+              <div style="color:var(--text-muted);">Khởi động tất cả container chạy ngầm</div>
+              <div><code>docker compose up --build -d</code></div>
+              <div style="color:var(--text-muted);">Build lại code mới rồi khởi chạy</div>
+              <div><code>docker compose down</code></div>
+              <div style="color:var(--text-muted);">Dừng và xóa toàn bộ container</div>
+              <div><code>docker compose ps</code></div>
+              <div style="color:var(--text-muted);">Kiểm tra trạng thái đang chạy</div>
+              <div><code>docker compose logs -f backend</code></div>
+              <div style="color:var(--text-muted);">Xem log trực tiếp để bắt lỗi</div>
+            </div>
+            <div class="card-project-apply" style="margin-top:8px;">
+              <strong>🎯 Áp dụng:</strong> Thay vì gõ 8 lệnh thủ công phức tạp, em chỉ cần gõ đúng <code>docker compose up -d</code> là toàn bộ hệ thống tự động khởi chạy đồng bộ.
+            </div>
+          </div>
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Khi số lượng container tăng lên 8 cái, việc gõ từng câu lệnh thủ công rất cồng kềnh. Vì vậy, em dùng
+            <strong>Docker Compose</strong> qua file <code>docker-compose.yml</code>.<br>
+            Compose mang lại <strong>3 giá trị thiết thực</strong>: Thứ nhất, bật toàn bộ 8 container cùng lúc chỉ bằng 1
+            lệnh <code>docker compose up -d</code>; Thứ hai, tự động kết nối mạng nội bộ—nhìn vào khung code bên trái,
+            backend gọi thẳng tới database bằng tên <code>postgres:5432</code> mà không cần mò IP; Thứ ba, kiểm soát thứ
+            tự chạy với <code>depends_on</code>, đảm bảo DB sẵn sàng trước khi backend bật.<br>
+            Các lệnh CLI hàng ngày em thường dùng ở cột bên phải gồm <code>up -d</code> để chạy ngầm, <code>up --build -d</code> khi sửa code, và <code>logs -f backend</code> để theo dõi log gỡ lỗi trực tiếp!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 05: SPRING SECURITY — AUTHENTICATION & AUTHORIZATION
+         ================================================================== -->
+    <section class="slide" data-slide="5" data-title="05. Spring Security">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag coral">PHẦN 2 • BẢO MẬT & XÁC THỰC</span>
+            <h2 class="slide-title">Spring Security: Authentication & Authorization</h2>
+            <p class="slide-subtitle">Phân định danh tính và quyền hạn qua chuỗi bộ lọc bảo mật SecurityFilterChain</p>
+          </div>
+        </div>
+
+        <!-- Sơ Đồ Luồng 4 Bước -->
+        <div class="flowchart-wrapper" style="padding:8px 12px; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-coral)">
+              LUỒNG XỬ LÝ REQUEST QUA SPRING SECURITY FILTER CHAIN (4 BƯỚC)
+            </span>
+            <span class="pill pill-coral" style="font-size:0.65rem;">HTTP 401 vs 403</span>
+          </div>
+          <div class="flow-steps">
+            <div class="flow-step-box">
+              <div class="flow-step-num" style="color:var(--accent-coral);">1. CLIENT REQUEST</div>
+              <div class="flow-step-name">Gửi Yêu Cầu</div>
+              <div class="flow-step-desc">Ví dụ: <code>POST /api/login</code> hoặc <code>GET /api/admin</code></div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step-box">
+              <div class="flow-step-num" style="color:var(--accent-teal);">2. FILTER CHAIN</div>
+              <div class="flow-step-name">SecurityFilterChain</div>
+              <div class="flow-step-desc">Chặn bắt request, kiểm tra thông tin và quy tắc an ninh</div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step-box active">
+              <div class="flow-step-num">3. AUTHENTICATION</div>
+              <div class="flow-step-name">Xác Thực Danh Tính</div>
+              <div class="flow-step-desc">• Đúng: Nạp <code>SecurityContextHolder</code><br>• Sai: Chặn ngay với mã
+                <strong>HTTP 401</strong></div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step-box coral">
+              <div class="flow-step-num">4. AUTHORIZATION</div>
+              <div class="flow-step-name">Kiểm Tra Quyền Hạn</div>
+              <div class="flow-step-desc">• Khớp Role: Controller xử lý<br>• Thiếu quyền: Chặn ngay với mã <strong>HTTP
+                  403</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="gap:12px; margin-bottom:10px;">
+          <!-- Cột Trái: Phân Biệt Khái Niệm -->
+          <div class="card" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem;">
+              <span class="card-icon coral">🔑</span> Phân Biệt: Bạn Là Ai? vs Bạn Được Làm Gì?
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px; font-size:0.71rem;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:6px 8px;">
+                <strong style="color:var(--accent-teal);">👤 Authentication (Xác thực):</strong><br>
+                Trả lời: <em>'Bạn là ai?'</em> qua username/email và mật khẩu hợp lệ.
+              </div>
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:6px 8px;">
+                <strong style="color:var(--accent-coral);">🛡️ Authorization (Phân quyền):</strong><br>
+                Trả lời: <em>'Bạn được làm gì?'</em> dựa trên Role được cấp (User hay Admin).
+              </div>
+            </div>
+            <div class="card-project-apply coral" style="font-size:0.71rem; margin-top:0;">
+              <strong>Ví dụ phân biệt:</strong> Đăng nhập thành công nhưng vào trang quản trị bị chặn ➔ <em>Xác thực thành
+                công nhưng phân quyền thất bại</em> (Server trả về HTTP 403 Forbidden).
+            </div>
+          </div>
+
+          <!-- Cột Phải: Cấu Hình Thực Tế -->
+          <div class="card highlight" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem; justify-content:space-between;">
+              <span><span class="card-icon">⚙️</span> Cấu Hình Thực Tế Trong Spring Boot 3</span>
+              <span class="pill pill-teal" style="font-size:0.63rem;">SecurityConfig</span>
+            </div>
+            <div class="code-container" style="font-size:0.66rem; line-height:1.35; padding:8px 10px; margin-bottom:6px;">
+              http.authorizeHttpRequests(auth -> auth<br>
+              &nbsp;&nbsp;.requestMatchers(<span style="color:#A7F3D0;">"/api/auth/**"</span>).<span
+                style="color:#FDE047; font-weight:700;">permitAll()</span><br>
+              &nbsp;&nbsp;.requestMatchers(<span style="color:#A7F3D0;">"/api/admin/**"</span>).<span
+                style="color:#FDE047; font-weight:700;">hasRole("ADMIN")</span><br>
+              &nbsp;&nbsp;.anyRequest().<span style="color:#FDE047; font-weight:700;">authenticated()</span><br>
+              );
+            </div>
+            <div style="font-size:0.7rem; color:var(--text-muted); line-height:1.32;">
+              • <code>permitAll():</code> Cho phép gọi công khai mà không cần đăng nhập.<br>
+              • <code>hasRole("ADMIN"):</code> Yêu cầu tài khoản bắt buộc phải có vai trò Quản trị viên.<br>
+              • <code>authenticated():</code> Yêu cầu bắt buộc phải đăng nhập hợp lệ.
+            </div>
+          </div>
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Bước sang Phần 2 về Bảo mật, em phân định rạch ròi hai khái niệm cốt lõi ở <strong>cột bên trái</strong>:
+            <em>Authentication</em> là xác thực 'Bạn là ai?' qua email và mật khẩu; còn <em>Authorization</em> là phân
+            quyền 'Bạn được phép làm gì?' qua Role.<br>
+            Nhìn vào <strong>sơ đồ luồng 4 bước</strong> ở trên cùng: Khi request đi vào, SecurityFilterChain sẽ chặn bắt.
+            Nếu chưa đăng nhập hoặc sai pass, hệ thống từ chối ngay với mã <strong>HTTP 401 Unauthorized</strong>. Nếu đã
+            xác thực nhưng tài khoản User thông thường cố truy cập endpoint của Admin, hệ thống phát hiện thiếu quyền và trả
+            về <strong>HTTP 403 Forbidden</strong>.<br>
+            Trong mã nguồn ở <strong>cột bên phải</strong>, em cấu hình <code>.permitAll()</code> cho API đăng ký đăng
+            nhập; <code>.hasRole(\"ADMIN\")</code> cho API quản trị; và <code>.authenticated()</code> cho mọi API yêu cầu
+            đăng nhập!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 06: JSON WEB TOKEN — CẤU TRÚC 3 PHẦN & CHIẾN LƯỢC DUAL-TOKEN
+         ================================================================== -->
+    <section class="slide" data-slide="6" data-title="06. JWT & Dual-Token">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag coral">PHẦN 2 • BẢO MẬT & XÁC THỰC</span>
+            <h2 class="slide-title">JSON Web Token: Cấu Trúc 3 Phần & Chiến Lược Dual-Token</h2>
+            <p class="slide-subtitle">Bản chất Stateless, Chữ ký số HMAC-SHA256 chống giả mạo và Cặp Access/Refresh Token
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="gap:12px; margin-bottom:10px;">
+          <!-- Cột Trái: Cấu Trúc 3 Phần -->
+          <div class="card highlight" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem; justify-content:space-between;">
+              <span><span class="card-icon">🧩</span> Cấu Trúc JWT Gồm 3 Phần Nối Bằng Dấu Chấm</span>
+              <span class="pill pill-teal" style="font-size:0.63rem;">Base64URL</span>
+            </div>
+
+            <div
+              style="display:flex; align-items:center; justify-content:center; gap:6px; background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:4px 8px; margin-bottom:6px; font-weight:800; font-family:var(--font-mono); font-size:0.72rem;">
+              <span style="color:#FB7185;">HEADER</span> <span>.</span>
+              <span style="color:#38BDF8;">PAYLOAD</span> <span>.</span>
+              <span style="color:#2DD4BF;">SIGNATURE</span>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:5px; font-size:0.71rem; line-height:1.35;">
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid #FB7185; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:#FB7185;">1. Header (Màu hồng):</strong> Khai báo thuật toán ký, ví dụ
+                <code>{"alg":"HS256","typ":"JWT"}</code>.
+              </div>
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:#0284C7;">2. Payload (Màu xanh dương):</strong> Chứa Claims như <code>userId</code>,
+                <code>roles</code>, hạn dùng <code>exp</code>. <span style="color:var(--accent-coral); font-weight:600;">⚠️
+                  Chỉ là encode Base64URL nên ai cũng đọc được, tuyệt đối không chứa password!</span>
+              </div>
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid #2DD4BF; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:#0F766E;">3. Signature (Màu xanh ngọc):</strong> Chữ ký số HMAC-SHA256 tạo từ
+                SecretKey. Nếu hacker tự sửa role từ USER lên ADMIN trong Payload, chữ ký sẽ sai lệch ngay và server từ
+                chối lập tức.
+              </div>
+            </div>
+          </div>
+
+          <!-- Cột Phải: Chiến Lược Dual-Token -->
+          <div class="card highlight-coral" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem; justify-content:space-between;">
+              <span><span class="card-icon coral">⚖️</span> Chiến Lược Dual-Token (Cân Bằng Bảo Mật & UX)</span>
+              <span class="pill pill-coral" style="font-size:0.63rem;">Bảo Vệ Đa Lớp</span>
+            </div>
+
+            <table class="editorial-table" style="margin-bottom:6px;">
+              <thead>
+                <tr>
+                  <th>Tiêu Chí</th>
+                  <th>Access Token</th>
+                  <th>Refresh Token</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Thời gian sống</strong></td>
+                  <td>Ngắn hạn: <strong>15 phút</strong> (hạn chế rủi ro lộ)</td>
+                  <td>Dài hạn: <strong>7 ngày</strong> (trải nghiệm mượt mà)</td>
+                </tr>
+                <tr>
+                  <td><strong>Lưu trữ</strong></td>
+                  <td><strong>Stateless:</strong> Server không lưu DB, chỉ kiểm tra chữ ký</td>
+                  <td><strong>Stateful:</strong> Lưu bản băm SHA-256 trong Database để thu hồi</td>
+                </tr>
+                <tr>
+                  <td><strong>Mục đích</strong></td>
+                  <td>Gắn vào Header <code>Bearer</code> cho mọi API nghiệp vụ</td>
+                  <td>Chỉ gửi lên <code>/api/auth/refresh</code> để đổi token mới</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="card-project-apply" style="margin-top:0;">
+              <strong>🎯 Trải nghiệm người dùng:</strong> Khi Access Token hết hạn, ứng dụng tự động dùng Refresh Token xin
+              cấp token mới mà khách không bị văng ra bắt đăng nhập lại.
+            </div>
+          </div>
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Trong môi trường Microservices phân tán, em không dùng Session vì sẽ gây dính máy chủ. Em dùng <strong>JWT
+              Stateless</strong>.<br>
+            Nhìn sang <strong>cột bên trái</strong>, một chuỗi JWT gồm 3 phần nối bằng dấu chấm: <strong>Header</strong>
+            khai báo thuật toán; <strong>Payload</strong> chứa thông tin định danh như userId và role—Thầy Cô lưu ý:
+            Payload chỉ encode Base64URL nên ai cũng đọc được, tuyệt đối không lưu mật khẩu ở đây; và
+            <strong>Signature</strong> là chữ ký số HMAC-SHA256 kết hợp SecretKey, nếu hacker cố sửa quyền từ USER lên
+            ADMIN thì chữ ký sẽ sai lệch và server từ chối ngay!<br>
+            Ở <strong>cột bên phải</strong>, để cân bằng giữa bảo mật và trải nghiệm, em áp dụng cơ chế
+            <strong>Dual-Token</strong>: Access Token sống ngắn 15 phút stateless hoàn toàn; còn Refresh Token sống dài 7
+            ngày lưu bản băm trong Database để tự động gia hạn token mà không bắt người dùng đăng nhập lại!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 07: MICROSERVICES — PHÂN RÃ KIẾN TRÚC & 3 LỢI ÍCH
+         ================================================================== -->
+    <section class="slide" data-slide="7" data-title="07. Kiến Trúc Microservices">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag">PHẦN 3 • THIẾT KẾ HỆ THỐNG</span>
+            <h2 class="slide-title">Microservices: Phân Rã Kiến Trúc & 3 Lợi Ích Cốt Lõi</h2>
+            <p class="slide-subtitle">Khắc phục điểm nghẽn sập dây chuyền của Monolith và triển khai chuẩn
+              Database-per-Service trong dự án</p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:10px;">
+          <!-- Monolith -->
+          <div class="card">
+            <div class="card-title"><span class="card-icon coral">🏢</span> Hạn Chế Của Kiến Trúc Monolith</div>
+            <p class="card-desc">
+              Toàn bộ tính năng User, Chat, Notification đóng gói chung vào một file jar duy nhất và trỏ vào 1 Database
+              dùng chung.<br>
+              <strong>Hạn chế chí mạng:</strong> Chỉ cần một module Chat bị rò rỉ bộ nhớ hoặc khóa bảng database, toàn bộ
+              hệ thống sẽ bị kéo sập theo, khiến chức năng Đăng nhập hay Thanh toán cũng tê liệt hoàn toàn!
+            </p>
+          </div>
+
+          <!-- Microservices -->
+          <div class="card highlight">
+            <div class="card-title"><span class="card-icon">🚀</span> 3 Lợi Ích Cốt Lõi Của Microservices</div>
+            <div class="card-desc" style="display:flex; flex-direction:column; gap:4px; font-size:0.72rem;">
+              <div>• <strong>1. Cách ly lỗi (Fault Isolation):</strong> Chat Service bị lỗi thì User Service vẫn vận hành
+                100% bình thường.</div>
+              <div>• <strong>2. Triển khai độc lập (Independent Deployment):</strong> Cập nhật phòng chat không cần tắt cả
+                hệ thống để deploy lại.</div>
+              <div>• <strong>3. Mở rộng linh hoạt (Targeted Scalability):</strong> Khi lượng chat tăng vọt, chỉ cần nhân
+                bản riêng container Chat Service.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bảng So Sánh & Chuẩn DB-per-Service -->
+        <table class="editorial-table" style="margin-bottom:8px;">
+          <thead>
+            <tr>
+              <th>Tiêu chí so sánh</th>
+              <th>Monolith (Kiến Trúc Nguyên Khối)</th>
+              <th>Microservices (Kiến Trúc Dự Án)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Cơ sở dữ liệu</strong></td>
+              <td>1 Database chung (khóa bảng ảnh hưởng lẫn nhau)</td>
+              <td><strong>Database-per-Service:</strong> User và Chat sở hữu Database riêng biệt (users_db, chat_db)</td>
+            </tr>
+            <tr>
+              <td><strong>Ảnh hưởng sự cố</strong></td>
+              <td>1 module lỗi có thể làm sập toàn bộ ứng dụng</td>
+              <td><strong>Cách ly hoàn toàn:</strong> Lỗi ở một service không lan truyền dây chuyền</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="card-project-apply" style="margin-top:0; margin-bottom:8px;">
+          <strong>🎯 Hiện thực hóa trong dự án:</strong> Hệ thống chia thành 4 service riêng biệt:
+          <code>api-gateway (:8080)</code>, <code>user-service (:8081)</code>, <code>notification-service (:8082)</code>
+          và <code>chat-service (:8083)</code>. Các service có dữ liệu nghiệp vụ đều sở hữu database riêng, Gateway đóng
+          vai trò điều phối định tuyến duy nhất.
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Bước sang Phần 3 về Thiết kế hệ thống, em phân rã kiến trúc từ Monolith sang Microservices:<br>
+            Trước đây với <strong>Monolith (thẻ bên trái)</strong>, tất cả module dùng chung một Database. Nhược điểm chí
+            mạng là chỉ cần module Chat bị rò rỉ bộ nhớ hay deadlock DB thì tính năng Đăng nhập cũng sập theo!<br>
+            Khi chuyển sang <strong>Microservices (thẻ bên phải)</strong>, em đạt được 3 lợi ích sống còn:
+            <strong>Cách ly lỗi</strong> (Chat lỗi thì User vẫn chạy bình thường); <strong>Triển khai độc lập</strong>; và
+            <strong>Mở rộng linh hoạt</strong>.<br>
+            Nhìn vào bảng so sánh ở dưới, em áp dụng chuẩn <strong>Database-per-Service</strong>: <code>user-service</code>
+            và <code>chat-service</code> sở hữu database riêng biệt (<code>users_db</code> và <code>chat_db</code>), kết
+            hợp với <code>api-gateway</code> ở cổng 8080 đóng vai trò điều phối định tuyến duy nhất!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 08: GIAO TIẾP SERVICE — SYNC REST VS ASYNC KAFKA
+         ================================================================== -->
+    <section class="slide" data-slide="8" data-title="08. Giao Tiếp Microservices">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag">PHẦN 3 • THIẾT KẾ HỆ THỐNG</span>
+            <h2 class="slide-title">Giao Tiếp Giữa Các Service: Sync REST vs Async Kafka</h2>
+            <p class="slide-subtitle">Cây quyết định lựa chọn cơ chế giao tiếp phù hợp với từng bài toán nghiệp vụ</p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:10px;">
+          <!-- Sync REST -->
+          <div class="card highlight">
+            <div class="card-title"><span class="card-icon">📞</span> Đồng Bộ: Synchronous (REST API)</div>
+            <p class="card-desc">
+              Bên gửi gửi request HTTP và <strong>phải chờ đợi</strong> bên nhận phản hồi mới tiếp tục công việc.<br>
+              • <strong>Ưu điểm:</strong> Đơn giản, nhận ngay kết quả để render giao diện.<br>
+              • <strong>Nhược điểm:</strong> Khớp nối chặt (Tight Coupling); nếu service nhận bị chậm sẽ làm nghẽn luôn
+              service gửi.
+            </p>
+            <div class="card-project-apply">
+              <strong>Ví dụ dự án:</strong> Khi Admin mở phòng chat, <code>chat-service</code> gọi HTTP GET sang
+              <code>user-service</code> để lấy tức thì họ tên và avatar khách hàng.
+            </div>
+          </div>
+
+          <!-- Async Kafka -->
+          <div class="card highlight-coral">
+            <div class="card-title"><span class="card-icon coral">📨</span> Bất Đồng Bộ: Asynchronous (Apache Kafka)</div>
+            <p class="card-desc">
+              Bên gửi bắn sự kiện vào hàng đợi rồi <strong>tiếp tục ngay lập tức</strong> mà không cần chờ đợi.<br>
+              • <strong>Ưu điểm:</strong> Tách rời hoàn toàn (Decoupled); nếu bên nhận tạm chết thì sự kiện vẫn nằm an toàn
+              trên Kafka.<br>
+              • <strong>Nhược điểm:</strong> Dữ liệu có độ trễ nhất định (Eventual Consistency).
+            </p>
+            <div class="card-project-apply coral">
+              <strong>Ví dụ dự án:</strong> Khi khách đăng ký, <code>user-service</code> gửi event sang Kafka để
+              <code>notification-service</code> kéo về gửi email ngầm.
+            </div>
+          </div>
+        </div>
+
+        <!-- Decision Tree Box -->
+        <div class="flowchart-wrapper" style="padding:8px 12px; margin-bottom:8px;">
+          <div
+            style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--text-main); margin-bottom:4px;">
+            CÂY QUYẾT ĐỊNH KIẾN TRÚC: KHI NÀO DÙNG REST? KHI NÀO DÙNG KAFKA?
+          </div>
+          <div class="grid-2">
+            <div
+              style="background:var(--accent-teal-light); border-left:3px solid var(--accent-teal); padding:6px 10px; border-radius:var(--radius-sm); font-size:0.74rem;">
+              <strong>Cần kết quả tức thì để hiển thị UI ➔ DÙNG REST API:</strong><br>
+              Ví dụ: Truy vấn hồ sơ người dùng, lấy lịch sử chat cũ, kiểm tra trạng thái đơn.
+            </div>
+            <div
+              style="background:var(--accent-coral-light); border-left:3px solid var(--accent-coral); padding:6px 10px; border-radius:var(--radius-sm); font-size:0.74rem;">
+              <strong>Tác vụ xử lý tốn thời gian, chạy ngầm ➔ DÙNG KAFKA EVENT:</strong><br>
+              Ví dụ: Gửi email kích hoạt tài khoản, thông báo đẩy, ghi log thống kê.
+            </div>
+          </div>
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Sau khi tách database riêng, câu hỏi đặt ra là: Các service sẽ nói chuyện với nhau bằng cách nào?<br>
+            Em xây dựng một cây quyết định kiến trúc phân chia rõ ràng ở hàng trên:<br>
+            • <strong>Giao tiếp Đồng bộ qua REST API (thẻ bên trái):</strong> Dùng khi cần kết quả ngay lập tức để render
+            UI cho khách hàng. Ví dụ khi Admin mở khung chat, Chat Service gọi REST sang User Service để lấy họ tên và
+            avatar.<br>
+            • <strong>Giao tiếp Bất đồng bộ qua Apache Kafka (thẻ bên phải):</strong> Dùng cho các tác vụ tốn thời gian,
+            không bắt người dùng phải đứng chờ. Ví dụ khi đăng ký tài khoản xong, User Service chỉ cần bắn một sự kiện vào
+            Kafka rồi trả thông báo thành công ngay cho khách; việc gửi email kích hoạt sẽ do service khác kéo về xử lý
+            ngầm.<br>
+            <strong>Quy tắc đúc kết ở khung bên dưới:</strong> Cần kết quả tức thì ➔ dùng REST; tác vụ chạy ngầm tốn thời
+            gian ➔ dùng Kafka Event!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 09: APACHE KAFKA — MESSAGE BROKER PHÂN TÁN
+         ================================================================== -->
+    <section class="slide" data-slide="9" data-title="09. Apache Kafka">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag coral">PHẦN 4 • XỬ LÝ BẤT ĐỒNG BỘ</span>
+            <h2 class="slide-title">Apache Kafka: Nền Tảng Message Broker Phân Tán</h2>
+            <p class="slide-subtitle">4 thành phần cốt lõi, Kỹ thuật phân vùng Partition và Sức mạnh đệm chịu tải cao</p>
+          </div>
+        </div>
+
+        <!-- Sơ Đồ Luồng Bắn Sự Kiện -->
+        <div class="flowchart-wrapper" style="padding:8px 12px; margin-bottom:8px;">
+          <div
+            style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-coral); margin-bottom:6px;">
+            SƠ ĐỒ LUỒNG SỰ KIỆN ĐĂNG KÝ TÀI KHOẢN TRONG DỰ ÁN
+          </div>
+          <div class="flow-steps">
+            <div class="flow-step-box">
+              <div class="flow-step-num">PRODUCER</div>
+              <div class="flow-step-name">user-service</div>
+              <div class="flow-step-desc">Khách đăng ký ➔ Bắn event <code>UserRegisteredEvent</code></div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step-box coral">
+              <div class="flow-step-num">TOPIC & PARTITION</div>
+              <div class="flow-step-name">Topic: user-events</div>
+              <div class="flow-step-desc">Gán <code>Key = userId</code> ➔ Vào cùng 1 Partition, giữ đúng tuyệt đối thứ tự
+                thời gian</div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step-box active">
+              <div class="flow-step-num">CONSUMER</div>
+              <div class="flow-step-name">notification-service</div>
+              <div class="flow-step-desc">Kéo event về ➔ Gửi email kích hoạt qua Mailpit / SMTP</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Khái Niệm Cốt Lõi -->
+        <div class="grid-4" style="margin-bottom:8px;">
+          <div class="card" style="padding:8px 10px;">
+            <div class="card-title" style="font-size:0.8rem;"><span class="card-icon">📤</span> Producer</div>
+            <p class="card-desc" style="font-size:0.71rem;">Ứng dụng sản sinh và gửi thông điệp vào Broker (Trong dự án:
+              <code>user-service</code>).
+            </p>
+          </div>
+          <div class="card" style="padding:8px 10px;">
+            <div class="card-title" style="font-size:0.8rem;"><span class="card-icon coral">📥</span> Consumer</div>
+            <p class="card-desc" style="font-size:0.71rem;">Ứng dụng lắng nghe và chủ động kéo thông điệp về xử lý (Trong dự
+              án: <code>notification-service</code>).
+            </p>
+          </div>
+          <div class="card" style="padding:8px 10px;">
+            <div class="card-title" style="font-size:0.8rem;"><span class="card-icon">🗂️</span> Topic</div>
+            <p class="card-desc" style="font-size:0.71rem;">Kênh hàng đợi phân loại sự kiện. Chia nhiều Partition để đọc/ghi
+              song song tốc độ cao.
+            </p>
+          </div>
+          <div class="card" style="padding:8px 10px;">
+            <div class="card-title" style="font-size:0.8rem;"><span class="card-icon coral">🖥️</span> Broker</div>
+            <p class="card-desc" style="font-size:0.71rem;">Máy chủ Kafka lưu trữ log sự kiện bền vững trực tiếp trên ổ đĩa
+              cứng.
+            </p>
+          </div>
+        </div>
+
+        <div class="card-project-apply coral" style="margin-top:0; margin-bottom:8px;">
+          <strong>Vì sao dùng Kafka thay vì gọi HTTP trực tiếp?</strong> Giảm khớp nối và tăng độ bền vững: Nếu máy chủ
+          email bị quá tải hoặc rớt mạng 15 phút, sự kiện đăng ký vẫn nằm an toàn trên Kafka chờ xử lý sau, khách hàng đăng
+          ký tài khoản hoàn toàn không bị gián đoạn hay báo lỗi!
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Ở slide này, Kafka đóng vai trò là một hàng đợi sự kiện phân tán chịu tải cao gồm 4 thành phần: Producer,
+            Consumer, Topic và Broker.<br>
+            Trong dự án, <code>user-service</code> đóng vai Producer bắn sự kiện vào Topic <code>user-events</code>. Em
+            chỉ định <strong><code>Key = userId</code></strong>, đảm bảo mọi sự kiện liên quan đến cùng một user sẽ đi vào
+            cùng một Partition, giữ đúng tuyệt đối thứ tự thời gian.<br>
+            <code>notification-service</code> làm Consumer kéo sự kiện về để gửi email. Ưu điểm cốt lõi ở khung màu cam
+            dưới cùng là <strong>tính chịu lỗi</strong>: Nếu máy chủ email bị quá tải hoặc rớt mạng 15 phút, sự kiện vẫn nằm
+            an toàn trên Kafka chờ xử lý, không bao giờ bị nghẽn hay mất dữ liệu của khách!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 10: TRANSACTIONAL OUTBOX PATTERN & IDEMPOTENT CONSUMER
+         ================================================================== -->
+    <section class="slide" data-slide="10" data-title="10. Transactional Outbox">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag coral">PHẦN 4 • XỬ LÝ BẤT ĐỒNG BỘ</span>
+            <h2 class="slide-title">Transactional Outbox Pattern & Idempotent Consumer</h2>
+            <p class="slide-subtitle">Triệt tiêu hoàn toàn rủi ro Dual-Write và Đảm bảo tính nhất quán dữ liệu phân tán</p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:8px;">
+          <!-- Dual-write problem -->
+          <div class="card highlight-coral" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem;"><span class="card-icon coral">❌</span> Vấn
+              Đề Dual-Write Nếu Gọi Trực Tiếp</div>
+            <p class="card-desc">
+              Khi khách đăng ký: Nếu lưu User vào Database thành công, nhưng lệnh gửi Kafka bị rớt mạng ➔ <strong>User đã tạo
+                nhưng email không bao giờ được gửi!</strong><br>
+              Ngược lại, nếu gửi Kafka trước mà DB bị lỗi rollback ➔ <strong>Lại gửi email cho một tài khoản ảo không tồn
+                tại!</strong>
+            </p>
+          </div>
+
+          <!-- Outbox Solution -->
+          <div class="card highlight" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem;"><span class="card-icon">💎</span> Giải
+              Pháp: Transactional Outbox Pattern</div>
+            <p class="card-desc">
+              Lưu User và Sự kiện gửi email vào bảng <code>outbox_events</code> trong <strong>CÙNG 1 DATABASE
+                TRANSACTION</strong>. Cả 2 chỉ có thể cùng thành công hoặc cùng rollback!<br>
+              Một tiến trình Scheduler định kỳ quét bảng Outbox để xuất bản lên Kafka, cam kết không làm mất sự kiện.
+            </p>
+          </div>
+        </div>
+
+        <!-- Sơ Đồ 4 Bước Hoạt Động -->
+        <div class="flowchart-wrapper" style="padding:8px 12px; margin-bottom:8px;">
+          <div
+            style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); margin-bottom:6px;">
+            QUY TRÌNH 4 BƯỚC HOẠT ĐỘNG CỦA OUTBOX PATTERN TRONG DỰ ÁN
+          </div>
+          <div class="flow-steps">
+            <div class="flow-step-box">
+              <div class="flow-step-num">BƯỚC 1: CÙNG TRANSACTION</div>
+              <div class="flow-step-name">INSERT users + outbox_events</div>
+              <div class="flow-step-desc">Đảm bảo dữ liệu User và event luôn đồng nhất trong PostgreSQL</div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step-box active">
+              <div class="flow-step-num">BƯỚC 2: SCHEDULER QUÉT</div>
+              <div class="flow-step-name">FOR UPDATE SKIP LOCKED</div>
+              <div class="flow-step-desc">Quét bản ghi chưa gửi mỗi 2s, chống tranh chấp giữa nhiều instance</div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step-box coral">
+              <div class="flow-step-num">BƯỚC 3: XUẤT BẢN KAFKA</div>
+              <div class="flow-step-name">Đánh dấu PROCESSED</div>
+              <div class="flow-step-desc">Đẩy message lên Kafka và cập nhật trạng thái đã gửi thành công</div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step-box">
+              <div class="flow-step-num">BƯỚC 4: IDEMPOTENT</div>
+              <div class="flow-step-name">Kiểm tra eventId</div>
+              <div class="flow-step-desc">Consumer bỏ qua nếu eventId đã xử lý, chống gửi trùng 2-3 email</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Đây là một trong những điểm kỹ thuật quan trọng nhất của bài seminar: <strong>Giải quyết bài toán
+              Dual-Write</strong>.<br>
+            Nhìn vào <strong>thẻ màu đỏ</strong>: Nếu ta lưu User vào DB thành công, sau đó mới gọi lệnh gửi Kafka mà
+            chẳng may mạng rớt, thì User đã tạo nhưng email không bao giờ được gửi. Ngược lại, nếu gửi Kafka trước mà DB bị
+            lỗi rollback, thì lại gửi email cho một user không tồn tại!<br>
+            Em giải quyết bằng <strong>Transactional Outbox Pattern (thẻ xanh)</strong>: Lưu thông tin User và lưu sự kiện
+            vào bảng <code>outbox_events</code> trong <strong>CÙNG 1 DATABASE TRANSACTION</strong>. Cả hai cùng thành công
+            hoặc cùng rollback.<br>
+            Quy trình 4 bước ở sơ đồ giữa slide: <strong>Bước 1</strong> ghi đồng thời vào DB; <strong>Bước 2</strong>
+            Scheduler dùng lệnh <code>FOR UPDATE SKIP LOCKED</code> quét bảng Outbox mỗi 2 giây; <strong>Bước 3</strong> đẩy
+            lên Kafka đổi trạng thái sang PROCESSED; và <strong>Bước 4</strong> dùng <strong>Idempotent Consumer</strong>
+            kiểm tra <code>eventId</code>, cam kết dữ liệu nhất quán theo chuẩn At-Least-Once Delivery mà không sợ gửi trùng
+            lặp email!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 11: REDIS — SỨC MẠNH IN-MEMORY & SO SÁNH POSTGRESQL
+         ================================================================== -->
+    <section class="slide" data-slide="11" data-title="11. Redis In-Memory">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag">PHẦN 5 • TỐC ĐỘ & BỘ NHỚ ĐỆM</span>
+            <h2 class="slide-title">Redis: Sức Mạnh In-Memory, Cấu Trúc Dữ Liệu & So Sánh PostgreSQL</h2>
+            <p class="slide-subtitle">Lợi ích thực tế khi đưa vào hệ thống, Các kiểu dữ liệu hỗ trợ và Bảng đối chiếu với
+              Database quan hệ</p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="gap:12px; margin-bottom:8px;">
+          <!-- Cột 1: 4 Lợi Ích Của Redis -->
+          <div class="card highlight" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem; justify-content:space-between;">
+              <span><span class="card-icon">⚡</span> 1. Bốn Lợi Ích Của Redis Trong Dự Án</span>
+              <span class="pill pill-teal" style="font-size:0.63rem;">In-Memory RAM</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:4px; font-size:0.71rem; line-height:1.35;">
+              <div>• <strong>Tốc độ truy xuất sub-millisecond:</strong> Lưu toàn bộ trên RAM, giảm thiểu tối đa độ trễ so
+                với đọc từ ổ đĩa cứng.</div>
+              <div>• <strong>Giảm tải cho PostgreSQL:</strong> Làm lớp Cache đệm cho thông tin hồ sơ người dùng
+                (<code>user:profile</code>).</div>
+              <div>• <strong>Tự động thu dọn dữ liệu (TTL 15 phút):</strong> Tự hủy key hết hạn, không cần viết cronjob
+                dọn rác thủ công.</div>
+              <div>• <strong>Phòng vệ Brute-force:</strong> Dùng lệnh tăng biến đếm nguyên tử <code>INCR</code> để chặn đứng
+                các đợt dò pass ngay tại tầng RAM.</div>
+            </div>
+          </div>
+
+          <!-- Cột 2: Các Kiểu Dữ Liệu -->
+          <div class="card" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem; justify-content:space-between;">
+              <span><span class="card-icon">🧱</span> 2. Các Kiểu Dữ Liệu Hỗ Trợ</span>
+              <span class="pill pill-coral" style="font-size:0.63rem;">Data Structures</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:3px; font-size:0.69rem; line-height:1.32;">
+              <div>• <code>String:</code> Cache hồ sơ JSON, đếm số lần đăng nhập sai (hỗ trợ lệnh <code>INCR</code>).</div>
+              <div>• <code>Hash:</code> Lưu object nhiều trường (ví dụ <code>user:100 -> name, role</code>).</div>
+              <div>• <code>List:</code> Hoạt động như Queue (<code>LPUSH/RPOP</code>) xử lý tác vụ nền.</div>
+              <div>• <code>Set:</code> Tập hợp không trùng lặp, lưu Blacklist token đã thu hồi.</div>
+              <div>• <code>Sorted Set:</code> Sắp xếp theo Score, dùng cho Bảng xếp hạng hoặc Rate Limiter.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bảng So Sánh PostgreSQL vs Redis -->
+        <table class="editorial-table" style="margin-bottom:8px;">
+          <thead>
+            <tr>
+              <th>Tiêu Chí So Sánh</th>
+              <th>PostgreSQL (Relational Database)</th>
+              <th>Redis (In-Memory Key-Value)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Môi trường lưu trữ</strong></td>
+              <td>Lưu trên <strong>Ổ cứng (Disk)</strong> ➔ Bền vững tuyệt đối, chuẩn ACID</td>
+              <td>Lưu trên <strong>Bộ nhớ RAM</strong> ➔ Tốc độ truy xuất siêu tốc, độ trễ cực thấp</td>
+            </tr>
+            <tr>
+              <td><strong>Tốc độ truy xuất</strong></td>
+              <td>Độ trễ mili-giây (5–50ms tùy độ phức tạp query)</td>
+              <td>Độ trễ ở mức <strong>sub-millisecond</strong> (dưới 1 mili-giây trên RAM)</td>
+            </tr>
+            <tr>
+              <td><strong>Vai trò trong dự án</strong></td>
+              <td><strong>Nguồn chân lý (Source of Truth):</strong> Lưu User, Role, Tin nhắn chat</td>
+              <td><strong>Lớp đệm tốc độ & phòng vệ:</strong> Cache User, Đếm số lần nhập sai pass</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Để tối ưu tốc độ, em đưa Redis vào hoạt động song song với PostgreSQL.<br>
+            Nhìn vào <strong>cột bên trái</strong>, trong hệ thống Redis đảm nhiệm hai việc chính: Một là làm lớp Cache đệm
+            cho thông tin User Profile, giúp giảm tải trực tiếp các câu query lặp lại vào PostgreSQL; Hai là phòng vệ
+            Brute-force bằng lệnh nguyên tử <code>INCR</code> và cài đặt thời gian tự hủy <code>TTL 15 phút</code>—nếu một tài
+            khoản nhập sai pass quá số lần cho phép, Redis sẽ chặn ngay lập tức tại RAM trước khi request kịp chạm vào
+            Database.<br>
+            Cột bên phải là các kiểu dữ liệu phong phú như String, Hash, List, Set.<br>
+            Và nhìn vào <strong>bảng so sánh ở dưới</strong>, triết lý thiết kế của em là: PostgreSQL lưu trên ổ cứng làm
+            <em>Nguồn chân lý (Source of Truth)</em> đảm bảo an toàn dữ liệu; còn Redis lưu trên RAM đóng vai trò làm
+            <em>lớp đệm tốc độ và lá chắn phòng vệ ở cửa ngõ</em>!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 12: WEBSOCKET & STOMP — CHAT REALTIME ADMIN - USER
+         ================================================================== -->
+    <section class="slide" data-slide="12" data-title="12. WebSocket & STOMP">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag">PHẦN 6 • GIAO TIẾP THỜI GIAN THỰC</span>
+            <h2 class="slide-title">WebSocket & STOMP: Chat Realtime Admin – User</h2>
+            <p class="slide-subtitle">Vấn đề của HTTP Polling, Kết nối hai chiều Full-Duplex và Giao thức định tuyến STOMP
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:8px;">
+          <!-- Vấn Đề Polling -->
+          <div class="card" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem;"><span class="card-icon coral">💡</span> Hạn
+              Chế Của HTTP Polling Truyền Thống</div>
+            <p class="card-desc">
+              • <strong>Tình huống:</strong> Khách hàng hỏi Admin cần nhận được ngay; khi Admin trả lời khách hàng phải nhìn
+              thấy tức thời mà không cần bấm F5 tải lại trang.<br>
+              • <strong>Hạn chế HTTP:</strong> Chỉ có cơ chế Client hỏi thì Server mới trả lời. Trình duyệt phải liên tục gửi
+              request thăm dò (Polling) mỗi 2 giây, sinh ra hàng ngàn request rỗng gây lãng phí băng thông và nghẽn máy
+              chủ.
+            </p>
+          </div>
+
+          <!-- Giải Pháp WebSocket -->
+          <div class="card highlight" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem;"><span class="card-icon">⚡</span> Giải
+              Pháp: WebSocket & STOMP Broker</div>
+            <p class="card-desc">
+              • <strong>WebSocket:</strong> Duy trì 1 kết nối TCP <strong>hai chiều (Full-Duplex)</strong> duy nhất. Server
+              có thể chủ động đẩy (push) tin nhắn mới xuống client bất kỳ lúc nào.<br>
+              • <strong>STOMP:</strong> Quy ước định tuyến theo Destination:<br>
+              &nbsp;&nbsp;- Gửi tin lên server: <code>/app/chat.sendMessage</code><br>
+              &nbsp;&nbsp;- Nhận tin theo phòng: <code>/topic/rooms.{roomId}</code>
+            </p>
+          </div>
+        </div>
+
+        <!-- Bảng So Sánh Polling vs WebSocket -->
+        <table class="editorial-table" style="margin-bottom:8px;">
+          <thead>
+            <tr>
+              <th>Tiêu chí so sánh</th>
+              <th>HTTP Polling Truyền Thống</th>
+              <th>WebSocket + STOMP (Dự Án Đã Làm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Cơ chế truyền tin</strong></td>
+              <td>Client hỏi liên tục mỗi 2-3s: <em>"Có tin mới không?"</em></td>
+              <td><strong>Server chủ động đẩy tin</strong> ngay khi vừa nhận được</td>
+            </tr>
+            <tr>
+              <td><strong>Độ trễ (Latency)</strong></td>
+              <td>2 - 3 giây (phụ thuộc vào chu kỳ polling)</td>
+              <td><strong>Mili-giây:</strong> Gần như tức thời qua kết nối TCP đang mở</td>
+            </tr>
+            <tr>
+              <td><strong>Tài nguyên hệ thống</strong></td>
+              <td>Tốn băng thông mạng vì hàng ngàn header HTTP lặp lại</td>
+              <td>Cực kỳ tiết kiệm CPU máy chủ và băng thông mạng</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="card-project-apply" style="margin-top:0; margin-bottom:8px;">
+          <strong>Đơn vị điều phối trong dự án:</strong> Sử dụng <strong>In-Memory Simple Broker</strong> tích hợp sẵn của
+          Spring Boot kích hoạt qua <code>enableSimpleBroker("/topic")</code> để phân phối tin nhắn cực nhanh trên RAM mà
+          không cần cài thêm hạ tầng phức tạp.
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Với tính năng hỗ trợ trực tuyến giữa Admin và Khách hàng, cơ chế HTTP Polling truyền thống ở <strong>thẻ bên
+              trái</strong> bộc lộ nhược điểm rất lớn: Trình duyệt phải liên tục gửi request hỏi <em>'Có tin nhắn mới
+              không?'</em> mỗi 2-3 giây, gây lãng phí băng thông và tạo độ trễ cao.<br>
+            Em giải quyết bằng <strong>WebSocket (thẻ bên phải)</strong>, duy trì một kênh kết nối hai chiều Full-Duplex duy
+            nhất trên nền TCP. Kết hợp với <strong>STOMP</strong>—giao thức định tuyến tin nhắn dạng Pub/Sub: Client gửi tin
+            lên endpoint <code>/app/chat.sendMessage</code>; và lắng nghe tin nhắn theo phòng tại kênh
+            <code>/topic/rooms.{roomId}</code>.<br>
+            Nhìn vào <strong>bảng so sánh ở giữa</strong>: WebSocket đưa độ trễ từ 2–3 giây về mức mili-giây tức thời và tiết
+            kiệm tối đa CPU máy chủ. Dự án sử dụng bộ <strong>Simple Broker</strong> tích hợp sẵn của Spring Boot để phân
+            phối tin nhắn cực nhanh trên RAM!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 13: KỸ THUẬT KẾT NỐI & XÁC THỰC WEBSOCKET STOMP
+         ================================================================== -->
+    <section class="slide" data-slide="13" data-title="13. Kỹ Thuật WebSocket">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag">PHẦN 6 • GIAO TIẾP THỜI GIAN THỰC</span>
+            <h2 class="slide-title">Kỹ Thuật Kết Nối & Xác Thực WebSocket STOMP</h2>
+            <p class="slide-subtitle">Quy trình bắt tay Handshake, Bộ chặn ChannelInterceptor xác thực JWT và Cơ chế chống
+              giả mạo</p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="gap:12px; margin-bottom:8px;">
+          <!-- Cột 1: 3 Bước Kết Nối & Auth -->
+          <div class="card highlight" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem; justify-content:space-between;">
+              <span><span class="card-icon">🔌</span> 1. Quy Trình Bắt Tay & Xác Thực JWT (3 Bước)</span>
+              <span class="pill pill-teal" style="font-size:0.63rem;">Frame CONNECT</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:4px; font-size:0.7rem; line-height:1.35;">
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-teal);">• Bước 1 — Handshake:</strong> Client gọi <code>GET /ws-chat</code>.
+                Server nâng cấp giao thức HTTP sang WebSocket qua mã <strong>HTTP 101 Switching Protocols</strong>.
+              </div>
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:#0284C7;">• Bước 2 — Frame STOMP CONNECT:</strong> Client gửi frame STOMP đầu tiên đính
+                kèm JWT Bearer Token trong header.
+              </div>
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid var(--accent-coral); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-coral);">• Bước 3 — ChannelInterceptor:</strong> Lớp chặn <code>preSend()</code>
+                giải mã token, kiểm tra hạn và gắn đối tượng xác thực vào phiên qua <code>accessor.setUser(auth)</code>.
+              </div>
+            </div>
+          </div>
+
+          <!-- Cột 2: Cơ Chế Pub/Sub & Chống Giả Mạo -->
+          <div class="card highlight-coral" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem; justify-content:space-between;">
+              <span><span class="card-icon coral">💬</span> 2. Cơ Chế Pub/Sub & Bảo Mật Danh Tính</span>
+              <span class="pill pill-coral" style="font-size:0.63rem;">@MessageMapping</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:4px; font-size:0.7rem; line-height:1.35;">
+              <div>• <strong>Lắng nghe (SUBSCRIBE):</strong> Client gửi <code>SUBSCRIBE /topic/rooms.{roomId}</code> để nhận tin tức thời.</div>
+              <div>• <strong>Gửi tin (SEND):</strong> Client gửi lên <code>/app/chat.sendMessage</code>. Body chỉ chứa nội dung và mã phòng.</div>
+              <div style="background:var(--accent-coral-light); border:1px solid var(--accent-coral-border); border-radius:var(--radius-sm); padding:4px 8px;">
+                <strong style="color:var(--accent-coral);">🔒 Chống giả mạo 100%:</strong> Controller tự động trích xuất
+                danh tính người gửi trực tiếp từ <strong>Principal</strong> của phiên kết nối. Client <strong>tuyệt đối không
+                  được tự truyền senderId</strong>!
+              </div>
+              <div>• <strong>Lưu trữ & Bắn tin:</strong> Lưu vào PostgreSQL (<code>chat_messages</code>) ➔ Bắn tin qua
+                <code>messagingTemplate</code>.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-project-apply" style="margin-top:0; margin-bottom:8px;">
+          <strong>💡 Mô hình kết hợp chuẩn doanh nghiệp (REST + WebSocket):</strong> Khi vừa mở khung chat, ứng dụng gọi REST
+          API để tải lịch sử trò chuyện cũ từ PostgreSQL. Sau đó, ứng dụng mở kết nối WebSocket STOMP để truyền nhận các tin nhắn
+          mới tức thời!
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Do kết nối WebSocket không truyền header HTTP trên từng tin nhắn, em xử lý xác thực theo <strong>3 bước chuẩn công
+              nghiệp ở cột bên trái</strong>:<br>
+            <strong>Bước 1:</strong> Client gửi yêu cầu Handshake nâng cấp kết nối HTTP sang WebSocket qua mã <code>HTTP 101
+              Switching Protocols</code>.<br>
+            <strong>Bước 2:</strong> Client gửi frame STOMP CONNECT đầu tiên đính kèm JWT Bearer Token.<br>
+            <strong>Bước 3:</strong> Lớp chặn <code>WebSocketAuthChannelInterceptor</code> giải mã token, kiểm tra tính hợp lệ và
+            gắn đối tượng xác thực vào phiên qua <code>accessor.setUser()</code>.<br>
+            Ở <strong>cột bên phải - Điểm mấu chốt về an ninh</strong>: Khi gửi tin nhắn, người dùng không được phép tự truyền
+            senderId. Controller tự động trích xuất danh tính trực tiếp từ <strong>Principal</strong> của phiên, loại bỏ 100%
+            rủi ro mạo danh người khác để gửi tin nhắn rác!<br>
+            Và ở <strong>khung dưới cùng</strong>: Khi mở khung chat, ứng dụng gọi REST API để tải lịch sử cũ từ DB, sau đó mở
+            WebSocket để truyền nhận tin mới tức thời!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 14: TỔNG KẾT TOÀN BỘ HỆ THỐNG & HỎI ĐÁP (Q&A)
+         ================================================================== -->
+    <section class="slide" data-slide="14" data-title="14. Tổng Kết & Q&A">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag">TỔNG KẾT BÁO CÁO</span>
+            <h2 class="slide-title">Tổng Kết Toàn Bộ Hệ Thống & Hỏi Đáp (Q&A)</h2>
+            <p class="slide-subtitle">Bức tranh toàn cảnh 4 khối công nghệ phân tán và 3 bài học lớn đúc kết sau đồ án</p>
+          </div>
+        </div>
+
+        <!-- 4 Khối Công Nghệ Tổng Thể -->
+        <div class="card highlight" style="margin-bottom:10px; padding:10px 12px;">
+          <div
+            style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); margin-bottom:6px;">
+            MÔ HÌNH TỔNG THỂ 4 KHỐI CÔNG NGHỆ PHÂN TÁN ĐÃ XÂY DỰNG
+          </div>
+          <div class="grid-4" style="font-size:0.73rem; gap:8px;">
+            <div
+              style="background:var(--bg-canvas); padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+              <strong style="color:var(--text-main);">1. Đóng gói & Vận hành:</strong><br>
+              Docker Compose quản lý đồng bộ 8 container, Image JRE 21 siêu nhẹ, Volume giữ dữ liệu.
+            </div>
+            <div
+              style="background:var(--bg-canvas); padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+              <strong style="color:var(--accent-coral);">2. Cửa ngõ Gateway:</strong><br>
+              Spring Cloud Gateway (:8080) Netty Reactive, Single Entry, Global CORS.
+            </div>
+            <div
+              style="background:var(--bg-canvas); padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+              <strong style="color:var(--accent-teal);">3. Bảo vệ & Bộ nhớ RAM:</strong><br>
+              Spring Security JWT Stateless, Dual-Token, Redis phòng vệ Brute-force & Cache.
+            </div>
+            <div
+              style="background:var(--bg-canvas); padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+              <strong style="color:var(--accent-navy);">4. Giao tiếp phân tán:</strong><br>
+              Kafka Outbox chống mất event và WebSocket STOMP chat realtime hai chiều.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:8px;">
+          <!-- 3 Bài Học Lớn -->
+          <div class="card" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:4px; font-size:0.84rem;"><span class="card-icon">🎓</span> 3 Bài Học
+              Lớn Em Đạt Được</div>
+            <div class="card-desc" style="display:flex; flex-direction:column; gap:4px; font-size:0.72rem;">
+              <div>1. <strong>Tư duy kiến trúc đúng đắn:</strong> Phân định rõ ràng giữa Đồng bộ (REST), Bất đồng bộ (Kafka) và
+                Realtime (WebSocket).</div>
+              <div>2. <strong>Bảo mật theo chiều sâu:</strong> Bảo vệ nhiều lớp từ Gateway, Filter Chain đến bộ đệm RAM.</div>
+              <div>3. <strong>Tính bền vững hệ thống:</strong> Đảm bảo nhất quán dữ liệu bằng Outbox Pattern và sẵn sàng chịu
+                lỗi (Graceful Degradation).</div>
+            </div>
+          </div>
+
+          <!-- Q&A Box -->
+          <div class="card highlight-coral"
+            style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:12px;">
+            <div style="font-size:1.6rem; margin-bottom:2px;">💬</div>
+            <h3 style="font-size:1.2rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">HỎI VÀ ĐÁP (Q&A)</h3>
+            <p style="font-size:0.77rem; color:var(--text-muted); margin-bottom:8px;">
+              Em đã chuẩn bị sẵn demo thực tế và rất mong nhận được câu hỏi phản biện, đóng góp quý báu từ Thầy Cô!
+            </p>
+            <div style="display:inline-flex; gap:6px;">
+              <span class="pill pill-teal">Demo Postman</span>
+              <span class="pill pill-coral">Console Log Kafka</span>
+              <span class="pill pill-teal">Chat WebSocket Realtime</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Read Along Box Directly On Slide -->
+        <div class="read-along-card">
+          <span class="read-badge">🎙️ Lời Đọc A-Z:</span>
+          <div class="read-text">
+            "Tóm lại, dự án đã giúp em nắm vững việc phối hợp các công nghệ phân tán trên <strong>4 khối công nghệ ở trên
+              cùng</strong>: Từ đóng gói container chuẩn hóa với Docker, định tuyến tại Gateway, bảo mật stateless bằng JWT,
+            tăng tốc bộ đệm với Redis, đảm bảo tính nhất quán dữ liệu bằng Kafka Outbox, cho đến giao tiếp realtime bằng
+            WebSocket.<br>
+            <strong>3 bài học lớn nhất em tích lũy được là:</strong> Tư duy kiến trúc đúng đắn; Bảo mật theo chiều sâu; và
+            Thiết kế hệ thống luôn sẵn sàng chịu lỗi.<br>
+            Em xin chân thành cảm ơn Thầy Cô và các bạn đã chú ý lắng nghe. Em đã chuẩn bị sẵn kịch bản demo và rất mong nhận
+            được những câu hỏi phản biện từ Thầy Cô!"
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ==================================================================
+       BOTTOM CONTROLLER BAR
+       ================================================================== -->
+  <footer class="bottom-bar">
+    <button class="nav-btn" id="btnPrev" title="Slide trước (←)">‹</button>
+    <div class="slide-counter" id="slideCounter">00 / 14</div>
+    <button class="nav-btn" id="btnNext" title="Slide tiếp (→)">›</button>
+    <div style="height:16px; width:1px; background:var(--border-light); margin:0 2px;"></div>
+    <button class="nav-btn" id="btnToc" title="Mục lục (M)" style="font-size:0.75rem; font-weight:700;">M</button>
+    <button class="nav-btn" id="btnNotes" title="Ghi chú người nói (N)"
+      style="font-size:0.75rem; font-weight:700;">N</button>
+    <button class="nav-btn" id="btnFullscreen" title="Toàn màn hình (F)"
+      style="font-size:0.75rem; font-weight:700;">⛶</button>
+  </footer>
+
+
+  <!-- ==================================================================
+       SPEAKER NOTES DRAWER (N KEY)
+       ================================================================== -->
+  <aside class="speaker-drawer" id="speakerDrawer">
+    <div class="speaker-drawer-header">
+      <div class="speaker-drawer-title">
+        <span>🎙️</span> Lời Thoại Thuyết Trình A-Z (Intern)
+      </div>
+      <button id="btnCloseNotes"
+        style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-dim);">✕</button>
+    </div>
+    <div class="speaker-drawer-body" id="speakerNotesBody">
+      <!-- Injected via JavaScript based on current slide -->
+    </div>
+  </aside>
+
+
+  <!-- ==================================================================
+       TABLE OF CONTENTS MODAL (M KEY)
+       ================================================================== -->
+  <div class="toc-modal-overlay" id="tocModalOverlay">
+    <div class="toc-modal">
+      <div
+        style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:10px;">
+        <div style="font-size:1.05rem; font-weight:800; color:var(--text-main);">Mục Lục 15 Slide Báo Cáo Seminar</div>
+        <button id="btnCloseToc"
+          style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-dim);">✕</button>
+      </div>
+      <div class="toc-grid" id="tocGrid">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================================================================
+       JAVASCRIPT: SLIDE ENGINE & SPEAKER NOTES
+       ================================================================== -->
+  <script>
+    // 15 Complete Speaker Notes Synchronized 1:1 with Slide Content
+    const speakerNotes = [
+      {
+        title: "SLIDE 00: TRANG BÌA (Cover Slide)",
+        duration: "~30 – 45 giây",
+        keyPoints: "Giới thiệu đề tài, quy mô 4 Microservices + 8 Container Docker, 4 tầng công nghệ phân tán.",
+        script: "Kính thưa quý Thầy Cô và các bạn! Hôm nay em xin phép báo cáo seminar chuyên đề: <strong>Kiến Thức Nền Tảng Backend & Áp Dụng Thực Chiến</strong>.<br><br>Trong đề tài này, em đã hiện thực hóa một hệ thống gồm <strong>4 Microservices và 8 container Docker</strong> phối hợp, được chia làm 4 tầng công nghệ như trên slide:<br>• <strong>Tầng 1:</strong> Cửa ngõ điều phối qua <code>Spring Cloud Gateway (:8080)</code>.<br>• <strong>Tầng 2:</strong> Bảo mật phân quyền stateless với <code>Spring Security, JWT</code> và bộ đệm phòng vệ <code>Redis (:6379)</code>.<br>• <strong>Tầng 3:</strong> Vi dịch vụ nghiệp vụ <code>user-service</code> và <code>chat-service</code> với cơ sở dữ liệu riêng biệt.<br>• <strong>Tầng 4:</strong> Giao tiếp bất đồng bộ qua <code>Kafka Outbox</code> và chat realtime qua <code>WebSocket STOMP</code>.<br><br>Em rất mong nhận được những góp ý quý báu từ Thầy Cô!",
+        tip: "Đứng thẳng lưng, nhìn bao quát Hội đồng, bấm phím F trên bàn phím để chuyển sang chế độ toàn màn hình."
+      },
+      {
+        title: "SLIDE 01: MỤC LỤC — 6 CHUYÊN ĐỀ KIẾN THỨC & ỨNG DỤNG",
+        duration: "~40 giây",
+        keyPoints: "Trình bày 6 chuyên đề theo đúng mạch kiến trúc ở chân slide từ đóng gói đến nhắn tin tức thời.",
+        script: "Nội dung báo cáo hôm nay được em xây dựng liền mạch qua <strong>6 chuyên đề</strong> hiển thị trên màn hình:<br><br>• <strong>01. Docker & Container:</strong> Chuẩn hóa môi trường và đóng gói 8 container.<br>• <strong>02. Spring Security & JWT:</strong> Cơ chế xác thực, phân quyền và bảo vệ stateless.<br>• <strong>03. Kiến Trúc Microservices:</strong> Phân tách từ Monolith và chuẩn Database-per-Service.<br>• <strong>04. Apache Kafka & Outbox:</strong> Xử lý bất đồng bộ chịu lỗi và giải quyết bài toán Dual-Write.<br>• <strong>05. Redis In-Memory:</strong> Tăng tốc bộ nhớ đệm RAM và phòng vệ brute-force mật khẩu.<br>• <strong>06. WebSocket & STOMP Chat:</strong> Kênh chat hai chiều thời gian thực giữa Admin và Khách hàng.<br><br>Toàn bộ theo đúng mạch kiến trúc: <em>Đóng gói ➔ Bảo vệ danh tính ➔ Chia nhỏ dịch vụ ➔ Bất đồng bộ ➔ Bộ đệm RAM ➔ Nhắn tin tức thời</em>.",
+        tip: "Chỉ tay theo câu chốt màu vàng ở chân slide từ trái qua phải để thể hiện tư duy liền mạch."
+      },
+      {
+        title: "SLIDE 02: DOCKER LÀ GÌ? BẢN CHẤT & NHU CẦU THỰC TẾ",
+        duration: "~1 phút",
+        keyPoints: "3 thẻ: ⚠️ Vấn đề thực tế (8 container) ➔ 📦 Docker giải quyết gì ➔ 🧱 4 Khái niệm (Volume giữ DB).",
+        script: "Ở Slide 2, em trình bày về Docker qua <strong>3 thẻ nội dung</strong> trên màn hình:<br><br>• <strong>1. Vấn Đề Thực Tế (thẻ cam):</strong> Câu nói kinh điển <em>'Trên máy tôi chạy được mà!'</em> do lệch version Java hoặc thư viện hệ điều hành. Dự án của em chạy 4 microservices cùng PostgreSQL, Redis, Kafka và Mailpit—<strong>tổng cộng 8 container</strong>, nếu cài thủ công thì rất dễ lỗi môi trường.<br><br>• <strong>2. Docker Giải Quyết Gì (thẻ xanh giữa):</strong> Docker gom mã nguồn, Java Runtime và cấu hình vào một <strong>Container độc lập</strong>, đảm bảo chạy ở máy dev hay máy chủ production đều đồng nhất 100%.<br><br>• <strong>3. Bốn Khái Niệm Cốt Lõi (thẻ phải):</strong><br>&nbsp;&nbsp;- <code>Image:</code> Bản thiết kế tĩnh chỉ đọc.<br>&nbsp;&nbsp;- <code>Container:</code> Ứng dụng đang chạy thực tế.<br>&nbsp;&nbsp;- <code>Registry:</code> Kho lưu trữ Image như Docker Hub.<br>&nbsp;&nbsp;- <code>Volume:</code> Vùng lưu trữ bền vững bên ngoài. Em dùng Volume <code>postgres_user_data</code> để dù container có tắt thì database vẫn an toàn tuyệt đối.",
+        tip: "Nhìn vào 3 thẻ từ trái sang phải, nhấn mạnh cụm từ '8 container phối hợp' và 'Volume giữ an toàn database'."
+      },
+      {
+        title: "SLIDE 03: TÌM HIỂU VỀ DOCKERFILE: CÔNG DỤNG & CÁCH DÙNG CƠ BẢN",
+        duration: "~1 phút 15 giây",
+        keyPoints: "3 công dụng lớn ở trên ➔ 5 chỉ thị cơ bản (cột trái) ➔ Quy trình 3 bước build/run (cột phải).",
+        script: "Slide 3 là về Dockerfile, em chia thành 3 phần rất trực quan:<br><br>• <strong>Hàng trên - Ba công dụng của Dockerfile:</strong><br>1. Đóng gói mã nguồn file <code>.jar</code> và Java Runtime thành một Image duy nhất.<br>2. Chạy ở đâu cũng giống nhau, xóa bỏ lỗi lệch môi trường.<br>3. Tự động hóa cài đặt chỉ bằng một câu lệnh <code>docker build</code>.<br><br>• <strong>Cột trái - Cách dùng với 5 chỉ thị cơ bản:</strong><br>- <code>FROM:</code> Chọn môi trường nền Java 21 nhẹ.<br>- <code>WORKDIR:</code> Đặt thư mục làm việc nội bộ <code>/app</code>.<br>- <code>COPY:</code> Chép file jar vào container và đổi tên thành <code>app.jar</code>.<br>- <code>EXPOSE:</code> Mở cổng <code>8081</code> để nhận request.<br>- <code>ENTRYPOINT:</code> Lệnh chạy ứng dụng: <code>java -jar app.jar</code>.<br><br>• <strong>Cột phải - Quy trình 3 bước:</strong> Viết <strong>Dockerfile</strong> ➔ Gõ <code>docker build</code> tạo <strong>Docker Image</strong> ➔ Gõ <code>docker run</code> để bật thành <strong>Container</strong> đang chạy.<br><em>Phân biệt dễ nhớ: Image là chiếc khuôn bánh, Container là chiếc bánh được tạo ra.</em>",
+        tip: "Đưa mắt từ thanh ngang công dụng trên cùng, rồi nhìn cột trái chỉ 5 chỉ thị, sau đó nhìn cột phải chỉ quy trình 3 bước."
+      },
+      {
+        title: "SLIDE 04: DOCKER COMPOSE: CHẠY & QUẢN LÝ NHIỀU CONTAINER",
+        duration: "~1 phút 15 giây",
+        keyPoints: "3 giá trị Compose ở trên ➔ Các thành phần trong file YAML (cột trái) ➔ Các lệnh CLI thường dùng (cột phải).",
+        script: "Khi số lượng lên tới 8 container, em dùng Docker Compose để quản lý tập trung:<br><br>• <strong>Ba giá trị thiết thực (hàng trên):</strong><br>1. Khởi chạy toàn bộ 8 container cùng lúc chỉ bằng 1 câu lệnh.<br>2. Tự động kết nối mạng nội bộ: Backend gọi thẳng sang Database bằng tên <code>postgres:5432</code> mà không cần mò IP tĩnh.<br>3. Quản lý tập trung thứ tự chạy và theo dõi toàn bộ hệ thống tại một nơi.<br><br>• <strong>Các thành phần trong file YAML (cột trái):</strong><br>- <code>services:</code> Khai báo danh sách container (backend, postgres).<br>- <code>ports:</code> Mở cổng ra ngoài máy thật (<code>8080:8080</code>).<br>- <code>environment:</code> Cài đặt biến môi trường kết nối database.<br>- <code>volumes:</code> Gắn ổ đĩa <code>postgres_data</code> giữ an toàn dữ liệu.<br>- <code>depends_on:</code> Chỉ định backend đợi postgres chạy xong mới bật lên.<br><br>• <strong>Các lệnh thường dùng nhất (cột phải):</strong><br>- Chạy ngầm tất cả: <code>docker compose up -d</code>.<br>- Build lại khi sửa code: <code>docker compose up --build -d</code>.<br>- Xem trạng thái: <code>docker compose ps</code>.<br>- Xem log gỡ lỗi: <code>docker compose logs -f backend</code>.",
+        tip: "Chỉ tay vào chữ postgres:5432 trong khung code YAML để chứng minh hai container đã tự động kết nối mạng nội bộ."
+      },
+      {
+        title: "SLIDE 05: SPRING SECURITY: AUTHENTICATION & AUTHORIZATION",
+        duration: "~1 phút 30 giây",
+        keyPoints: "Sơ đồ luồng 4 bước ở trên ➔ Phân biệt AuthN vs AuthZ (cột trái) ➔ Ví dụ cấu hình SecurityConfig (cột phải).",
+        script: "Bước sang Phần 2 về Bảo mật với Spring Security:<br><br>• <strong>Nhìn vào sơ đồ luồng 4 bước ở trên cùng:</strong><br>1. Client gửi request.<br>2. Đi qua chuỗi <strong>SecurityFilterChain</strong> để kiểm tra.<br>3. <strong>Xác thực danh tính (Authentication):</strong> Nếu sai thông tin từ chối ngay với mã <strong>HTTP 401</strong>; nếu đúng sẽ nạp vào <code>SecurityContextHolder</code>.<br>4. <strong>Kiểm tra phân quyền (Authorization):</strong> Nếu đúng Role thì Controller xử lý; nếu tài khoản User cố vào trang Admin sẽ bị chặn với mã <strong>HTTP 403 Forbidden</strong>.<br><br>• <strong>Cột trái - Phân định rõ 2 khái niệm:</strong><br>- <em>Authentication:</em> 'Bạn là ai?' qua email và mật khẩu.<br>- <em>Authorization:</em> 'Bạn được phép làm gì?' qua quyền Role.<br><em>Ví dụ: Đăng nhập thành công nhưng vào trang Admin bị chặn ➔ Xác thực thành công nhưng phân quyền thất bại (403).</em><br><br>• <strong>Cột phải - Ví dụ cấu hình SecurityConfig:</strong><br>- <code>permitAll():</code> Cho phép truy cập công khai không cần đăng nhập.<br>- <code>hasRole(\"ADMIN\"):</code> Bắt buộc phải có quyền Admin.<br>- <code>authenticated():</code> Bắt buộc người dùng phải đăng nhập hợp lệ.",
+        tip: "Chỉ tay qua 4 hộp số 1 ➔ 2 ➔ 3 ➔ 4 ở sơ đồ luồng ngang trên cùng trước, rồi đọc 3 lệnh cấu hình ở cột phải."
+      },
+      {
+        title: "SLIDE 06: JSON WEB TOKEN: CẤU TRÚC 3 PHẦN & CHIẾN LƯỢC DUAL-TOKEN",
+        duration: "~1 phút 30 giây",
+        keyPoints: "Cấu trúc 3 phần Header.Payload.Signature (cột trái) ➔ Bảng so sánh Access vs Refresh Token (cột phải).",
+        script: "Để bảo mật stateless trong hệ thống microservices, em sử dụng JWT:<br><br>• <strong>Cột trái - Cấu trúc 3 phần nối bằng dấu chấm:</strong><br>- <strong>1. Header (màu hồng):</strong> Khai báo thuật toán ký, ví dụ <code>HS256</code>.<br>- <strong>2. Payload (màu xanh):</strong> Chứa thông tin người dùng như <code>userId</code>, <code>roles</code>, <code>exp</code>. Lưu ý: Payload chỉ là encode Base64URL nên ai cũng đọc được, tuyệt đối không lưu mật khẩu ở đây!<br>- <strong>3. Signature (màu xanh ngọc):</strong> Là chữ ký số tạo từ SecretKey. Nếu hacker tự sửa role từ USER lên ADMIN trong Payload, chữ ký sẽ sai lệch ngay và server từ chối lập tức.<br><br>• <strong>Cột phải - Bảng so sánh chiến lược Dual-Token:</strong><br>- <strong>Access Token:</strong> Sống ngắn <strong>15 phút</strong>, hoàn toàn stateless không lưu DB, dùng để gọi API hàng ngày qua Header <code>Bearer</code>.<br>- <strong>Refresh Token:</strong> Sống dài <strong>7 ngày</strong>, lưu bản băm trong Database. Khi Access Token hết hạn, ứng dụng tự động gửi Refresh Token để đổi cặp token mới mà người dùng không bị văng ra đăng nhập lại.",
+        tip: "Trỏ tay vào chuỗi JWT 3 màu (hồng, xanh dương, xanh ngọc) ở cột trái, rồi chuyển sang bảng so sánh ở cột phải."
+      },
+      {
+        title: "SLIDE 07: MICROSERVICES: PHÂN RÃ KIẾN TRÚC & 3 LỢI ÍCH CỐT LÕI",
+        duration: "~1 phút 15 giây",
+        keyPoints: "Monolith sập dây chuyền ➔ 3 lợi ích Microservices ➔ Bảng so sánh chuẩn Database-per-Service (dự án 4 service).",
+        script: "Sang Phần 3 về Thiết kế hệ thống, em phân rã kiến trúc từ Monolith sang Microservices:<br><br>• <strong>Hạn chế của Monolith (thẻ cam trên):</strong> Tất cả tính năng đóng chung một file jar và dùng chung 1 Database. Nguy hiểm nhất là chỉ cần module Chat bị nghẽn bộ nhớ thì tính năng Đăng nhập hay Thanh toán cũng sập theo!<br><br>• <strong>3 Lợi ích cốt lõi của Microservices (thẻ xanh trên):</strong><br>1. <strong>Cách ly lỗi:</strong> Chat-service có bị lỗi thì User-service vẫn vận hành bình thường.<br>2. <strong>Triển khai độc lập:</strong> Cập nhật phòng chat không cần deploy lại toàn bộ hệ thống.<br>3. <strong>Mở rộng linh hoạt:</strong> Lượng chat tăng vọt thì chỉ cần nhân bản riêng container chat-service.<br><br>• <strong>Bảng so sánh & Áp dụng thực tế trong dự án:</strong><br>Em áp dụng chuẩn <strong>Database-per-Service</strong>: <code>user-service</code> có database riêng (<code>users_db</code>), <code>chat-service</code> có database riêng (<code>chat_db</code>). Toàn bộ hệ thống gồm 4 service độc lập được điều phối tập trung qua <code>api-gateway</code> ở cổng 8080.",
+        tip: "Nhấn mạnh lợi ích 'Cách ly lỗi' và cụm từ 'Database-per-Service' trên bảng so sánh."
+      },
+      {
+        title: "SLIDE 08: GIAO TIẾP GIỮA CÁC SERVICE: SYNC REST VS ASYNC KAFKA",
+        duration: "~1 phút 15 giây",
+        keyPoints: "Đồng bộ REST API (trái) ➔ Bất đồng bộ Kafka (phải) ➔ Khung Cây quyết định kiến trúc ở dưới.",
+        script: "Khi chia nhỏ thành nhiều service, slide 8 giải quyết bài toán các service nói chuyện với nhau thế nào:<br><br>• <strong>Hàng trên - Hai cơ chế giao tiếp:</strong><br>- <strong>Đồng bộ qua REST API (thẻ bên trái):</strong> Gửi request và phải chờ phản hồi mới chạy tiếp. Dùng khi cần kết quả ngay để hiển thị màn hình. <em>Ví dụ dự án: Khi mở khung chat, chat-service gọi HTTP sang user-service lấy tên và avatar khách hàng.</em><br>- <strong>Bất đồng bộ qua Apache Kafka (thẻ bên phải):</strong> Bắn sự kiện vào hàng đợi rồi tiếp tục ngay lập tức. Bên nhận tạm chết thì tin nhắn vẫn nằm an toàn trên Kafka. <em>Ví dụ dự án: Khách đăng ký xong, user-service bắn event vào Kafka để service khác gửi email ngầm.</em><br><br>• <strong>Khung Cây Quyết Định ở hàng dưới (rất dễ nhớ):</strong><br>- <em>Cần kết quả tức thì để hiển thị cho người dùng</em> ➔ <strong>DÙNG REST API</strong>.<br>- <em>Tác vụ tốn thời gian, chạy ngầm</em> ➔ <strong>DÙNG KAFKA EVENT</strong>.",
+        tip: "Tay trái chỉ ô REST, tay phải chỉ ô Kafka, rồi chốt lại ở 2 khung màu xanh và cam ở Cây quyết định bên dưới."
+      },
+      {
+        title: "SLIDE 09: APACHE KAFKA: NỀN TẢNG MESSAGE BROKER PHÂN TÁN",
+        duration: "~1 phút",
+        keyPoints: "Sơ đồ luồng bắn sự kiện user-events ➔ 4 Thẻ thành phần (Producer, Consumer, Topic, Broker) ➔ Tính chịu lỗi.",
+        script: "Đi sâu vào Phần 4 về Xử lý bất đồng bộ, công cụ em sử dụng là **Apache Kafka**:<br><br>• <strong>Sơ đồ luồng hoạt động ở trên cùng:</strong><br>- <strong>Producer:</strong> Là <code>user-service</code>, khi khách đăng ký sẽ bắn sự kiện <code>UserRegisteredEvent</code>.<br>- <strong>Topic:</strong> Là <code>user-events</code>. Em gán <code>Key = userId</code>, đảm bảo mọi sự kiện của cùng 1 user sẽ luôn vào cùng một Partition để giữ đúng thứ tự thời gian.<br>- <strong>Consumer:</strong> Là <code>notification-service</code>, kéo sự kiện về và gửi email kích hoạt qua SMTP.<br><br>• <strong>Bốn khái niệm cốt lõi ở hàng giữa:</strong> <code>Producer</code> (ứng dụng gửi), <code>Consumer</code> (ứng dụng nhận), <code>Topic</code> (kênh phân loại), và <code>Broker</code> (máy chủ lưu log sự kiện bền vững trên ổ đĩa).<br><br>• <strong>Vì sao dùng Kafka thay vì gọi HTTP trực tiếp (khung cam dưới)?</strong><br>Vì tính chịu lỗi cao: Nếu máy chủ email bị quá tải hoặc rớt mạng 15 phút, sự kiện đăng ký vẫn nằm an toàn trên Kafka chờ xử lý sau, khách hàng đăng ký tài khoản hoàn toàn không bị gián đoạn hay báo lỗi!",
+        tip: "Đọc dứt khoát câu trả lời ở khung màu cam dưới cùng để khẳng định độ bền vững của hệ thống."
+      },
+      {
+        title: "SLIDE 10: TRANSACTIONAL OUTBOX PATTERN & IDEMPOTENT CONSUMER",
+        duration: "~1 phút 30 giây",
+        keyPoints: "❌ Vấn đề Dual-Write ➔ 💎 Giải pháp Outbox (cùng 1 DB Transaction) ➔ Sơ đồ 4 bước hoạt động.",
+        script: "Đây là một điểm kỹ thuật rất quan trọng của bài báo cáo: Giải quyết bài toán Dual-Write.<br><br>• <strong>Hàng trên - Vấn đề và Giải pháp:</strong><br>- <em>Vấn đề Dual-Write (thẻ đỏ):</em> Nếu lưu User vào Database xong mới gọi lệnh gửi Kafka, lỡ mạng rớt thì User đã tạo nhưng email không bao giờ được gửi. Ngược lại, nếu gửi Kafka trước mà DB bị rollback thì lại gửi email cho một tài khoản ảo!<br>- <em>Giải pháp Outbox Pattern (thẻ xanh):</em> Lưu User và Sự kiện vào bảng <code>outbox_events</code> trong <strong>CÙNG 1 DATABASE TRANSACTION</strong>. Cả hai cùng thành công hoặc cùng rollback!<br><br>• <strong>Quy trình 4 bước ở sơ đồ giữa slide:</strong><br>- <strong>Bước 1:</strong> Ghi đồng thời User và Outbox Event vào PostgreSQL trong cùng 1 Transaction.<br>- <strong>Bước 2:</strong> Một Scheduler định kỳ quét bảng Outbox mỗi 2 giây, áp dụng lệnh <code>FOR UPDATE SKIP LOCKED</code> để các instance không tranh chấp dữ liệu.<br>- <strong>Bước 3:</strong> Đẩy message lên Kafka thành công thì đổi trạng thái sang <code>PROCESSED</code>.<br>- <strong>Bước 4:</strong> Ở phía nhận, dùng <strong>Idempotent Consumer</strong> kiểm tra <code>eventId</code>, nếu đã xử lý rồi thì bỏ qua, chống hoàn toàn việc gửi trùng lặp email cho khách.",
+        tip: "Chỉ tay từ dấu X đỏ (Dual-Write) sang viên kim cương xanh (Outbox), rồi lần lượt qua 4 bước 1 ➔ 2 ➔ 3 ➔ 4."
+      },
+      {
+        title: "SLIDE 11: REDIS: SỨC MẠNH IN-MEMORY, CẤU TRÚC DỮ LIỆU & SO SÁNH POSTGRESQL",
+        duration: "~1 phút 15 giây",
+        keyPoints: "4 Lợi ích Redis (cột 1) ➔ 5 Kiểu dữ liệu (cột 2) ➔ Bảng so sánh PostgreSQL vs Redis (hàng dưới).",
+        script: "Bước sang Phần 5 về Bộ nhớ đệm và Tốc độ với Redis:<br><br>• <strong>Cột 1 bên trái - Bốn lợi ích thiết thực trong dự án:</strong><br>1. Tốc độ truy xuất siêu tốc <strong>sub-millisecond</strong> nhờ lưu hoàn toàn trên RAM.<br>2. <strong>Giảm tải cho PostgreSQL</strong> bằng cách làm lớp Cache đệm cho thông tin hồ sơ người dùng.<br>3. <strong>Cơ chế tự hủy TTL sau 15 phút</strong>, tự động dọn rác mà không cần viết cronjob thủ công.<br>4. <strong>Phòng vệ Brute-force mật khẩu:</strong> Dùng lệnh nguyên tử <code>INCR</code> trên RAM để chặn đứng các đợt dò pass trước khi request chạm vào Database.<br><br>• <strong>Cột 2 bên phải - Các kiểu dữ liệu Redis:</strong> Hỗ trợ từ <code>String</code> (chuỗi JSON, đếm login), <code>Hash</code> (lưu object nhiều trường), <code>List</code> (hàng đợi tác vụ), đến <code>Set</code> (lưu danh sách token bị thu hồi).<br><br>• <strong>Bảng so sánh ở hàng dưới - Triết lý thiết kế:</strong><br>- <strong>PostgreSQL</strong> lưu trên ổ cứng làm <em>Nguồn chân lý (Source of Truth)</em> đảm bảo an toàn dữ liệu chuẩn ACID.<br>- Còn <strong>Redis</strong> lưu trên RAM làm <em>lớp đệm tốc độ và dựng tường lửa phòng vệ ở cửa ngõ</em>!",
+        tip: "Nhấn mạnh vai trò kép của Redis: Vừa làm Cache tăng tốc, vừa dùng lệnh INCR + TTL để phòng vệ bảo mật."
+      },
+      {
+        title: "SLIDE 12: WEBSOCKET & STOMP: CHAT REALTIME ADMIN – USER",
+        duration: "~1 phút 15 giây",
+        keyPoints: "Vấn đề HTTP Polling (trái) ➔ Giải pháp WebSocket + STOMP (phải) ➔ Bảng so sánh độ trễ mili-giây.",
+        script: "Sang Phần 6 là tính năng Chat thời gian thực giữa Khách hàng và Admin:<br><br>• <strong>Hàng trên - Vấn đề và Giải pháp:</strong><br>- <em>Hạn chế của HTTP (thẻ bên trái):</em> HTTP chỉ có cơ chế Client hỏi thì Server mới trả lời. Nếu dùng Polling thì trình duyệt phải liên tục gửi request hỏi <em>'Có tin mới không?'</em> mỗi 2 giây, sinh ra hàng ngàn request rỗng làm nghẽn máy chủ và tốn băng thông.<br>- <em>Giải pháp WebSocket & STOMP (thẻ bên phải):</em> Em dùng <strong>WebSocket</strong> mở một kết nối hai chiều <strong>Full-Duplex</strong> duy nhất. Server có thể chủ động đẩy tin mới xuống client tức thì. Kết hợp với <strong>STOMP</strong> để định tuyến:<br>&nbsp;&nbsp;+ Kênh gửi tin lên: <code>/app/chat.sendMessage</code>.<br>&nbsp;&nbsp;+ Kênh nhận tin theo phòng: <code>/topic/rooms.{roomId}</code>.<br><br>• <strong>Nhìn vào bảng so sánh ở giữa slide:</strong> WebSocket giảm độ trễ từ 2–3 giây xuống còn vài mili-giây và cực kỳ tiết kiệm CPU, băng thông mạng. Dự án sử dụng <strong>In-Memory Simple Broker</strong> tích hợp sẵn của Spring Boot để phân phối tin nhắn cực nhanh trên RAM.",
+        tip: "Chỉ tay vào bảng so sánh làm nổi bật sự khác biệt giữa Polling (hỏi liên tục, trễ 2-3s) và WebSocket (đẩy tức thời, mili-giây)."
+      },
+      {
+        title: "SLIDE 13: KỸ THUẬT KẾT NỐI & XÁC THỰC WEBSOCKET STOMP",
+        duration: "~1 phút 30 giây",
+        keyPoints: "Quy trình bắt tay 3 bước (cột 1) ➔ Cơ chế Pub/Sub & Chống giả mạo Principal (cột 2) ➔ Băng kết hợp REST + Socket.",
+        script: "Đi sâu vào chi tiết kỹ thuật của WebSocket ở slide 13:<br><br>• <strong>Cột 1 bên trái - Quy trình 3 bước bắt tay & xác thực JWT:</strong><br>- <em>Bước 1 (Handshake):</em> Client gọi <code>GET /ws-chat</code>, server nâng cấp giao thức qua mã <strong>HTTP 101 Switching Protocols</strong>.<br>- <em>Bước 2 (STOMP CONNECT):</em> Client gửi frame STOMP đầu tiên đính kèm JWT Bearer Token trong header.<br>- <em>Bước 3 (ChannelInterceptor):</em> Bộ chặn tại backend giải mã token, kiểm tra hợp lệ và gắn danh tính người dùng vào phiên qua lệnh <code>accessor.setUser(auth)</code>.<br><br>• <strong>Cột 2 bên phải - Cơ chế Pub/Sub & Chống giả mạo danh tính:</strong><br>- Client đăng ký nhận tin theo phòng: <code>SUBSCRIBE /topic/rooms.{roomId}</code>.<br>- Client gửi tin lên: <code>/app/chat.sendMessage</code>. <strong>Điểm mấu chốt về an ninh:</strong> Controller tự động lấy <code>senderId</code> trực tiếp từ <code>Principal</code> của phiên kết nối. Client <strong>tuyệt đối không được tự truyền senderId</strong> để loại bỏ 100% rủi ro mạo danh người khác!<br><br>• <strong>Băng ngang dưới - Mô hình kết hợp chuẩn doanh nghiệp:</strong> Khi mở khung chat, ứng dụng gọi REST API để lấy lịch sử tin nhắn cũ từ PostgreSQL, sau đó mới mở WebSocket STOMP để truyền nhận tin mới tức thời.",
+        tip: "Nhấn mạnh câu: 'Client tuyệt đối không được tự truyền senderId, server tự trích xuất từ Principal' để ghi điểm bảo mật."
+      },
+      {
+        title: "SLIDE 14: TỔNG KẾT TOÀN BỘ HỆ THỐNG & HỎI ĐÁP (Q&A)",
+        duration: "~1 phút",
+        keyPoints: "4 khối công nghệ phân tán (trên) ➔ 3 bài học lớn đạt được (trái dưới) ➔ Sẵn sàng demo & trả lời Q&A (phải dưới).",
+        script: "Để tổng kết lại toàn bộ bài seminar chuyên đề:<br><br>• <strong>Nhìn vào 4 khối công nghệ ở hàng trên, em đã hiện thực hóa trọn vẹn một hệ thống phân tán:</strong><br>1. <em>Đóng gói & Vận hành:</em> Docker Compose quản lý đồng bộ 8 container.<br>2. <em>Cửa ngõ Gateway:</em> Spring Cloud Gateway cổng 8080 làm điểm vào duy nhất.<br>3. <em>Bảo vệ & Bộ nhớ RAM:</em> Spring Security JWT Stateless kết hợp Redis phòng vệ brute-force và Cache hồ sơ.<br>4. <em>Giao tiếp phân tán:</em> Kafka Outbox chống mất event và WebSocket STOMP chat realtime hai chiều.<br><br>• <strong>Ba bài học lớn em tích lũy được (khung bên dưới):</strong><br>1. <strong>Tư duy kiến trúc:</strong> Phân định rõ ràng giữa Đồng bộ (REST), Bất đồng bộ (Kafka) và Realtime (WebSocket).<br>2. <strong>Bảo mật theo chiều sâu:</strong> Bảo vệ nhiều lớp từ Gateway, Filter Chain đến bộ đệm RAM.<br>3. <strong>Tính bền vững hệ thống:</strong> Đảm bảo nhất quán dữ liệu bằng Outbox Pattern và sẵn sàng chịu lỗi.<br><br>Em xin chân thành cảm ơn quý Thầy Cô đã chú ý lắng nghe. Em đã chuẩn bị sẵn kịch bản demo và rất mong nhận được câu hỏi phản biện từ Thầy Cô!",
+        tip: "Cúi chào nhẹ nhàng, giữ nụ cười tự tin, sẵn sàng chuyển sang màn hình demo hoặc mở tab Postman/giao diện web."
+      }
+    ];
+
+    // Core Presentation Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('slidesContainer');
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const totalSlides = slides.length;
+
+      const progressBar = document.getElementById('progressBar');
+      const slideCounter = document.getElementById('slideCounter');
+      const sideNavDots = document.getElementById('sideNavDots');
+      const tocGrid = document.getElementById('tocGrid');
+
+      const btnPrev = document.getElementById('btnPrev');
+      const btnNext = document.getElementById('btnNext');
+      const btnToc = document.getElementById('btnToc');
+      const btnCloseToc = document.getElementById('btnCloseToc');
+      const tocModalOverlay = document.getElementById('tocModalOverlay');
+
+      const btnNotes = document.getElementById('btnNotes');
+      const btnCloseNotes = document.getElementById('btnCloseNotes');
+      const speakerDrawer = document.getElementById('speakerDrawer');
+      const speakerNotesBody = document.getElementById('speakerNotesBody');
+      const btnFullscreen = document.getElementById('btnFullscreen');
+
+      let currentSlide = 0;
+      let isThrottling = false;
+
+      // Build Navigation Dots & TOC Modal
+      slides.forEach((slide, index) => {
+        const title = slide.getAttribute('data-title') || `Slide ${index}`;
+
+        // Side dot
+        const dot = document.createElement('div');
+        dot.className = `dot-item ${index === 0 ? 'active' : ''}`;
+        dot.title = `${title}`;
+        dot.addEventListener('click', () => goToSlide(index));
+        sideNavDots.appendChild(dot);
+
+        // TOC Item
+        const tocItem = document.createElement('div');
+        tocItem.className = 'toc-item';
+        tocItem.innerHTML = `
+          <div class="toc-num">SLIDE ${String(index).padStart(2, '0')}</div>
+          <div class="toc-title">${title}</div>
+        `;
+        tocItem.addEventListener('click', () => {
+          goToSlide(index);
+          closeToc();
+        });
+        tocGrid.appendChild(tocItem);
+      });
+
+      // Jump to slide function
+      window.goToSlide = function (index) {
+        if (index < 0 || index >= totalSlides) return;
+        currentSlide = index;
+        slides[index].scrollIntoView({ behavior: 'smooth' });
+        updateUI(index);
+      };
+
+      function updateUI(index) {
+        // Slide counter
+        slideCounter.textContent = `${String(index).padStart(2, '0')} / ${String(totalSlides - 1).padStart(2, '0')}`;
+
+        // Progress bar
+        const percent = totalSlides > 1 ? (index / (totalSlides - 1)) * 100 : 0;
+        progressBar.style.width = `${percent}%`;
+
+        // Side dots
+        const allDots = sideNavDots.querySelectorAll('.dot-item');
+        allDots.forEach((d, i) => d.classList.toggle('active', i === index));
+
+        // Speaker Notes
+        const note = speakerNotes[index] || { title: `Slide ${index}`, duration: '', keyPoints: '', script: 'Đang cập nhật ghi chú.', tip: '' };
+        speakerNotesBody.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:8px;">
+            <strong style="color:var(--accent-coral); font-size:0.95rem; line-height:1.3;">${note.title}</strong>
+            ${note.duration ? `<span class="pill pill-coral" style="font-size:0.7rem; font-weight:700; white-space:nowrap;">⏱️ ${note.duration}</span>` : ''}
+          </div>
+
+          ${note.keyPoints ? `
+          <div style="background:var(--accent-teal-light); border-left:3px solid var(--accent-teal); padding:9px 12px; border-radius:0 var(--radius-sm) var(--radius-sm) 0; font-size:0.78rem; line-height:1.45; color:var(--text-main); margin-bottom:12px;">
+            <strong style="color:var(--accent-teal); display:block; margin-bottom:2px; text-transform:uppercase; font-size:0.7rem; letter-spacing:0.5px;">🎯 Ý Chính Cốt Lõi:</strong>
+            ${note.keyPoints}
+          </div>` : ''}
+
+          <div class="speaker-script-box" style="margin-bottom:12px;">
+            <div style="font-size:0.7rem; font-weight:700; color:var(--accent-coral); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">🎙️ Lời Thoại Mẫu (Đọc Liền Mạch):</div>
+            <div style="font-size:0.84rem; line-height:1.6; color:var(--text-main);">${note.script}</div>
+          </div>
+
+          <div style="background:var(--bg-canvas); padding:10px 12px; border-radius:var(--radius-sm); font-size:0.78rem; color:var(--text-muted); border:1px solid var(--border-light); line-height:1.45;">
+            <strong style="color:var(--accent-teal); display:block; margin-bottom:3px; text-transform:uppercase; font-size:0.7rem; letter-spacing:0.5px;">💡 Mẹo Khi Nói & Chỉ Slide:</strong>
+            ${note.tip || 'Nhấn mạnh vào vấn đề thực tế gặp phải trước khi nói về giải pháp công nghệ.'}
+          </div>
+        `;
+      }
+
+      updateUI(0);
+
+      // Intersection Observer for scroll
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const idx = parseInt(entry.target.getAttribute('data-slide'), 10);
+            currentSlide = idx;
+            updateUI(idx);
+          }
+        });
+      }, { root: container, threshold: 0.55 });
+
+      slides.forEach(s => observer.observe(s));
+
+      // Mouse Wheel Listener with Throttling
+      window.addEventListener('wheel', (e) => {
+        if (speakerDrawer.classList.contains('open') && speakerDrawer.contains(e.target)) return;
+        if (tocModalOverlay.classList.contains('open')) return;
+        if (isThrottling) return;
+
+        if (Math.abs(e.deltaY) > 28) {
+          isThrottling = true;
+          if (e.deltaY > 0) {
+            goToSlide(currentSlide + 1);
+          } else {
+            goToSlide(currentSlide - 1);
+          }
+          setTimeout(() => { isThrottling = false; }, 450);
+        }
+      }, { passive: false });
+
+      // Buttons
+      if (btnPrev) btnPrev.addEventListener('click', () => goToSlide(currentSlide - 1));
+      if (btnNext) btnNext.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+      // TOC Modal
+      function openToc() { tocModalOverlay.classList.add('open'); }
+      function closeToc() { tocModalOverlay.classList.remove('open'); }
+      window.toggleToc = function () { tocModalOverlay.classList.toggle('open'); };
+      if (btnToc) btnToc.addEventListener('click', toggleToc);
+      if (btnCloseToc) btnCloseToc.addEventListener('click', closeToc);
+      tocModalOverlay.addEventListener('click', (e) => {
+        if (e.target === tocModalOverlay) closeToc();
+      });
+
+      // Speaker Notes
+      function toggleNotes() { speakerDrawer.classList.toggle('open'); }
+      if (btnNotes) btnNotes.addEventListener('click', toggleNotes);
+      if (btnCloseNotes) btnCloseNotes.addEventListener('click', () => speakerDrawer.classList.remove('open'));
+
+      // Fullscreen
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => { });
+        } else {
+          if (document.exitFullscreen) document.exitFullscreen();
+        }
+      }
+      if (btnFullscreen) btnFullscreen.addEventListener('click', toggleFullscreen);
+
+      // Keyboard Shortcuts
+      window.addEventListener('keydown', (e) => {
+        if (tocModalOverlay.classList.contains('open')) {
+          if (e.key === 'Escape') closeToc();
+          return;
+        }
+
+        switch (e.key) {
+          case 'ArrowRight':
+          case 'ArrowDown':
+          case 'PageDown':
+          case ' ':
+            e.preventDefault();
+            goToSlide(currentSlide + 1);
+            break;
+          case 'ArrowLeft':
+          case 'ArrowUp':
+          case 'PageUp':
+            e.preventDefault();
+            goToSlide(currentSlide - 1);
+            break;
+          case 'Home':
+            e.preventDefault();
+            goToSlide(0);
+            break;
+          case 'End':
+            e.preventDefault();
+            goToSlide(totalSlides - 1);
+            break;
+          case 'f':
+          case 'F':
+            e.preventDefault();
+            toggleFullscreen();
+            break;
+          case 'n':
+          case 'N':
+            e.preventDefault();
+            toggleNotes();
+            break;
+          case 'm':
+          case 'M':
+            e.preventDefault();
+            toggleToc();
+            break;
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
