@@ -21,34 +21,45 @@
        ========================================================================== */
     :root {
       /* Backgrounds */
-      --bg-canvas: #F8F7F2;          /* Trắng ngà / kem nhạt */
-      --bg-surface: #FFFFFF;         /* Trắng tinh khôi cho Card */
-      --bg-subtle: #F0EFEA;          /* Nền xám kem nhẹ */
+      --bg-canvas: #F8F7F2;
+      /* Trắng ngà / kem nhạt */
+      --bg-surface: #FFFFFF;
+      /* Trắng tinh khôi cho Card */
+      --bg-subtle: #F0EFEA;
+      /* Nền xám kem nhẹ */
       --bg-tag: #EBE9E1;
 
       /* Primary & Text */
-      --text-main: #202B3C;          /* Xanh navy đậm quý phái */
-      --text-muted: #5A677B;         /* Xám xanh trung tính */
-      --text-dim: #8896A6;           /* Xám nhạt chú thích */
+      --text-main: #202B3C;
+      /* Xanh navy đậm quý phái */
+      --text-muted: #5A677B;
+      /* Xám xanh trung tính */
+      --text-dim: #8896A6;
+      /* Xám nhạt chú thích */
 
       /* Accents */
-      --accent-teal: #287C78;        /* Teal công nghệ thanh lịch (Chính) */
+      --accent-teal: #287C78;
+      /* Teal công nghệ thanh lịch (Chính) */
       --accent-teal-light: #EBF5F4;
       --accent-teal-border: #BCE2DF;
 
-      --accent-coral: #E58B68;       /* Cam san hô ấm áp (Nhấn mạnh/Cảnh báo) */
+      --accent-coral: #E58B68;
+      /* Cam san hô ấm áp (Nhấn mạnh/Cảnh báo) */
       --accent-coral-light: #FCF1EC;
       --accent-coral-border: #F5CEBE;
 
-      --accent-navy: #1E3A5F;        /* Navy bổ trợ kiến trúc */
+      --accent-navy: #1E3A5F;
+      /* Navy bổ trợ kiến trúc */
       --accent-navy-light: #EEF3F8;
 
-      --accent-sage: #4E8752;        /* Xanh lá thảo mộc (Thành công) */
+      --accent-sage: #4E8752;
+      /* Xanh lá thảo mộc (Thành công) */
       --accent-sage-light: #EFF6F0;
       --accent-sage-border: #C8E3CB;
 
       /* Borders & Shadows */
-      --border-light: #E5E3DC;       /* Viền thẻ mảnh tinh tế */
+      --border-light: #E5E3DC;
+      /* Viền thẻ mảnh tinh tế */
       --border-focus: #287C78;
       --shadow-sm: 0 2px 6px -1px rgba(32, 43, 60, 0.04), 0 1px 3px rgba(32, 43, 60, 0.02);
       --shadow-card: 0 6px 18px -3px rgba(32, 43, 60, 0.05), 0 2px 6px -1px rgba(32, 43, 60, 0.02);
@@ -70,7 +81,8 @@
       padding: 0;
     }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       height: 100%;
       overflow: hidden;
@@ -88,7 +100,7 @@
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      background-image: 
+      background-image:
         radial-gradient(rgba(32, 43, 60, 0.04) 1px, transparent 1px);
       background-size: 32px 32px;
       opacity: 0.7;
@@ -107,6 +119,7 @@
       z-index: 1;
       scrollbar-width: none;
     }
+
     .slides-container::-webkit-scrollbar {
       display: none;
     }
@@ -141,6 +154,7 @@
         opacity: 0;
         transform: translateY(12px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -226,6 +240,7 @@
       transition: all 0.2s ease;
       position: relative;
     }
+
     .card:hover {
       box-shadow: var(--shadow-card);
       border-color: #D3D0C6;
@@ -264,6 +279,7 @@
       font-weight: 800;
       flex-shrink: 0;
     }
+
     .card-icon.coral {
       background: var(--accent-coral-light);
       color: var(--accent-coral);
@@ -285,12 +301,15 @@
       color: var(--text-main);
       line-height: 1.4;
     }
+
     .card-project-apply.coral {
       border-left-color: var(--accent-coral);
     }
+
     .card-project-apply strong {
       color: var(--accent-teal);
     }
+
     .card-project-apply.coral strong {
       color: var(--accent-coral);
     }
@@ -307,6 +326,7 @@
       overflow: hidden;
       border: 1px solid var(--border-light);
     }
+
     .editorial-table th {
       background: var(--bg-subtle);
       color: var(--text-main);
@@ -318,15 +338,18 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+
     .editorial-table td {
       padding: 8px 12px;
       border-bottom: 1px solid var(--border-light);
       color: var(--text-muted);
       vertical-align: top;
     }
+
     .editorial-table tr:last-child td {
       border-bottom: none;
     }
+
     .editorial-table tr:hover td {
       background: #FAF9F5;
     }
@@ -363,10 +386,12 @@
       flex-direction: column;
       justify-content: center;
     }
+
     .flow-step-box.active {
       border-color: var(--accent-teal);
       background: var(--accent-teal-light);
     }
+
     .flow-step-box.coral {
       border-color: var(--accent-coral);
       background: var(--accent-coral-light);
@@ -380,6 +405,7 @@
       text-transform: uppercase;
       margin-bottom: 2px;
     }
+
     .flow-step-box.coral .flow-step-num {
       color: var(--accent-coral);
     }
@@ -420,10 +446,12 @@
       line-height: 1.45;
       overflow-x: auto;
     }
+
     .code-hl {
       color: #38BDF8;
       font-weight: 600;
     }
+
     .code-cm {
       color: #94A3B8;
       font-style: italic;
@@ -438,11 +466,13 @@
       font-family: var(--font-mono);
       font-weight: 600;
     }
+
     .pill-teal {
       background: var(--accent-teal-light);
       color: var(--accent-teal);
       border: 1px solid var(--accent-teal-border);
     }
+
     .pill-coral {
       background: var(--accent-coral-light);
       color: var(--accent-coral);
@@ -456,6 +486,7 @@
       gap: 14px;
       align-items: stretch;
     }
+
     .phone-preview-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-light);
@@ -467,10 +498,12 @@
       align-items: center;
       transition: all 0.2s ease;
     }
+
     .phone-preview-card:hover {
       box-shadow: var(--shadow-card);
       border-color: var(--accent-teal);
     }
+
     .phone-preview-header {
       width: 100%;
       display: flex;
@@ -480,6 +513,7 @@
       padding-bottom: 6px;
       border-bottom: 1px dashed var(--border-light);
     }
+
     .phone-preview-title {
       font-size: 0.78rem;
       font-weight: 700;
@@ -488,6 +522,7 @@
       align-items: center;
       gap: 5px;
     }
+
     .phone-preview-img-box {
       width: 100%;
       border-radius: 12px;
@@ -497,8 +532,9 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.25);
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
     }
+
     .phone-preview-img-box img {
       max-height: 335px;
       width: auto;
@@ -551,6 +587,7 @@
       font-size: 0.8rem;
       transition: all 0.15s ease;
     }
+
     .nav-btn:hover {
       background: var(--accent-teal);
       color: #FFF;
@@ -566,6 +603,7 @@
       background: rgba(40, 124, 120, 0.12);
       z-index: 1000;
     }
+
     .progress-bar {
       height: 100%;
       width: 0%;
@@ -584,6 +622,7 @@
       gap: 6px;
       z-index: 90;
     }
+
     .dot-item {
       width: 7px;
       height: 7px;
@@ -592,10 +631,12 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
+
     .dot-item.active {
       background: var(--accent-teal);
       transform: scale(1.5);
     }
+
     .dot-item:hover {
       background: var(--accent-coral);
     }
@@ -618,9 +659,11 @@
       flex-direction: column;
       padding: 24px;
     }
+
     .speaker-drawer.open {
       transform: translateX(0);
     }
+
     .speaker-drawer-header {
       display: flex;
       justify-content: space-between;
@@ -629,6 +672,7 @@
       padding-bottom: 10px;
       border-bottom: 1px solid var(--border-light);
     }
+
     .speaker-drawer-title {
       font-size: 1rem;
       font-weight: 700;
@@ -637,6 +681,7 @@
       align-items: center;
       gap: 6px;
     }
+
     .speaker-drawer-body {
       flex: 1;
       overflow-y: auto;
@@ -644,6 +689,7 @@
       color: var(--text-main);
       line-height: 1.6;
     }
+
     .speaker-script-box {
       background: var(--bg-canvas);
       border-left: 3px solid var(--accent-coral);
@@ -664,9 +710,11 @@
       justify-content: center;
       padding: 24px;
     }
+
     .toc-modal-overlay.open {
       display: flex;
     }
+
     .toc-modal {
       background: #FFFFFF;
       border-radius: var(--radius-lg);
@@ -679,6 +727,7 @@
       border: 1px solid var(--border-light);
       padding: 24px;
     }
+
     .toc-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -687,6 +736,7 @@
       margin-top: 14px;
       padding-right: 4px;
     }
+
     .toc-item {
       padding: 10px 12px;
       border-radius: var(--radius-sm);
@@ -695,16 +745,19 @@
       cursor: pointer;
       transition: all 0.15s ease;
     }
+
     .toc-item:hover {
       background: var(--accent-teal-light);
       border-color: var(--accent-teal-border);
     }
+
     .toc-num {
       font-family: var(--font-mono);
       font-weight: 700;
       font-size: 0.72rem;
       color: var(--accent-teal);
     }
+
     .toc-title {
       font-size: 0.8rem;
       font-weight: 600;
@@ -716,7 +769,9 @@
 
 <body>
   <div class="bg-grid-overlay"></div>
-  <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
   <div class="side-nav-dots" id="sideNavDots"></div>
 
   <!-- SLIDES MAIN CONTAINER -->
@@ -730,84 +785,110 @@
         <div style="display:grid; grid-template-columns: 1.25fr 0.95fr; gap: 40px; align-items:center;">
           <!-- Left Column -->
           <div>
-            <div style="display:inline-flex; align-items:center; gap:8px; padding:4px 12px; background:var(--accent-teal-light); border:1px solid var(--accent-teal-border); border-radius:30px; font-size:0.75rem; font-weight:700; color:var(--accent-teal); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px;">
+            <div
+              style="display:inline-flex; align-items:center; gap:8px; padding:4px 12px; background:var(--accent-teal-light); border:1px solid var(--accent-teal-border); border-radius:30px; font-size:0.75rem; font-weight:700; color:var(--accent-teal); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px;">
               <span>🎓</span> Báo Cáo Seminar Đồ Án Chuyên Đề
             </div>
-            <h1 style="font-size: 2.7rem; font-weight:800; color:var(--text-main); line-height: 1.15; letter-spacing:-0.03em; margin-bottom:14px;">
+            <h1
+              style="font-size: 2.7rem; font-weight:800; color:var(--text-main); line-height: 1.15; letter-spacing:-0.03em; margin-bottom:14px;">
               Kiến Thức Nền Tảng <br>
               <span style="color:var(--accent-teal); position:relative;">
                 Backend & Áp Dụng
               </span>
               <span style="color:var(--accent-coral);">Thực Chiến</span>
             </h1>
-            <p style="font-size: 1.02rem; color:var(--text-muted); line-height:1.55; margin-bottom: 24px; max-width: 540px;">
-              Hành trình kiến tạo hệ thống vi dịch vụ hoàn chỉnh: Từ đóng gói container, bảo mật phân quyền stateless, giao tiếp bất đồng bộ chịu lỗi đến nhắn tin hai chiều thời gian thực.
+            <p
+              style="font-size: 1.02rem; color:var(--text-muted); line-height:1.55; margin-bottom: 24px; max-width: 540px;">
+              Hành trình kiến tạo hệ thống vi dịch vụ hoàn chỉnh: Từ đóng gói container, bảo mật phân quyền stateless,
+              giao tiếp bất đồng bộ chịu lỗi đến nhắn tin hai chiều thời gian thực.
             </p>
 
-            <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:14px 18px; box-shadow:var(--shadow-sm); display:flex; justify-content:space-between; align-items:center; max-width: 500px;">
+            <div
+              style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:14px 18px; box-shadow:var(--shadow-sm); display:flex; justify-content:space-between; align-items:center; max-width: 500px;">
               <div>
-                <div style="font-size:0.72rem; text-transform:uppercase; color:var(--text-dim); font-weight:700; letter-spacing:0.05em;">Người Trình Bày</div>
-                <div style="font-size:0.92rem; font-weight:700; color:var(--text-main);">Sinh viên thực hiện (Intern Java)</div>
+                <div
+                  style="font-size:0.72rem; text-transform:uppercase; color:var(--text-dim); font-weight:700; letter-spacing:0.05em;">
+                  Người Trình Bày</div>
+                <div style="font-size:0.92rem; font-weight:700; color:var(--text-main);">Sinh viên thực hiện (Intern
+                  Java)</div>
               </div>
               <div style="height:28px; width:1px; background:var(--border-light);"></div>
               <div>
-                <div style="font-size:0.72rem; text-transform:uppercase; color:var(--text-dim); font-weight:700; letter-spacing:0.05em;">Hệ Thống Thực Tế</div>
-                <div style="font-size:0.92rem; font-weight:700; color:var(--accent-teal);">4 Microservices + Docker</div>
+                <div
+                  style="font-size:0.72rem; text-transform:uppercase; color:var(--text-dim); font-weight:700; letter-spacing:0.05em;">
+                  Hệ Thống Thực Tế</div>
+                <div style="font-size:0.92rem; font-weight:700; color:var(--accent-teal);">4 Microservices + Docker
+                </div>
               </div>
             </div>
 
             <div style="display:flex; gap:10px; margin-top:20px;">
-              <button onclick="goToSlide(1)" style="padding:10px 22px; background:var(--accent-teal); color:#FFF; font-weight:700; font-size:0.86rem; border:none; border-radius:var(--radius-sm); cursor:pointer; box-shadow:0 4px 12px rgba(40,124,120,0.25);">
+              <button onclick="goToSlide(1)"
+                style="padding:10px 22px; background:var(--accent-teal); color:#FFF; font-weight:700; font-size:0.86rem; border:none; border-radius:var(--radius-sm); cursor:pointer; box-shadow:0 4px 12px rgba(40,124,120,0.25);">
                 Bắt Đầu Thuyết Trình ➔
               </button>
-              <button onclick="toggleToc()" style="padding:10px 18px; background:var(--bg-surface); color:var(--text-main); font-weight:600; font-size:0.86rem; border:1px solid var(--border-light); border-radius:var(--radius-sm); cursor:pointer;">
+              <button onclick="toggleToc()"
+                style="padding:10px 18px; background:var(--bg-surface); color:var(--text-main); font-weight:600; font-size:0.86rem; border:1px solid var(--border-light); border-radius:var(--radius-sm); cursor:pointer;">
                 Xem Mục Lục (M)
               </button>
             </div>
           </div>
 
           <!-- Right Column: Clean Editorial Architecture Preview -->
-          <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-lg); padding:24px; box-shadow:var(--shadow-card);">
-            <div style="font-size:0.76rem; font-weight:700; text-transform:uppercase; color:var(--text-dim); letter-spacing:0.06em; margin-bottom:12px; display:flex; justify-content:space-between;">
+          <div
+            style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-lg); padding:24px; box-shadow:var(--shadow-card);">
+            <div
+              style="font-size:0.76rem; font-weight:700; text-transform:uppercase; color:var(--text-dim); letter-spacing:0.06em; margin-bottom:12px; display:flex; justify-content:space-between;">
               <span>Sơ Đồ Phân Tầng Công Nghệ</span>
               <span class="pill pill-teal">Spring Boot 3.x</span>
             </div>
 
             <div style="display:flex; flex-direction:column; gap:9px;">
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
                 <div>
                   <div style="font-size:0.8rem; font-weight:700; color:var(--accent-navy);">1. Cửa Ngõ & Điều Phối</div>
-                  <div style="font-size:0.72rem; color:var(--text-muted)">Spring Cloud Gateway (:8080) • Cổng vào duy nhất</div>
+                  <div style="font-size:0.72rem; color:var(--text-muted)">Spring Cloud Gateway (:8080) • Cổng vào duy
+                    nhất</div>
                 </div>
                 <span class="pill pill-teal">Single Entry</span>
               </div>
 
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
                 <div>
-                  <div style="font-size:0.8rem; font-weight:700; color:var(--accent-teal);">2. Bảo Mật & Bộ Đệm RAM</div>
-                  <div style="font-size:0.72rem; color:var(--text-muted)">Spring Security 6 • JWT Stateless • Redis (:6379)</div>
+                  <div style="font-size:0.8rem; font-weight:700; color:var(--accent-teal);">2. Bảo Mật & Bộ Đệm RAM
+                  </div>
+                  <div style="font-size:0.72rem; color:var(--text-muted)">Spring Security 6 • JWT Stateless • Redis
+                    (:6379)</div>
                 </div>
                 <span class="pill pill-coral">Phòng Vệ Brute-force</span>
               </div>
 
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
                 <div>
                   <div style="font-size:0.8rem; font-weight:700; color:var(--text-main);">3. Vi Dịch Vụ Nghiệp Vụ</div>
-                  <div style="font-size:0.72rem; color:var(--text-muted)">user-service (:8081) • chat-service (:8083) • DB riêng</div>
+                  <div style="font-size:0.72rem; color:var(--text-muted)">user-service (:8081) • chat-service (:8083) •
+                    DB riêng</div>
                 </div>
                 <span class="pill pill-teal">Database-per-Service</span>
               </div>
 
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
                 <div>
-                  <div style="font-size:0.8rem; font-weight:700; color:var(--accent-coral);">4. Bất Đồng Bộ & Realtime</div>
-                  <div style="font-size:0.72rem; color:var(--text-muted)">Kafka Outbox (:9092) • WebSocket STOMP (/ws-chat)</div>
+                  <div style="font-size:0.8rem; font-weight:700; color:var(--accent-coral);">4. Bất Đồng Bộ & Realtime
+                  </div>
+                  <div style="font-size:0.72rem; color:var(--text-muted)">Kafka Outbox (:9092) • WebSocket STOMP
+                    (/ws-chat)</div>
                 </div>
                 <span class="pill pill-coral">Eventual Consistency</span>
               </div>
             </div>
 
-            <div style="margin-top:14px; padding-top:10px; border-top:1px dashed var(--border-light); font-size:0.72rem; color:var(--text-dim); text-align:center;">
+            <div
+              style="margin-top:14px; padding-top:10px; border-top:1px dashed var(--border-light); font-size:0.72rem; color:var(--text-dim); text-align:center;">
               Đóng gói và vận hành đồng bộ trên <strong>Docker Compose</strong> (8 container độc lập)
             </div>
           </div>
@@ -825,7 +906,8 @@
           <div>
             <span class="slide-category-tag">LỘ TRÌNH BÁO CÁO</span>
             <h2 class="slide-title">Mục Lục: 7 Chuyên Đề Kiến Thức &amp; Ứng Dụng</h2>
-            <p class="slide-subtitle">Mạch tư duy liền mạch từ tầng hạ tầng đóng gói, backend phân tán đến mobile app độc lập</p>
+            <p class="slide-subtitle">Mạch tư duy liền mạch từ tầng hạ tầng đóng gói, backend phân tán đến mobile app
+              độc lập</p>
           </div>
         </div>
 
@@ -851,7 +933,8 @@
         <div class="grid-3">
           <div class="card highlight-coral" onclick="goToSlide(10)" style="cursor:pointer">
             <div class="card-title"><span class="card-icon coral">05</span> Redis In-Memory</div>
-            <p class="card-desc">Bộ nhớ đệm RAM micro-giây, chống Brute-force mật khẩu (TTL 900s) và Cache hồ sơ user.</p>
+            <p class="card-desc">Bộ nhớ đệm RAM micro-giây, chống Brute-force mật khẩu (TTL 900s) và Cache hồ sơ user.
+            </p>
           </div>
           <div class="card highlight-coral" onclick="goToSlide(12)" style="cursor:pointer">
             <div class="card-title"><span class="card-icon coral">06</span> WebSocket &amp; STOMP Chat</div>
@@ -863,9 +946,11 @@
           </div>
         </div>
 
-        <div style="margin-top:14px; background:var(--bg-subtle); border-radius:var(--radius-sm); padding:10px 16px; display:flex; align-items:center; gap:12px; font-size:0.79rem; color:var(--text-main);">
+        <div
+          style="margin-top:14px; background:var(--bg-subtle); border-radius:var(--radius-sm); padding:10px 16px; display:flex; align-items:center; gap:12px; font-size:0.79rem; color:var(--text-main);">
           <span style="font-size:1.1rem;">💡</span>
-          <span><strong>Mạch kiến trúc liền mạch:</strong> <em>Đóng gói ứng dụng ➔ Bảo vệ danh tính ➔ Chia nhỏ dịch vụ ➔ Giao tiếp bất đồng bộ ➔ Tăng tốc & phòng thủ RAM ➔ Nhắn tin tức thời ➔ Mở rộng Mobile App</em>.</span>
+          <span><strong>Mạch kiến trúc liền mạch:</strong> <em>Đóng gói ứng dụng ➔ Bảo vệ danh tính ➔ Chia nhỏ dịch vụ ➔
+              Giao tiếp bất đồng bộ ➔ Tăng tốc & phòng thủ RAM ➔ Nhắn tin tức thời ➔ Mở rộng Mobile App</em>.</span>
         </div>
       </div>
     </section>
@@ -880,7 +965,8 @@
           <div>
             <span class="slide-category-tag">PHẦN 1 • CONTAINER HÓA</span>
             <h2 class="slide-title">Docker Là Gì? Bản Chất & Nhu Cầu Thực Tế</h2>
-            <p class="slide-subtitle">Xóa bỏ rào cản môi trường dev/staging/production và chuẩn hóa đóng gói phần mềm</p>
+            <p class="slide-subtitle">Xóa bỏ rào cản môi trường dev/staging/production và chuẩn hóa đóng gói phần mềm
+            </p>
           </div>
         </div>
 
@@ -889,10 +975,13 @@
           <div class="card">
             <div class="card-title"><span class="card-icon coral">⚠️</span> Vấn Đề Thực Tế</div>
             <p class="card-desc">
-              <strong>"Trên máy tôi chạy được mà!"</strong> (Works on my machine) là nỗi ám ảnh kinh điển. Sự khác biệt giữa Java 17 và 21, thiếu thư viện native trên Linux, cấu hình database khác nhau khiến việc chuyển giao dự án dễ đổ vỡ.
+              <strong>"Trên máy tôi chạy được mà!"</strong> (Works on my machine) là nỗi ám ảnh kinh điển. Sự khác biệt
+              giữa Java 17 và 21, thiếu thư viện native trên Linux, cấu hình database khác nhau khiến việc chuyển giao
+              dự án dễ đổ vỡ.
             </p>
             <div class="card-project-apply coral">
-              <strong>Trong dự án:</strong> Cần chạy 4 backend service, 2 database PostgreSQL, Kafka, Zookeeper và Redis. Cài đặt thủ công từng phần mềm trên máy mới mất hàng giờ và dễ lỗi.
+              <strong>Trong dự án:</strong> Cần chạy 4 backend service, 2 database PostgreSQL, Kafka, Zookeeper và
+              Redis. Cài đặt thủ công từng phần mềm trên máy mới mất hàng giờ và dễ lỗi.
             </div>
           </div>
 
@@ -900,10 +989,13 @@
           <div class="card highlight">
             <div class="card-title"><span class="card-icon">📦</span> Docker Giải Quyết Gì?</div>
             <p class="card-desc">
-              Docker đóng gói toàn bộ: mã nguồn chương trình, Java Runtime (JRE), thư viện phụ thuộc và cấu hình hệ điều hành vào một đơn vị độc lập gọi là <strong>Container</strong>. Chạy ổn định ở bất cứ nơi đâu có Docker Engine.
+              Docker đóng gói toàn bộ: mã nguồn chương trình, Java Runtime (JRE), thư viện phụ thuộc và cấu hình hệ điều
+              hành vào một đơn vị độc lập gọi là <strong>Container</strong>. Chạy ổn định ở bất cứ nơi đâu có Docker
+              Engine.
             </p>
             <div class="card-project-apply">
-              <strong>Lợi ích:</strong> Môi trường đồng nhất 100% giữa máy cá nhân của lập trình viên và máy chủ production.
+              <strong>Lợi ích:</strong> Môi trường đồng nhất 100% giữa máy cá nhân của lập trình viên và máy chủ
+              production.
             </div>
           </div>
 
@@ -911,10 +1003,12 @@
           <div class="card">
             <div class="card-title"><span class="card-icon">🧱</span> 4 Khái Niệm Cốt Lõi</div>
             <div class="card-desc" style="display:flex; flex-direction:column; gap:6px;">
-              <div>• <strong>Image:</strong> Bản thiết kế (blueprint) tĩnh, đóng băng chỉ đọc chứa mã nguồn và môi trường.</div>
+              <div>• <strong>Image:</strong> Bản thiết kế (blueprint) tĩnh, đóng băng chỉ đọc chứa mã nguồn và môi
+                trường.</div>
               <div>• <strong>Container:</strong> Một instance đang thực thi của Image, có thể start/stop/restart.</div>
               <div>• <strong>Registry:</strong> Kho lưu trữ Image (Docker Hub, GitHub Container Registry).</div>
-              <div>• <strong>Volume:</strong> Vùng lưu trữ bền vững gắn ngoài, dữ liệu không mất khi xóa container.</div>
+              <div>• <strong>Volume:</strong> Vùng lưu trữ bền vững gắn ngoài, dữ liệu không mất khi xóa container.
+              </div>
             </div>
             <div class="card-project-apply">
               <strong>Áp dụng:</strong> Dùng Volume <code>postgres_user_data</code> giữ an toàn dữ liệu khách hàng.
@@ -950,25 +1044,32 @@
             <div class="flow-step-box" style="padding:8px 10px;">
               <div class="flow-step-num">BƯỚC 1: ĐẦU VÀO</div>
               <div class="flow-step-name" style="font-size:0.8rem;">Dockerfile + Source Code</div>
-              <div class="flow-step-desc" style="font-size:0.7rem;">Tệp văn bản chứa tập lệnh chỉ dẫn + file JAR / mã nguồn ứng dụng</div>
+              <div class="flow-step-desc" style="font-size:0.7rem;">Tệp văn bản chứa tập lệnh chỉ dẫn + file JAR / mã
+                nguồn ứng dụng</div>
             </div>
             <div class="flow-arrow" style="font-size:0.85rem; flex-direction:column; gap:2px;">
-              <span style="font-size:0.65rem; font-family:var(--font-mono); color:var(--accent-teal); font-weight:700;">docker build</span>
+              <span
+                style="font-size:0.65rem; font-family:var(--font-mono); color:var(--accent-teal); font-weight:700;">docker
+                build</span>
               <span>➔</span>
             </div>
             <div class="flow-step-box active" style="padding:8px 10px;">
               <div class="flow-step-num">BƯỚC 2: ĐÓNG GÓI</div>
               <div class="flow-step-name" style="font-size:0.8rem;">Docker Image (Bản đóng băng)</div>
-              <div class="flow-step-desc" style="font-size:0.7rem;">Gói tĩnh, chỉ đọc (read-only) chứa ứng dụng, Java Runtime và dependencies</div>
+              <div class="flow-step-desc" style="font-size:0.7rem;">Gói tĩnh, chỉ đọc (read-only) chứa ứng dụng, Java
+                Runtime và dependencies</div>
             </div>
             <div class="flow-arrow" style="font-size:0.85rem; flex-direction:column; gap:2px;">
-              <span style="font-size:0.65rem; font-family:var(--font-mono); color:var(--accent-coral); font-weight:700;">docker run</span>
+              <span
+                style="font-size:0.65rem; font-family:var(--font-mono); color:var(--accent-coral); font-weight:700;">docker
+                run</span>
               <span>➔</span>
             </div>
             <div class="flow-step-box coral" style="padding:8px 10px;">
               <div class="flow-step-num">BƯỚC 3: THỰC THI</div>
               <div class="flow-step-name" style="font-size:0.8rem;">Container (Instance Đang Chạy)</div>
-              <div class="flow-step-desc" style="font-size:0.7rem;">Một tiến trình độc lập, cô lập tài nguyên được tạo ra từ Docker Image</div>
+              <div class="flow-step-desc" style="font-size:0.7rem;">Một tiến trình độc lập, cô lập tài nguyên được tạo
+                ra từ Docker Image</div>
             </div>
           </div>
         </div>
@@ -987,23 +1088,31 @@
               <span class="code-hl" style="color:#C084FC;">WORKDIR</span> /app<br>
               <span class="code-hl" style="color:#C084FC;">COPY</span> target/app.jar app.jar<br>
               <span class="code-hl" style="color:#C084FC;">EXPOSE</span> 8080<br>
-              <span class="code-hl" style="color:#C084FC;">ENTRYPOINT</span> [<span style="color:#A7F3D0;">"java"</span>, <span style="color:#A7F3D0;">"-jar"</span>, <span style="color:#A7F3D0;">"app.jar"</span>]
+              <span class="code-hl" style="color:#C084FC;">ENTRYPOINT</span> [<span
+                style="color:#A7F3D0;">"java"</span>, <span style="color:#A7F3D0;">"-jar"</span>, <span
+                style="color:#A7F3D0;">"app.jar"</span>]
             </div>
 
             <!-- Hướng dẫn cách đọc & cách chạy 2 lệnh -->
-            <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:8px 10px;">
-              <div style="font-size:0.74rem; font-weight:700; color:var(--text-main); margin-bottom:4px; display:flex; justify-content:space-between;">
+            <div
+              style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:8px 10px;">
+              <div
+                style="font-size:0.74rem; font-weight:700; color:var(--text-main); margin-bottom:4px; display:flex; justify-content:space-between;">
                 <span>🛠️ Cách Build Image & Khởi Chạy Container:</span>
                 <span style="font-family:var(--font-mono); font-size:0.68rem; color:var(--accent-teal);">Terminal</span>
               </div>
-              <div class="code-container" style="font-size:0.7rem; padding:6px 10px; margin-bottom:4px; background:#0F172A;">
-                <span style="color:#94A3B8;"># 1. Đọc Dockerfile tại (.) và tạo Image có tên:tag là my-spring-app:1.0</span><br>
+              <div class="code-container"
+                style="font-size:0.7rem; padding:6px 10px; margin-bottom:4px; background:#0F172A;">
+                <span style="color:#94A3B8;"># 1. Đọc Dockerfile tại (.) và tạo Image có tên:tag là
+                  my-spring-app:1.0</span><br>
                 <span class="code-hl">docker build</span> -t my-spring-app:1.0 .<br><br>
-                <span style="color:#94A3B8;"># 2. Khởi chạy Container từ Image, ánh xạ cổng 8080 host sang 8080 container</span><br>
+                <span style="color:#94A3B8;"># 2. Khởi chạy Container từ Image, ánh xạ cổng 8080 host sang 8080
+                  container</span><br>
                 <span class="code-hl">docker run</span> --name my-spring-app -p 8080:8080 my-spring-app:1.0
               </div>
               <div style="font-size:0.71rem; color:var(--text-muted); line-height:1.35;">
-                • <code>-t</code>: Gán tag tên cho Image &nbsp;|&nbsp; <code>.</code>: Build context thư mục hiện tại &nbsp;|&nbsp; <code>-p</code>: Ánh xạ cổng <code>HOST:CONTAINER</code>.
+                • <code>-t</code>: Gán tag tên cho Image &nbsp;|&nbsp; <code>.</code>: Build context thư mục hiện tại
+                &nbsp;|&nbsp; <code>-p</code>: Ánh xạ cổng <code>HOST:CONTAINER</code>.
               </div>
             </div>
           </div>
@@ -1037,13 +1146,16 @@
             </div>
 
             <div class="card-project-apply" style="margin-top:8px; padding:6px 10px; font-size:0.74rem;">
-              <strong>Thứ tự thực thi:</strong> 
-              Khi <code>docker build</code>, Docker thực thi tuần tự từ trên xuống dưới để nung thành các lớp chỉ đọc (Layers). Khi <code>docker run</code>, container kích hoạt và khởi chạy lệnh tại <code>ENTRYPOINT</code>.
+              <strong>Thứ tự thực thi:</strong>
+              Khi <code>docker build</code>, Docker thực thi tuần tự từ trên xuống dưới để nung thành các lớp chỉ đọc
+              (Layers). Khi <code>docker run</code>, container kích hoạt và khởi chạy lệnh tại <code>ENTRYPOINT</code>.
             </div>
 
-            <div style="margin-top:8px; padding:6px 10px; background:var(--bg-canvas); border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.72rem; color:var(--text-muted); line-height:1.35;">
+            <div
+              style="margin-top:8px; padding:6px 10px; background:var(--bg-canvas); border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.72rem; color:var(--text-muted); line-height:1.35;">
               <strong style="color:var(--text-main);">Các chỉ thị phổ biến khác:</strong>
-              <code>RUN</code> (chạy lệnh cài đặt khi build), <code>ENV</code> (đặt biến môi trường), <code>USER</code> (đổi sang non-root user an toàn), <code>CMD</code> (tham số mặc định có thể bị ghi đè).
+              <code>RUN</code> (chạy lệnh cài đặt khi build), <code>ENV</code> (đặt biến môi trường), <code>USER</code>
+              (đổi sang non-root user an toàn), <code>CMD</code> (tham số mặc định có thể bị ghi đè).
             </div>
           </div>
         </div>
@@ -1065,12 +1177,16 @@
         </div>
 
         <!-- Kiến trúc giao tiếp mạng giữa các service -->
-        <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm);">
+        <div
+          style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm);">
           <div style="display:flex; align-items:center; gap:8px; font-size:0.77rem; color:var(--text-main);">
-            <span style="font-weight:700; color:var(--accent-teal); text-transform:uppercase; font-size:0.72rem;">Kiến Trúc Giao Tiếp:</span>
-            <span>Client</span> ➔ <span class="pill pill-teal">Backend (:8080)</span> ➔ <span class="pill pill-coral">PostgreSQL (postgres:5432)</span>
+            <span style="font-weight:700; color:var(--accent-teal); text-transform:uppercase; font-size:0.72rem;">Kiến
+              Trúc Giao Tiếp:</span>
+            <span>Client</span> ➔ <span class="pill pill-teal">Backend (:8080)</span> ➔ <span
+              class="pill pill-coral">PostgreSQL (postgres:5432)</span>
           </div>
-          <span style="font-size:0.71rem; color:var(--text-muted); font-family:var(--font-mono);">Mạng ảo: default (bridge) • DNS nội bộ tự động</span>
+          <span style="font-size:0.71rem; color:var(--text-muted); font-family:var(--font-mono);">Mạng ảo: default
+            (bridge) • DNS nội bộ tự động</span>
         </div>
 
         <div class="grid-2" style="gap:14px;">
@@ -1080,29 +1196,35 @@
               <span><span class="card-icon">🐙</span> Cấu Trúc File <code>docker-compose.yml</code></span>
               <span class="pill pill-teal" style="font-size:0.67rem;">YAML Cú Pháp Chuẩn</span>
             </div>
-            <div class="code-container" style="font-size:0.68rem; line-height:1.38; padding:8px 10px; max-height:330px; overflow-y:auto; margin-bottom:8px;">
+            <div class="code-container"
+              style="font-size:0.68rem; line-height:1.38; padding:8px 10px; max-height:330px; overflow-y:auto; margin-bottom:8px;">
               <span class="code-hl" style="color:#38BDF8;">services:</span><br>
               &nbsp;&nbsp;<span style="color:#FDE047; font-weight:700;">backend:</span><br>
               &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">build:</span> ./backend<br>
               &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">ports:</span><br>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span style="color:#A7F3D0;">"8080:8080"</span><br>
               &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">environment:</span><br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_URL: jdbc:postgresql://<span style="color:#FDE047; font-weight:700;">postgres</span>:5432/todo_db<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_URL: jdbc:postgresql://<span
+                style="color:#FDE047; font-weight:700;">postgres</span>:5432/todo_db<br>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_USERNAME: todo_user<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_PASSWORD: <span style="color:#F472B6;">${DB_PASSWORD}</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_PASSWORD: <span
+                style="color:#F472B6;">${DB_PASSWORD}</span><br>
               &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">depends_on:</span><br>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#FDE047; font-weight:700;">postgres:</span><br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition: <span style="color:#38BDF8; font-weight:700;">service_healthy</span><br><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition: <span
+                style="color:#38BDF8; font-weight:700;">service_healthy</span><br><br>
               &nbsp;&nbsp;<span style="color:#FDE047; font-weight:700;">postgres:</span><br>
               &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">image:</span> postgres:17-alpine<br>
               &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">environment:</span><br>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_DB: todo_db<br>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_USER: todo_user<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_PASSWORD: <span style="color:#F472B6;">${DB_PASSWORD}</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_PASSWORD: <span
+                style="color:#F472B6;">${DB_PASSWORD}</span><br>
               &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">volumes:</span><br>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- postgres_data:/var/lib/postgresql/data<br>
               &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl">healthcheck:</span><br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test: [<span style="color:#A7F3D0;">"CMD-SHELL"</span>, <span style="color:#A7F3D0;">"pg_isready -U todo_user -d todo_db"</span>]<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test: [<span style="color:#A7F3D0;">"CMD-SHELL"</span>, <span
+                style="color:#A7F3D0;">"pg_isready -U todo_user -d todo_db"</span>]<br>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interval: 5s<br>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeout: 3s<br>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retries: 10<br><br>
@@ -1114,16 +1236,21 @@
             </div>
 
             <!-- Các lệnh vận hành Compose -->
-            <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:6px 10px;">
+            <div
+              style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:6px 10px;">
               <div style="font-size:0.71rem; font-weight:700; color:var(--text-main); margin-bottom:3px;">
                 🚀 Lệnh Vận Hành Chính Với Docker Compose:
               </div>
-              <div class="code-container" style="font-size:0.68rem; padding:5px 8px; margin-bottom:3px; background:#0F172A;">
-                <span class="code-hl">docker compose up</span> --build -d  <span style="color:#94A3B8;"># Build lại và khởi chạy nền</span><br>
-                <span class="code-hl">docker compose ps</span>               <span style="color:#94A3B8;"># Xem trạng thái & health của container</span>
+              <div class="code-container"
+                style="font-size:0.68rem; padding:5px 8px; margin-bottom:3px; background:#0F172A;">
+                <span class="code-hl">docker compose up</span> --build -d <span style="color:#94A3B8;"># Build lại và
+                  khởi chạy nền</span><br>
+                <span class="code-hl">docker compose ps</span> <span style="color:#94A3B8;"># Xem trạng thái & health
+                  của container</span>
               </div>
               <div style="font-size:0.69rem; color:var(--text-dim);">
-                <code>--build</code>: Build lại image nếu code thay đổi &nbsp;|&nbsp; <code>-d</code>: Chạy detached ngầm &nbsp;|&nbsp; <code>ps</code>: Kiểm tra trạng thái.
+                <code>--build</code>: Build lại image nếu code thay đổi &nbsp;|&nbsp; <code>-d</code>: Chạy detached
+                ngầm &nbsp;|&nbsp; <code>ps</code>: Kiểm tra trạng thái.
               </div>
             </div>
           </div>
@@ -1137,23 +1264,29 @@
             <div class="card-desc" style="display:flex; flex-direction:column; gap:5px; font-size:0.75rem;">
               <div>
                 <strong style="color:var(--accent-teal); font-family:var(--font-mono);">services:</strong>
-                Định nghĩa các container của ứng dụng (<code>backend</code>, <code>postgres</code>). Tên service cũng chính là Hostname nội bộ.
+                Định nghĩa các container của ứng dụng (<code>backend</code>, <code>postgres</code>). Tên service cũng
+                chính là Hostname nội bộ.
               </div>
               <div>
                 <strong style="color:var(--accent-teal); font-family:var(--font-mono);">build & image:</strong>
-                <code>build: ./backend</code> yêu cầu build từ Dockerfile; còn <code>image</code> kéo trực tiếp từ Docker Hub (PostgreSQL 17).
+                <code>build: ./backend</code> yêu cầu build từ Dockerfile; còn <code>image</code> kéo trực tiếp từ
+                Docker Hub (PostgreSQL 17).
               </div>
               <div>
                 <strong style="color:var(--accent-teal); font-family:var(--font-mono);">ports ("8080:8080"):</strong>
-                Ánh xạ cổng <code>HOST:CONTAINER</code>. Cổng 8080 mở cho Client bên ngoài gọi; còn 5432 của DB được giữ kín trong mạng nội bộ.
+                Ánh xạ cổng <code>HOST:CONTAINER</code>. Cổng 8080 mở cho Client bên ngoài gọi; còn 5432 của DB được giữ
+                kín trong mạng nội bộ.
               </div>
               <div>
-                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">environment & ${DB_PASSWORD}:</strong>
-                Nạp biến môi trường cho container. Dùng biến <code>${DB_PASSWORD}</code> từ file <code>.env</code>, tuyệt đối không hardcode mật khẩu.
+                <strong style="color:var(--accent-teal); font-family:var(--font-mono);">environment &
+                  ${DB_PASSWORD}:</strong>
+                Nạp biến môi trường cho container. Dùng biến <code>${DB_PASSWORD}</code> từ file <code>.env</code>,
+                tuyệt đối không hardcode mật khẩu.
               </div>
               <div>
                 <strong style="color:var(--accent-teal); font-family:var(--font-mono);">volumes:</strong>
-                Gắn ổ đĩa ảo <code>postgres_data</code> để dữ liệu database không bị mất khi container bị tắt hoặc tạo mới.
+                Gắn ổ đĩa ảo <code>postgres_data</code> để dữ liệu database không bị mất khi container bị tắt hoặc tạo
+                mới.
               </div>
               <div>
                 <strong style="color:var(--accent-teal); font-family:var(--font-mono);">networks:</strong>
@@ -1162,21 +1295,33 @@
             </div>
 
             <!-- Các câu lệnh thường dùng với Docker -->
-            <div style="margin-top:6px; padding:7px 10px; background:var(--bg-canvas); border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.71rem;">
-              <div style="font-weight:700; color:var(--text-main); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
+            <div
+              style="margin-top:6px; padding:7px 10px; background:var(--bg-canvas); border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.71rem;">
+              <div
+                style="font-weight:700; color:var(--text-main); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
                 <span>🛠️ CÁC CÂU LỆNH THƯỜNG DÙNG VỚI DOCKER:</span>
                 <span class="pill pill-teal" style="font-size:0.64rem;">CLI Cheat Sheet</span>
               </div>
-              <div style="display:grid; grid-template-columns:1.45fr 1fr; gap:2px 8px; font-size:0.67rem; line-height:1.32;">
-                <div><code>docker ps</code></div><div style="color:var(--text-muted);">Xem container đang chạy</div>
-                <div><code>docker ps -a</code></div><div style="color:var(--text-muted);">Xem tất cả container</div>
-                <div><code>docker run -d --name my-app my-app:1.0</code></div><div style="color:var(--text-muted);">Tạo và chạy container ở chế độ nền</div>
-                <div><code>docker start my-app</code></div><div style="color:var(--text-muted);">Khởi động container đã tồn tại</div>
-                <div><code>docker stop my-app</code></div><div style="color:var(--text-muted);">Dừng container</div>
-                <div><code>docker restart my-app</code></div><div style="color:var(--text-muted);">Khởi động lại container</div>
-                <div><code>docker rm my-app</code></div><div style="color:var(--text-muted);">Xóa container đã dừng</div>
-                <div><code>docker logs my-app</code></div><div style="color:var(--text-muted);">Xem log</div>
-                <div><code>docker logs -f my-app</code></div><div style="color:var(--text-muted);">Theo dõi log liên tục</div>
+              <div
+                style="display:grid; grid-template-columns:1.45fr 1fr; gap:2px 8px; font-size:0.67rem; line-height:1.32;">
+                <div><code>docker ps</code></div>
+                <div style="color:var(--text-muted);">Xem container đang chạy</div>
+                <div><code>docker ps -a</code></div>
+                <div style="color:var(--text-muted);">Xem tất cả container</div>
+                <div><code>docker run -d --name my-app my-app:1.0</code></div>
+                <div style="color:var(--text-muted);">Tạo và chạy container ở chế độ nền</div>
+                <div><code>docker start my-app</code></div>
+                <div style="color:var(--text-muted);">Khởi động container đã tồn tại</div>
+                <div><code>docker stop my-app</code></div>
+                <div style="color:var(--text-muted);">Dừng container</div>
+                <div><code>docker restart my-app</code></div>
+                <div style="color:var(--text-muted);">Khởi động lại container</div>
+                <div><code>docker rm my-app</code></div>
+                <div style="color:var(--text-muted);">Xóa container đã dừng</div>
+                <div><code>docker logs my-app</code></div>
+                <div style="color:var(--text-muted);">Xem log</div>
+                <div><code>docker logs -f my-app</code></div>
+                <div style="color:var(--text-muted);">Theo dõi log liên tục</div>
               </div>
             </div>
           </div>
@@ -1194,7 +1339,8 @@
           <div>
             <span class="slide-category-tag coral">PHẦN 2 • BẢO MẬT & XÁC THỰC</span>
             <h2 class="slide-title">Spring Security: Authentication & Authorization</h2>
-            <p class="slide-subtitle">Khái niệm cốt lõi, luồng xử lý request qua Filter Chain và ví dụ cấu hình SecurityFilterChain</p>
+            <p class="slide-subtitle">Khái niệm cốt lõi, luồng xử lý request qua Filter Chain và ví dụ cấu hình
+              SecurityFilterChain</p>
           </div>
         </div>
 
@@ -1211,15 +1357,17 @@
             <div class="flow-step-box" style="padding:8px 6px; flex:1;">
               <div class="flow-step-num" style="color:var(--accent-coral);">1. CLIENT REQUEST</div>
               <div class="flow-step-name" style="font-size:0.78rem;">Gửi Yêu Cầu</div>
-              <div class="flow-step-desc" style="font-size:0.68rem;">Ví dụ: <code>POST /api/login</code> hoặc <code>GET /api/admin</code></div>
+              <div class="flow-step-desc" style="font-size:0.68rem;">Ví dụ: <code>POST /api/login</code> hoặc
+                <code>GET /api/admin</code></div>
             </div>
             <div class="flow-arrow" style="font-size:0.85rem;">➔</div>
-            
+
             <!-- Bước 2 -->
             <div class="flow-step-box" style="padding:8px 6px; flex:1.1;">
               <div class="flow-step-num" style="color:var(--accent-teal);">2. FILTER CHAIN</div>
               <div class="flow-step-name" style="font-size:0.78rem;">SecurityFilterChain</div>
-              <div class="flow-step-desc" style="font-size:0.68rem;">Chặn bắt request, kiểm tra thông tin xác thực & quy tắc bảo mật</div>
+              <div class="flow-step-desc" style="font-size:0.68rem;">Chặn bắt request, kiểm tra thông tin xác thực & quy
+                tắc bảo mật</div>
             </div>
             <div class="flow-arrow" style="font-size:0.85rem;">➔</div>
 
@@ -1255,8 +1403,10 @@
 
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
               <!-- Authentication -->
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:8px 10px;">
-                <div style="font-size:0.77rem; font-weight:700; color:var(--accent-teal); margin-bottom:3px; display:flex; align-items:center; gap:4px;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:8px 10px;">
+                <div
+                  style="font-size:0.77rem; font-weight:700; color:var(--accent-teal); margin-bottom:3px; display:flex; align-items:center; gap:4px;">
                   <span>👤</span> Authentication (Xác thực)
                 </div>
                 <div style="font-size:0.72rem; color:var(--text-muted); line-height:1.38;">
@@ -1268,8 +1418,10 @@
               </div>
 
               <!-- Authorization -->
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:8px 10px;">
-                <div style="font-size:0.77rem; font-weight:700; color:var(--accent-coral); margin-bottom:3px; display:flex; align-items:center; gap:4px;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:8px 10px;">
+                <div
+                  style="font-size:0.77rem; font-weight:700; color:var(--accent-coral); margin-bottom:3px; display:flex; align-items:center; gap:4px;">
                   <span>🛡️</span> Authorization (Phân quyền)
                 </div>
                 <div style="font-size:0.72rem; color:var(--text-muted); line-height:1.38;">
@@ -1282,18 +1434,22 @@
             </div>
 
             <!-- Câu so sánh nổi bật -->
-            <div class="card-project-apply coral" style="margin-top:0; margin-bottom:8px; padding:6px 10px; font-size:0.72rem;">
+            <div class="card-project-apply coral"
+              style="margin-top:0; margin-bottom:8px; padding:6px 10px; font-size:0.72rem;">
               <div style="font-size:0.76rem; font-weight:800; color:var(--accent-coral); margin-bottom:2px;">
                 ⚖️ SO SÁNH: Authentication = "Bạn là ai?" &nbsp;|&nbsp; Authorization = "Bạn được làm gì?"
               </div>
               <div style="color:var(--text-main); line-height:1.35;">
-                <strong>Ví dụ:</strong> Người dùng đăng nhập thành công nhưng vào trang quản trị bị chặn ➔ <em>Xác thực thành công nhưng phân quyền thất bại</em> (trả HTTP 403 Forbidden).
+                <strong>Ví dụ:</strong> Người dùng đăng nhập thành công nhưng vào trang quản trị bị chặn ➔ <em>Xác thực
+                  thành công nhưng phân quyền thất bại</em> (trả HTTP 403 Forbidden).
               </div>
             </div>
 
             <!-- 4 thành phần Spring Security -->
-            <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:6px 10px; font-size:0.69rem; color:var(--text-muted); line-height:1.35;">
-              <div style="font-weight:700; color:var(--text-main); margin-bottom:3px;">🧩 Các Thành Phần Cốt Lõi Trong Spring Security:</div>
+            <div
+              style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:6px 10px; font-size:0.69rem; color:var(--text-muted); line-height:1.35;">
+              <div style="font-weight:700; color:var(--text-main); margin-bottom:3px;">🧩 Các Thành Phần Cốt Lõi Trong
+                Spring Security:</div>
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px 8px;">
                 <div>• <code>SecurityFilterChain</code>: Khai báo quy tắc lọc</div>
                 <div>• <code>AuthenticationManager</code>: Xử lý xác thực</div>
@@ -1311,16 +1467,25 @@
             </div>
 
             <!-- Code block -->
-            <div class="code-container" style="font-size:0.68rem; line-height:1.38; padding:8px 10px; margin-bottom:6px;">
+            <div class="code-container"
+              style="font-size:0.68rem; line-height:1.38; padding:8px 10px; margin-bottom:6px;">
               <span class="code-hl" style="color:#C084FC;">@Configuration</span><br>
               <span class="code-hl" style="color:#C084FC;">@EnableWebSecurity</span><br>
-              <span class="code-hl" style="color:#38BDF8;">public class</span> <span style="color:#FDE047;">SecurityConfig</span> {<br>
+              <span class="code-hl" style="color:#38BDF8;">public class</span> <span
+                style="color:#FDE047;">SecurityConfig</span> {<br>
               &nbsp;&nbsp;<span class="code-hl" style="color:#C084FC;">@Bean</span><br>
-              &nbsp;&nbsp;<span class="code-hl" style="color:#38BDF8;">public</span> SecurityFilterChain <span style="color:#60A5FA;">securityFilterChain</span>(HttpSecurity http) <span class="code-hl" style="color:#38BDF8;">throws</span> Exception {<br>
+              &nbsp;&nbsp;<span class="code-hl" style="color:#38BDF8;">public</span> SecurityFilterChain <span
+                style="color:#60A5FA;">securityFilterChain</span>(HttpSecurity http) <span class="code-hl"
+                style="color:#38BDF8;">throws</span> Exception {<br>
               &nbsp;&nbsp;&nbsp;&nbsp;http.authorizeHttpRequests(auth -> auth<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.requestMatchers(<span style="color:#A7F3D0;">"/api/public/**"</span>).<span style="color:#FDE047; font-weight:700;">permitAll()</span><br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.requestMatchers(<span style="color:#A7F3D0;">"/api/admin/**"</span>).<span style="color:#FDE047; font-weight:700;">hasRole("ADMIN")</span><br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.anyRequest().<span style="color:#FDE047; font-weight:700;">authenticated()</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.requestMatchers(<span
+                style="color:#A7F3D0;">"/api/public/**"</span>).<span
+                style="color:#FDE047; font-weight:700;">permitAll()</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.requestMatchers(<span
+                style="color:#A7F3D0;">"/api/admin/**"</span>).<span
+                style="color:#FDE047; font-weight:700;">hasRole("ADMIN")</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.anyRequest().<span
+                style="color:#FDE047; font-weight:700;">authenticated()</span><br>
               &nbsp;&nbsp;&nbsp;&nbsp;);<br>
               &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-hl" style="color:#38BDF8;">return</span> http.build();<br>
               &nbsp;&nbsp;}<br>
@@ -1356,8 +1521,11 @@
             </table>
 
             <!-- Lưu ý bổ sung -->
-            <div style="font-size:0.68rem; color:var(--text-muted); line-height:1.32; background:var(--bg-canvas); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-              <strong>💡 Lưu ý:</strong> Đoạn code trên minh họa phân quyền (Authorization). Cơ chế xác thực thực tế phụ thuộc cấu hình JWT Stateless hay Session. Không nên tắt CSRF một cách máy móc nếu ứng dụng dùng xác thực qua Cookie/Session trình duyệt.
+            <div
+              style="font-size:0.68rem; color:var(--text-muted); line-height:1.32; background:var(--bg-canvas); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+              <strong>💡 Lưu ý:</strong> Đoạn code trên minh họa phân quyền (Authorization). Cơ chế xác thực thực tế phụ
+              thuộc cấu hình JWT Stateless hay Session. Không nên tắt CSRF một cách máy móc nếu ứng dụng dùng xác thực
+              qua Cookie/Session trình duyệt.
             </div>
           </div>
         </div>
@@ -1365,7 +1533,7 @@
     </section>
 
 
-        <!-- ==================================================================
+    <!-- ==================================================================
          SLIDE 6: JWT — CẤU TRÚC 3 PHẦN & CHIẾN LƯỢC DUAL-TOKEN
          ================================================================== -->
     <section class="slide" data-slide="6" data-title="JSON Web Token">
@@ -1374,7 +1542,8 @@
           <div>
             <span class="slide-category-tag coral">PHẦN 2 • BẢO MẬT & XÁC THỰC</span>
             <h2 class="slide-title">JSON Web Token: Cấu Trúc 3 Phần & Chiến Lược Dual-Token</h2>
-            <p class="slide-subtitle">Bản chất Stateless, Cơ chế chống giả mạo bằng Chữ ký HMAC-SHA256 và Cặp Access/Refresh Token</p>
+            <p class="slide-subtitle">Bản chất Stateless, Cơ chế chống giả mạo bằng Chữ ký HMAC-SHA256 và Cặp
+              Access/Refresh Token</p>
           </div>
         </div>
 
@@ -1387,31 +1556,45 @@
             </div>
 
             <p class="card-desc" style="font-size:0.73rem; margin-bottom:6px; line-height:1.35;">
-              Ba phần được nối với nhau bằng dấu chấm (<code>.</code>) và mã hóa theo định dạng <strong>Base64URL</strong>.
+              Ba phần được nối với nhau bằng dấu chấm (<code>.</code>) và mã hóa theo định dạng
+              <strong>Base64URL</strong>.
             </p>
 
             <!-- Khối công thức: HEADER . PAYLOAD . SIGNATURE -->
-            <div style="display:flex; align-items:center; justify-content:center; gap:8px; background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:6px 10px; margin-bottom:8px; font-weight:800; font-family:var(--font-mono); font-size:0.74rem;">
-              <span style="color:#FB7185; background:rgba(251,113,133,0.1); padding:2px 8px; border-radius:4px; border:1px solid rgba(251,113,133,0.25);">HEADER</span>
+            <div
+              style="display:flex; align-items:center; justify-content:center; gap:8px; background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:6px 10px; margin-bottom:8px; font-weight:800; font-family:var(--font-mono); font-size:0.74rem;">
+              <span
+                style="color:#FB7185; background:rgba(251,113,133,0.1); padding:2px 8px; border-radius:4px; border:1px solid rgba(251,113,133,0.25);">HEADER</span>
               <span style="color:var(--text-muted); font-size:1.1rem; line-height:1;">.</span>
-              <span style="color:#38BDF8; background:rgba(56,189,248,0.1); padding:2px 8px; border-radius:4px; border:1px solid rgba(56,189,248,0.25);">PAYLOAD</span>
+              <span
+                style="color:#38BDF8; background:rgba(56,189,248,0.1); padding:2px 8px; border-radius:4px; border:1px solid rgba(56,189,248,0.25);">PAYLOAD</span>
               <span style="color:var(--text-muted); font-size:1.1rem; line-height:1;">.</span>
-              <span style="color:#2DD4BF; background:rgba(45,212,191,0.1); padding:2px 8px; border-radius:4px; border:1px solid rgba(45,212,191,0.25);">SIGNATURE</span>
+              <span
+                style="color:#2DD4BF; background:rgba(45,212,191,0.1); padding:2px 8px; border-radius:4px; border:1px solid rgba(45,212,191,0.25);">SIGNATURE</span>
             </div>
 
             <!-- Khung chuỗi JWT thực tế mã hóa màu -->
-            <div class="code-container" style="font-size:0.67rem; line-height:1.36; padding:8px 10px; margin-bottom:8px; background:#0F172A; word-break:break-all;">
-              <span style="color:#FB7185; font-weight:700;">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span><span style="color:#FFFFFF; font-weight:900;">.</span><span style="color:#38BDF8; font-weight:700;">eyJ1c2VySWQiOiIxMjNlNDU2NyIsImVtYWlsIjoidXNlckBleGFtcGxlLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdfQ</span><span style="color:#FFFFFF; font-weight:900;">.</span><span style="color:#2DD4BF; font-weight:700;">SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span>
-              <div style="font-size:0.64rem; color:#94A3B8; margin-top:3px; font-weight:600; font-family:var(--font-mono);">
-                <span style="color:#FB7185;">Header</span>.<span style="color:#38BDF8;">Payload</span>.<span style="color:#2DD4BF;">Signature</span>
+            <div class="code-container"
+              style="font-size:0.67rem; line-height:1.36; padding:8px 10px; margin-bottom:8px; background:#0F172A; word-break:break-all;">
+              <span style="color:#FB7185; font-weight:700;">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span><span
+                style="color:#FFFFFF; font-weight:900;">.</span><span
+                style="color:#38BDF8; font-weight:700;">eyJ1c2VySWQiOiIxMjNlNDU2NyIsImVtYWlsIjoidXNlckBleGFtcGxlLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdfQ</span><span
+                style="color:#FFFFFF; font-weight:900;">.</span><span
+                style="color:#2DD4BF; font-weight:700;">SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span>
+              <div
+                style="font-size:0.64rem; color:#94A3B8; margin-top:3px; font-weight:600; font-family:var(--font-mono);">
+                <span style="color:#FB7185;">Header</span>.<span style="color:#38BDF8;">Payload</span>.<span
+                  style="color:#2DD4BF;">Signature</span>
               </div>
             </div>
 
             <!-- 3 Phần chi tiết theo yêu cầu người dùng -->
             <div style="display:flex; flex-direction:column; gap:6px;">
               <!-- 1. Header -->
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #FB7185; border-radius:var(--radius-sm); padding:6px 9px;">
-                <div style="font-weight:700; color:#FB7185; font-size:0.75rem; margin-bottom:2px; display:flex; justify-content:space-between; align-items:center;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #FB7185; border-radius:var(--radius-sm); padding:6px 9px;">
+                <div
+                  style="font-weight:700; color:#FB7185; font-size:0.75rem; margin-bottom:2px; display:flex; justify-content:space-between; align-items:center;">
                   <span>1. Header — Thông tin thuật toán</span>
                   <code style="font-size:0.64rem;">{"alg":"HS256","typ":"JWT"}</code>
                 </div>
@@ -1422,18 +1605,22 @@
               </div>
 
               <!-- 2. Payload -->
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:6px 9px;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:6px 9px;">
                 <div style="font-weight:700; color:#0284C7; font-size:0.75rem; margin-bottom:2px;">
                   2. Payload — Thông tin người dùng
                 </div>
                 <div style="font-size:0.71rem; color:var(--text-muted); line-height:1.35;">
-                  Chứa Claims như <code>userId</code>, <code>roles</code>, <code>exp</code> (thời điểm hết hạn), tùy thiết kế token.<br>
-                  <span style="color:var(--accent-coral); font-weight:600;">⚠️ Có thể đọc được; không nên chứa mật khẩu hay dữ liệu bí mật.</span>
+                  Chứa Claims như <code>userId</code>, <code>roles</code>, <code>exp</code> (thời điểm hết hạn), tùy
+                  thiết kế token.<br>
+                  <span style="color:var(--accent-coral); font-weight:600;">⚠️ Có thể đọc được; không nên chứa mật khẩu
+                    hay dữ liệu bí mật.</span>
                 </div>
               </div>
 
               <!-- 3. Signature -->
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #2DD4BF; border-radius:var(--radius-sm); padding:6px 9px;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #2DD4BF; border-radius:var(--radius-sm); padding:6px 9px;">
                 <div style="font-weight:700; color:#0F766E; font-size:0.75rem; margin-bottom:2px;">
                   3. Signature — Chữ ký xác minh
                 </div>
@@ -1452,7 +1639,8 @@
             </div>
 
             <p class="card-desc" style="font-size:0.72rem; margin-bottom:6px; line-height:1.38;">
-              Giải quyết bài toán tiến thoái lưỡng nan: Token sống dài (30 ngày) dễ bị cướp quyền; Token sống ngắn (15 phút) bắt user đăng nhập liên tục gây khó chịu.
+              Giải quyết bài toán tiến thoái lưỡng nan: Token sống dài (30 ngày) dễ bị cướp quyền; Token sống ngắn (15
+              phút) bắt user đăng nhập liên tục gây khó chịu.
             </p>
 
             <!-- Bảng so sánh Access vs Refresh Token -->
@@ -1473,7 +1661,8 @@
                 <tr>
                   <td style="padding:4px 8px;"><strong>Lưu trữ</strong></td>
                   <td style="padding:4px 8px;"><strong>Stateless:</strong> Server không lưu DB, chỉ kiểm tra chữ ký</td>
-                  <td style="padding:4px 8px;"><strong>Stateful:</strong> Lưu bản băm SHA-256 trong Database để thu hồi</td>
+                  <td style="padding:4px 8px;"><strong>Stateful:</strong> Lưu bản băm SHA-256 trong Database để thu hồi
+                  </td>
                 </tr>
                 <tr>
                   <td style="padding:4px 8px;"><strong>Mục đích</strong></td>
@@ -1483,8 +1672,10 @@
               </tbody>
             </table>
 
-            <div style="font-size:0.68rem; color:var(--text-muted); line-height:1.32; background:var(--bg-canvas); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-              <strong>💡 Dự án áp dụng:</strong> Khi Access Token hết hạn, ứng dụng tự động gửi Refresh Token lấy cặp token mới mà người dùng không hề bị gián đoạn hay phải nhập lại mật khẩu.
+            <div
+              style="font-size:0.68rem; color:var(--text-muted); line-height:1.32; background:var(--bg-canvas); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+              <strong>💡 Dự án áp dụng:</strong> Khi Access Token hết hạn, ứng dụng tự động gửi Refresh Token lấy cặp
+              token mới mà người dùng không hề bị gián đoạn hay phải nhập lại mật khẩu.
             </div>
           </div>
         </div>
@@ -1492,7 +1683,7 @@
     </section>
 
 
-        <!-- ==================================================================
+    <!-- ==================================================================
          SLIDE 7: MICROSERVICES LÀ GÌ? — SO SÁNH VỚI MONOLITH
          ================================================================== -->
     <section class="slide" data-slide="7" data-title="Kiến Trúc Microservices">
@@ -1501,19 +1692,25 @@
           <div>
             <span class="slide-category-tag">PHẦN 3 • THIẾT KẾ HỆ THỐNG</span>
             <h2 class="slide-title">Microservices: Phân Rã Kiến Trúc &amp; 3 Lợi Ích Cốt Lõi</h2>
-            <p class="slide-subtitle">Khắc phục điểm nghẽn của Monolith và triển khai mô hình Database-per-Service trong dự án</p>
+            <p class="slide-subtitle">Khắc phục điểm nghẽn của Monolith và triển khai mô hình Database-per-Service trong
+              dự án</p>
           </div>
         </div>
 
         <div class="grid-2" style="margin-bottom:12px;">
           <!-- Card 1: Khái niệm Microservices & Phân chia service trong dự án -->
           <div class="card">
-            <div class="card-title"><span class="card-icon">🧩</span> Khái Niệm Microservices &amp; Phân Chia Dự Án</div>
-            <div class="card-desc" style="display:flex; flex-direction:column; gap:4px; font-size:0.71rem; line-height:1.35;">
+            <div class="card-title"><span class="card-icon">🧩</span> Khái Niệm Microservices &amp; Phân Chia Dự Án
+            </div>
+            <div class="card-desc"
+              style="display:flex; flex-direction:column; gap:4px; font-size:0.71rem; line-height:1.35;">
               <div>
-                <strong>Khái niệm cốt lõi:</strong> Kiến trúc phân rã ứng dụng thành các dịch vụ nhỏ độc lập (loose coupling), mỗi service phụ trách một nghiệp vụ riêng (Bounded Context), sở hữu database riêng và giao tiếp qua mạng (REST, WebSocket, Kafka).
+                <strong>Khái niệm cốt lõi:</strong> Kiến trúc phân rã ứng dụng thành các dịch vụ nhỏ độc lập (loose
+                coupling), mỗi service phụ trách một nghiệp vụ riêng (Bounded Context), sở hữu database riêng và giao
+                tiếp qua mạng (REST, WebSocket, Kafka).
               </div>
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:5px 8px; margin-top:2px;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:5px 8px; margin-top:2px;">
                 <strong style="color:var(--accent-teal);">Dự án của em chia làm 4 services độc lập:</strong>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; margin-top:3px; font-size:0.68rem;">
                   <div>• <code>api-gateway (:8080)</code>: Cổng vào duy nhất</div>
@@ -1528,10 +1725,14 @@
           <!-- Card 2: 3 Lợi ích cốt lõi -->
           <div class="card highlight">
             <div class="card-title"><span class="card-icon">🚀</span> 3 Lợi Ích Cốt Lõi Của Microservices</div>
-            <div class="card-desc" style="display:flex; flex-direction:column; gap:4px; font-size:0.71rem; line-height:1.35;">
-              <div>• <strong>Cách ly lỗi (Fault Isolation):</strong> Một service lỗi (như Chat lỗi bộ nhớ) thì User và Đăng nhập vẫn vận hành bình thường, không gây sập dây chuyền.</div>
-              <div>• <strong>Triển khai độc lập (Independent Deployment):</strong> Đội ngũ cập nhật tính năng Chat không cần build lại hay deploy lại toàn bộ User Service.</div>
-              <div>• <strong>Mở rộng có trọng điểm (Targeted Scalability):</strong> Khi lưu lượng chat tăng vọt, chỉ cần nhân bản (scale) riêng container <code>chat-service</code> mà không lãng phí tài nguyên.</div>
+            <div class="card-desc"
+              style="display:flex; flex-direction:column; gap:4px; font-size:0.71rem; line-height:1.35;">
+              <div>• <strong>Cách ly lỗi (Fault Isolation):</strong> Một service lỗi (như Chat lỗi bộ nhớ) thì User và
+                Đăng nhập vẫn vận hành bình thường, không gây sập dây chuyền.</div>
+              <div>• <strong>Triển khai độc lập (Independent Deployment):</strong> Đội ngũ cập nhật tính năng Chat không
+                cần build lại hay deploy lại toàn bộ User Service.</div>
+              <div>• <strong>Mở rộng có trọng điểm (Targeted Scalability):</strong> Khi lưu lượng chat tăng vọt, chỉ cần
+                nhân bản (scale) riêng container <code>chat-service</code> mà không lãng phí tài nguyên.</div>
             </div>
           </div>
         </div>
@@ -1565,7 +1766,9 @@
         </table>
 
         <div class="card-project-apply">
-          <strong>Hiện thực hóa trong dự án:</strong> Hệ thống chia thành 4 service riêng biệt: <code>api-gateway (:8080)</code>, <code>user-service (:8081)</code>, <code>notification-service (:8082)</code> và <code>chat-service (:8083)</code>. Mỗi service sở hữu database riêng, giao tiếp qua REST và Kafka.
+          <strong>Hiện thực hóa trong dự án:</strong> Hệ thống chia thành 4 service riêng biệt:
+          <code>api-gateway (:8080)</code>, <code>user-service (:8081)</code>, <code>notification-service (:8082)</code>
+          và <code>chat-service (:8083)</code>. Mỗi service sở hữu database riêng, giao tiếp qua REST và Kafka.
         </div>
       </div>
     </section>
@@ -1579,13 +1782,15 @@
           <div>
             <span class="slide-category-tag coral">PHẦN 4 • XỬ LÝ BẤT ĐỒNG BỘ</span>
             <h2 class="slide-title">Apache Kafka: Nền Tảng Message Broker Phân Tán</h2>
-            <p class="slide-subtitle">4 khái niệm cốt lõi: Producer, Consumer, Topic Partition và Sức mạnh đệm chịu tải cao</p>
+            <p class="slide-subtitle">4 khái niệm cốt lõi: Producer, Consumer, Topic Partition và Sức mạnh đệm chịu tải
+              cao</p>
           </div>
         </div>
 
         <!-- Flowchart Event Stream -->
         <div class="flowchart-wrapper">
-          <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-coral); margin-bottom:8px;">
+          <div
+            style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-coral); margin-bottom:8px;">
             Sơ Đồ Luồng Bắn Sự Kiện user-events Trong Dự Án
           </div>
           <div class="flow-steps">
@@ -1612,24 +1817,30 @@
         <div class="grid-4">
           <div class="card">
             <div class="card-title"><span class="card-icon">📤</span> Producer</div>
-            <p class="card-desc">Ứng dụng sản sinh và gửi thông điệp vào Kafka Broker. (Trong dự án: <code>user-service</code>).</p>
+            <p class="card-desc">Ứng dụng sản sinh và gửi thông điệp vào Kafka Broker. (Trong dự án:
+              <code>user-service</code>).</p>
           </div>
           <div class="card">
             <div class="card-title"><span class="card-icon coral">📥</span> Consumer</div>
-            <p class="card-desc">Ứng dụng lắng nghe và kéo (pull) thông điệp về xử lý. (Trong dự án: <code>notification-service</code>).</p>
+            <p class="card-desc">Ứng dụng lắng nghe và kéo (pull) thông điệp về xử lý. (Trong dự án:
+              <code>notification-service</code>).</p>
           </div>
           <div class="card">
             <div class="card-title"><span class="card-icon">🗂️</span> Topic</div>
-            <p class="card-desc">Kênh hàng đợi phân loại sự kiện. Chia thành nhiều Partition để tăng tốc đọc/ghi song song.</p>
+            <p class="card-desc">Kênh hàng đợi phân loại sự kiện. Chia thành nhiều Partition để tăng tốc đọc/ghi song
+              song.</p>
           </div>
           <div class="card">
             <div class="card-title"><span class="card-icon coral">🖥️</span> Broker</div>
-            <p class="card-desc">Máy chủ Kafka đóng vai trò lưu trữ log thông điệp bền vững trên ổ đĩa, đảm bảo không mất dữ liệu.</p>
+            <p class="card-desc">Máy chủ Kafka đóng vai trò lưu trữ log thông điệp bền vững trên ổ đĩa, đảm bảo không
+              mất dữ liệu.</p>
           </div>
         </div>
 
         <div class="card-project-apply coral" style="margin-top:12px;">
-          <strong>Vì sao dùng Kafka thay vì gọi HTTP trực tiếp?</strong> Giảm khớp nối (Decoupling) và tăng độ bền: Nếu server gửi email bị quá tải hoặc sập tạm thời trong 15 phút, các sự kiện đăng ký tài khoản vẫn nằm an toàn trên Kafka chờ xử lý sau, người dùng đăng ký tài khoản hoàn toàn không bị gián đoạn!
+          <strong>Vì sao dùng Kafka thay vì gọi HTTP trực tiếp?</strong> Giảm khớp nối (Decoupling) và tăng độ bền: Nếu
+          server gửi email bị quá tải hoặc sập tạm thời trong 15 phút, các sự kiện đăng ký tài khoản vẫn nằm an toàn
+          trên Kafka chờ xử lý sau, người dùng đăng ký tài khoản hoàn toàn không bị gián đoạn!
         </div>
       </div>
     </section>
@@ -1644,7 +1855,8 @@
           <div>
             <span class="slide-category-tag coral">PHẦN 4 • XỬ LÝ BẤT ĐỒNG BỘ</span>
             <h2 class="slide-title">Transactional Outbox Pattern & Idempotent Consumer</h2>
-            <p class="slide-subtitle">Triệt tiêu hoàn toàn rủi ro Dual-Write và Đảm bảo tính nhất quán dữ liệu (Eventual Consistency)</p>
+            <p class="slide-subtitle">Triệt tiêu hoàn toàn rủi ro Dual-Write và Đảm bảo tính nhất quán dữ liệu (Eventual
+              Consistency)</p>
           </div>
         </div>
 
@@ -1653,8 +1865,10 @@
           <div class="card highlight-coral">
             <div class="card-title"><span class="card-icon coral">❌</span> Vấn Đề Dual-Write Nếu Gọi Trực Tiếp</div>
             <p class="card-desc">
-              Khi khách đăng ký: Nếu lưu User vào Database thành công, nhưng lệnh <code>kafkaTemplate.send()</code> bị rớt mạng ➔ <strong>User đã tạo nhưng email không bao giờ được gửi!</strong><br>
-              Ngược lại, nếu gửi Kafka trước rồi DB bị lỗi rollback ➔ <strong>Gửi email cho tài khoản không tồn tại!</strong>
+              Khi khách đăng ký: Nếu lưu User vào Database thành công, nhưng lệnh <code>kafkaTemplate.send()</code> bị
+              rớt mạng ➔ <strong>User đã tạo nhưng email không bao giờ được gửi!</strong><br>
+              Ngược lại, nếu gửi Kafka trước rồi DB bị lỗi rollback ➔ <strong>Gửi email cho tài khoản không tồn
+                tại!</strong>
             </p>
           </div>
 
@@ -1662,7 +1876,8 @@
           <div class="card highlight">
             <div class="card-title"><span class="card-icon">💎</span> Giải Pháp: Transactional Outbox Pattern</div>
             <p class="card-desc">
-              Lưu User và Sự kiện gửi email vào bảng <code>outbox_events</code> trong <strong>CÙNG 1 DATABASE TRANSACTION</strong>. Cả 2 cùng thành công hoặc cùng rollback!
+              Lưu User và Sự kiện gửi email vào bảng <code>outbox_events</code> trong <strong>CÙNG 1 DATABASE
+                TRANSACTION</strong>. Cả 2 cùng thành công hoặc cùng rollback!
               Một tiến trình ngầm định kỳ quét bảng Outbox để xuất bản lên Kafka an toàn 100%.
             </p>
           </div>
@@ -1670,7 +1885,8 @@
 
         <!-- Flowchart Outbox -->
         <div class="flowchart-wrapper">
-          <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); margin-bottom:8px;">
+          <div
+            style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); margin-bottom:8px;">
             Quy Trình Hoạt Động Của Outbox Pattern Trong Dự Án
           </div>
           <div class="flow-steps">
@@ -1701,7 +1917,8 @@
         </div>
 
         <div class="card-project-apply">
-          <strong>Giá trị đạt được:</strong> Đạt tiêu chuẩn phân tán <em>At-Least-Once Delivery</em> mà không sợ mất sự kiện ngay cả khi Kafka sập tạm thời.
+          <strong>Giá trị đạt được:</strong> Đạt tiêu chuẩn phân tán <em>At-Least-Once Delivery</em> mà không sợ mất sự
+          kiện ngay cả khi Kafka sập tạm thời.
         </div>
       </div>
     </section>
@@ -1716,16 +1933,19 @@
           <div>
             <span class="slide-category-tag">PHẦN 5 • TỐC ĐỘ & BỘ NHỚ ĐỆM</span>
             <h2 class="slide-title">Redis Là Gì? Bản Chất Hoạt Động &amp; So Sánh PostgreSQL</h2>
-            <p class="slide-subtitle">Kho dữ liệu In-Memory trên RAM, luồng Cache Hit / Miss, so sánh với PostgreSQL và 6 cấu trúc dữ liệu cốt lõi</p>
+            <p class="slide-subtitle">Kho dữ liệu In-Memory trên RAM, luồng Cache Hit / Miss, so sánh với PostgreSQL và
+              6 cấu trúc dữ liệu cốt lõi</p>
           </div>
         </div>
 
         <!-- Khung Top: Khái Niệm & Bản Chất Hoạt Động (Cache Hit / Miss) -->
-        <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
+        <div
+          style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <span class="card-icon" style="font-size:0.85rem; width:24px; height:24px;">⚡</span>
-              <span style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.04em;">
+              <span
+                style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.04em;">
                 1. REDIS LÀ GÌ? BẢN CHẤT HOẠT ĐỘNG (CACHE HIT / CACHE MISS)
               </span>
             </div>
@@ -1733,19 +1953,26 @@
           </div>
 
           <div style="display:grid; grid-template-columns: 1.15fr 1.85fr; gap:10px;">
-            <div style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
+            <div
+              style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
               <div style="font-weight:700; color:var(--accent-teal); margin-bottom:2px;">Khái Niệm Cốt Lõi:</div>
-              Redis là kho dữ liệu lưu trữ và xử lý trực tiếp trong <strong>bộ nhớ RAM</strong>, hỗ trợ nhiều cấu trúc dữ liệu và thao tác truy xuất siêu nhanh (&lt; 1ms). Redis cũng hỗ trợ lưu xuống ổ đĩa (RDB / AOF) để phục hồi khi cần.
+              Redis là kho dữ liệu lưu trữ và xử lý trực tiếp trong <strong>bộ nhớ RAM</strong>, hỗ trợ nhiều cấu trúc
+              dữ liệu và thao tác truy xuất siêu nhanh (&lt; 1ms). Redis cũng hỗ trợ lưu xuống ổ đĩa (RDB / AOF) để phục
+              hồi khi cần.
             </div>
 
-            <div style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
-              <div style="font-weight:700; color:#0284C7; margin-bottom:2px;">Ví Dụ Minh Họa: Hàng Nghìn Người Cùng Xem Sản Phẩm</div>
+            <div
+              style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
+              <div style="font-weight:700; color:#0284C7; margin-bottom:2px;">Ví Dụ Minh Họa: Hàng Nghìn Người Cùng Xem
+                Sản Phẩm</div>
               <div style="display:flex; gap:8px; margin-top:2px;">
                 <div style="flex:1; background:#0F172A; border-radius:4px; padding:3px 6px; border:1px solid #10B981;">
-                  <span style="color:#34D399; font-weight:700;">🟢 Cache Hit:</span> Có sẵn trong Redis ➔ <strong>Trả về ngay tức thì</strong>, giảm tải triệt để cho PostgreSQL.
+                  <span style="color:#34D399; font-weight:700;">🟢 Cache Hit:</span> Có sẵn trong Redis ➔ <strong>Trả về
+                    ngay tức thì</strong>, giảm tải triệt để cho PostgreSQL.
                 </div>
                 <div style="flex:1; background:#0F172A; border-radius:4px; padding:3px 6px; border:1px solid #F59E0B;">
-                  <span style="color:#FBBF24; font-weight:700;">🟡 Cache Miss:</span> Chưa có ➔ Truy vấn PostgreSQL ➔ Trả về và <strong>lưu vào Redis kèm TTL</strong> cho lần sau.
+                  <span style="color:#FBBF24; font-weight:700;">🟡 Cache Miss:</span> Chưa có ➔ Truy vấn PostgreSQL ➔
+                  Trả về và <strong>lưu vào Redis kèm TTL</strong> cho lần sau.
                 </div>
               </div>
             </div>
@@ -1797,8 +2024,11 @@
               </tbody>
             </table>
 
-            <div style="background:var(--bg-canvas); border-left:3px solid var(--accent-coral); padding:4px 8px; border-radius:var(--radius-sm); font-size:0.68rem; color:var(--text-muted); line-height:1.35;">
-              <strong style="color:var(--text-main);">📌 Ví dụ dễ nhớ:</strong> <em>PostgreSQL</em> là nơi lưu hồ sơ chính thức của khách hàng; <em>Redis</em> giống khu vực lưu tạm những thông tin cần lấy liên tục để giảm thời gian truy xuất.
+            <div
+              style="background:var(--bg-canvas); border-left:3px solid var(--accent-coral); padding:4px 8px; border-radius:var(--radius-sm); font-size:0.68rem; color:var(--text-muted); line-height:1.35;">
+              <strong style="color:var(--text-main);">📌 Ví dụ dễ nhớ:</strong> <em>PostgreSQL</em> là nơi lưu hồ sơ
+              chính thức của khách hàng; <em>Redis</em> giống khu vực lưu tạm những thông tin cần lấy liên tục để giảm
+              thời gian truy xuất.
             </div>
           </div>
 
@@ -1810,38 +2040,59 @@
             </div>
 
             <div style="display:flex; flex-direction:column; gap:4px; font-size:0.67rem; line-height:1.32;">
-              <div style="display:flex; gap:6px; align-items:center; background:var(--bg-canvas); padding:3px 6px; border-radius:4px; border:1px solid var(--border-light);">
-                <code style="min-width:62px; font-size:0.65rem; text-align:center; background:#1E293B; color:#38BDF8; padding:1px 4px; border-radius:3px;">String</code>
-                <div style="flex:1;"><strong>Giá trị đơn giản:</strong> Cache, OTP, bộ đếm. <code>SET otp:user 482691 EX 300</code> ➔ <code>GET</code></div>
+              <div
+                style="display:flex; gap:6px; align-items:center; background:var(--bg-canvas); padding:3px 6px; border-radius:4px; border:1px solid var(--border-light);">
+                <code
+                  style="min-width:62px; font-size:0.65rem; text-align:center; background:#1E293B; color:#38BDF8; padding:1px 4px; border-radius:3px;">String</code>
+                <div style="flex:1;"><strong>Giá trị đơn giản:</strong> Cache, OTP, bộ đếm.
+                  <code>SET otp:user 482691 EX 300</code> ➔ <code>GET</code></div>
               </div>
-              <div style="display:flex; gap:6px; align-items:center; background:var(--bg-canvas); padding:3px 6px; border-radius:4px; border:1px solid var(--border-light);">
-                <code style="min-width:62px; font-size:0.65rem; text-align:center; background:#1E293B; color:#A7F3D0; padding:1px 4px; border-radius:3px;">Hash</code>
-                <div style="flex:1;"><strong>Nhiều trường 1 đối tượng:</strong> Session, profile. <code>HSET user:101 name "Huynh"</code> ➔ <code>HGET</code></div>
+              <div
+                style="display:flex; gap:6px; align-items:center; background:var(--bg-canvas); padding:3px 6px; border-radius:4px; border:1px solid var(--border-light);">
+                <code
+                  style="min-width:62px; font-size:0.65rem; text-align:center; background:#1E293B; color:#A7F3D0; padding:1px 4px; border-radius:3px;">Hash</code>
+                <div style="flex:1;"><strong>Nhiều trường 1 đối tượng:</strong> Session, profile.
+                  <code>HSET user:101 name "Huynh"</code> ➔ <code>HGET</code></div>
               </div>
-              <div style="display:flex; gap:6px; align-items:center; background:var(--bg-canvas); padding:3px 6px; border-radius:4px; border:1px solid var(--border-light);">
-                <code style="min-width:62px; font-size:0.65rem; text-align:center; background:#1E293B; color:#FDE047; padding:1px 4px; border-radius:3px;">List</code>
-                <div style="flex:1;"><strong>Danh sách thứ tự:</strong> Hàng đợi đơn giản, tin gần đây. <code>LPUSH recent user101</code> ➔ <code>LRANGE</code></div>
+              <div
+                style="display:flex; gap:6px; align-items:center; background:var(--bg-canvas); padding:3px 6px; border-radius:4px; border:1px solid var(--border-light);">
+                <code
+                  style="min-width:62px; font-size:0.65rem; text-align:center; background:#1E293B; color:#FDE047; padding:1px 4px; border-radius:3px;">List</code>
+                <div style="flex:1;"><strong>Danh sách thứ tự:</strong> Hàng đợi đơn giản, tin gần đây.
+                  <code>LPUSH recent user101</code> ➔ <code>LRANGE</code></div>
               </div>
-              <div style="display:flex; gap:6px; align-items:center; background:var(--bg-canvas); padding:3px 6px; border-radius:4px; border:1px solid var(--border-light);">
-                <code style="min-width:62px; font-size:0.65rem; text-align:center; background:#1E293B; color:#F472B6; padding:1px 4px; border-radius:3px;">Set</code>
-                <div style="flex:1;"><strong>Tập hợp duy nhất:</strong> Loại trùng, kiểm tra thành viên phòng chat. <code>SADD room:1 u101</code> ➔ <code>SISMEMBER</code></div>
+              <div
+                style="display:flex; gap:6px; align-items:center; background:var(--bg-canvas); padding:3px 6px; border-radius:4px; border:1px solid var(--border-light);">
+                <code
+                  style="min-width:62px; font-size:0.65rem; text-align:center; background:#1E293B; color:#F472B6; padding:1px 4px; border-radius:3px;">Set</code>
+                <div style="flex:1;"><strong>Tập hợp duy nhất:</strong> Loại trùng, kiểm tra thành viên phòng chat.
+                  <code>SADD room:1 u101</code> ➔ <code>SISMEMBER</code></div>
               </div>
-              <div style="display:flex; gap:6px; align-items:center; background:var(--bg-canvas); padding:3px 6px; border-radius:4px; border:1px solid var(--border-light);">
-                <code style="min-width:62px; font-size:0.65rem; text-align:center; background:#1E293B; color:#C084FC; padding:1px 4px; border-radius:3px;">Sorted Set</code>
-                <div style="flex:1;"><strong>Tập hợp có xếp hạng (Score):</strong> Bảng xếp hạng điểm. <code>ZADD leaderboard 150 u101</code> ➔ <code>ZREVRANGE</code></div>
+              <div
+                style="display:flex; gap:6px; align-items:center; background:var(--bg-canvas); padding:3px 6px; border-radius:4px; border:1px solid var(--border-light);">
+                <code
+                  style="min-width:62px; font-size:0.65rem; text-align:center; background:#1E293B; color:#C084FC; padding:1px 4px; border-radius:3px;">Sorted Set</code>
+                <div style="flex:1;"><strong>Tập hợp có xếp hạng (Score):</strong> Bảng xếp hạng điểm.
+                  <code>ZADD leaderboard 150 u101</code> ➔ <code>ZREVRANGE</code></div>
               </div>
-              <div style="display:flex; gap:6px; align-items:center; background:var(--bg-canvas); padding:3px 6px; border-radius:4px; border:1px solid var(--border-light);">
-                <code style="min-width:62px; font-size:0.65rem; text-align:center; background:#1E293B; color:#FB923C; padding:1px 4px; border-radius:3px;">Streams</code>
-                <div style="flex:1;"><strong>Luồng sự kiện:</strong> Xử lý theo thứ tự, consumer group. <code>XADD orders * id 1001 status CREATED</code></div>
+              <div
+                style="display:flex; gap:6px; align-items:center; background:var(--bg-canvas); padding:3px 6px; border-radius:4px; border:1px solid var(--border-light);">
+                <code
+                  style="min-width:62px; font-size:0.65rem; text-align:center; background:#1E293B; color:#FB923C; padding:1px 4px; border-radius:3px;">Streams</code>
+                <div style="flex:1;"><strong>Luồng sự kiện:</strong> Xử lý theo thứ tự, consumer group.
+                  <code>XADD orders * id 1001 status CREATED</code></div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Băng ngang dưới: Điều cần nhớ & Bổ trợ nhau -->
-        <div class="card" style="padding:6px 12px; font-size:0.7rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+        <div class="card"
+          style="padding:6px 12px; font-size:0.7rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
           <div>
-            <strong style="color:var(--accent-teal);">💡 Điều Cần Nhớ:</strong> Redis không nhất thiết thay thế PostgreSQL mà hai công nghệ <strong>bổ trợ cho nhau</strong>. PostgreSQL lưu trữ dữ liệu nghiệp vụ chính thức lâu dài; Redis đảm nhận vai trò bộ đệm tốc độ cao và dữ liệu tạm thời có thời hạn (TTL).
+            <strong style="color:var(--accent-teal);">💡 Điều Cần Nhớ:</strong> Redis không nhất thiết thay thế
+            PostgreSQL mà hai công nghệ <strong>bổ trợ cho nhau</strong>. PostgreSQL lưu trữ dữ liệu nghiệp vụ chính
+            thức lâu dài; Redis đảm nhận vai trò bộ đệm tốc độ cao và dữ liệu tạm thời có thời hạn (TTL).
           </div>
           <span class="pill pill-teal" style="font-size:0.62rem; white-space:nowrap;">Bổ Trợ Nhau</span>
         </div>
@@ -1858,16 +2109,19 @@
           <div>
             <span class="slide-category-tag coral">PHẦN 5 • HIỆN THỰC HÓA TRONG DỰ ÁN</span>
             <h2 class="slide-title">4. Các Chức Năng Của Redis &amp; Áp Dụng Thực Tế Trong Dự Án</h2>
-            <p class="slide-subtitle">5 chức năng phổ biến trong dự án và việc hiện thực hóa vào user-service: Cache hồ sơ, Chống Brute-force và Fallback an toàn</p>
+            <p class="slide-subtitle">5 chức năng phổ biến trong dự án và việc hiện thực hóa vào user-service: Cache hồ
+              sơ, Chống Brute-force và Fallback an toàn</p>
           </div>
         </div>
 
         <!-- Khung Top: 5 Chức Năng Nổi Bật Trong Thực Tế (5 Cột nhỏ) -->
-        <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
+        <div
+          style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <span class="card-icon" style="font-size:0.85rem; width:24px; height:24px;">🎯</span>
-              <span style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.04em;">
+              <span
+                style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.04em;">
                 5 CHỨC NĂNG NỔI BẬT CỦA REDIS TRONG DỰ ÁN THỰC TẾ
               </span>
             </div>
@@ -1875,23 +2129,28 @@
           </div>
 
           <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:8px;">
-            <div style="background:var(--bg-canvas); border-top:3px solid var(--accent-teal); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.67rem; line-height:1.3;">
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid var(--accent-teal); padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.67rem; line-height:1.3;">
               <div style="font-weight:700; color:var(--accent-teal); margin-bottom:2px;">1. Cache Tăng Tốc</div>
               Lưu kết quả truy vấn lặp lại (sản phẩm, profile), trả về tức thì, giảm tải database.
             </div>
-            <div style="background:var(--bg-canvas); border-top:3px solid #38BDF8; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.67rem; line-height:1.3;">
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid #38BDF8; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.67rem; line-height:1.3;">
               <div style="font-weight:700; color:#0284C7; margin-bottom:2px;">2. Session & Token</div>
               Lưu phiên dùng chung giữa nhiều instance; lưu refresh token hoặc danh sách token thu hồi.
             </div>
-            <div style="background:var(--bg-canvas); border-top:3px solid #F59E0B; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.67rem; line-height:1.3;">
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid #F59E0B; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.67rem; line-height:1.3;">
               <div style="font-weight:700; color:#D97706; margin-bottom:2px;">3. OTP & Rate Limit</div>
               Lưu mã OTP với TTL 5 phút tự hủy; giới hạn số lần gọi API chống spam và quét mật khẩu.
             </div>
-            <div style="background:var(--bg-canvas); border-top:3px solid #EC4899; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.67rem; line-height:1.3;">
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid #EC4899; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.67rem; line-height:1.3;">
               <div style="font-weight:700; color:#DB2777; margin-bottom:2px;">4. Đếm & Xếp Hạng</div>
               Tăng bộ đếm nguyên tử <code>INCR</code> (lượt xem, like); Sorted Set tính điểm bảng xếp hạng.
             </div>
-            <div style="background:var(--bg-canvas); border-top:3px solid #8B5CF6; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.67rem; line-height:1.3;">
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid #8B5CF6; padding:5px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.67rem; line-height:1.3;">
               <div style="font-weight:700; color:#7C3AED; margin-bottom:2px;">5. Pub/Sub Realtime</div>
               Publish sự kiện lên channel; các service khác subscribe chuyển tiếp tới WebSocket.
             </div>
@@ -1907,19 +2166,25 @@
             </div>
 
             <div style="display:flex; flex-direction:column; gap:5px; font-size:0.7rem; line-height:1.35;">
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:var(--accent-teal);">• Vấn đề thực tế:</strong> 
-                Mỗi lần người dùng mở trang hoặc chuyển màn hình mobile, API <code>GET /users/me</code> lại được gọi. Nếu truy vấn PostgreSQL liên tục sẽ gây nghẽn database.
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:var(--accent-teal);">• Vấn đề thực tế:</strong>
+                Mỗi lần người dùng mở trang hoặc chuyển màn hình mobile, API <code>GET /users/me</code> lại được gọi.
+                Nếu truy vấn PostgreSQL liên tục sẽ gây nghẽn database.
               </div>
 
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:#0284C7;">• Giải pháp Cache-Aside:</strong> 
-                Kiểm tra Redis trước ➔ <strong>Cache Hit</strong> trả về trong <strong>&lt; 1ms</strong> ➔ <strong>Cache Miss</strong> truy vấn PostgreSQL rồi ghi vào Redis với <strong>TTL 10 phút</strong>.
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:#0284C7;">• Giải pháp Cache-Aside:</strong>
+                Kiểm tra Redis trước ➔ <strong>Cache Hit</strong> trả về trong <strong>&lt; 1ms</strong> ➔ <strong>Cache
+                  Miss</strong> truy vấn PostgreSQL rồi ghi vào Redis với <strong>TTL 10 phút</strong>.
               </div>
 
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #10B981; border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:#059669;">• Đồng bộ dữ liệu (@CacheEvict):</strong> 
-                Khi người dùng đổi mật khẩu hoặc cập nhật tên, hàm kích hoạt <code>@CacheEvict(key = "#userId")</code> xóa ngay cache để lần sau đọc dữ liệu mới nhất, tránh Stale Data.
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #10B981; border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:#059669;">• Đồng bộ dữ liệu (@CacheEvict):</strong>
+                Khi người dùng đổi mật khẩu hoặc cập nhật tên, hàm kích hoạt <code>@CacheEvict(key = "#userId")</code>
+                xóa ngay cache để lần sau đọc dữ liệu mới nhất, tránh Stale Data.
               </div>
             </div>
           </div>
@@ -1927,34 +2192,46 @@
           <!-- Cột 2: Tác dụng vào Chống Brute-Force Đăng Nhập -->
           <div class="card highlight-coral" style="padding:10px 12px;">
             <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
-              <span><span class="card-icon coral">🛡️</span> Áp Dụng 2: Chống Brute-Force &amp; Rate Limiting Đăng Nhập</span>
+              <span><span class="card-icon coral">🛡️</span> Áp Dụng 2: Chống Brute-Force &amp; Rate Limiting Đăng
+                Nhập</span>
               <span class="pill pill-coral" style="font-size:0.63rem;">LoginAttemptService</span>
             </div>
 
             <div style="display:flex; flex-direction:column; gap:5px; font-size:0.7rem; line-height:1.35;">
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
-                <div style="font-weight:700; color:#0284C7; margin-bottom:1px;">🔢 Bộ Đếm Nguyên Tử (INCR trên RAM):</div>
-                Khi nhập sai mật khẩu, gọi <code>opsForValue().increment("login:attempts:" + email)</code>. Lệnh đếm trên RAM cực nhanh và an toàn tuyệt đối khi scale đa instance.
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
+                <div style="font-weight:700; color:#0284C7; margin-bottom:1px;">🔢 Bộ Đếm Nguyên Tử (INCR trên RAM):
+                </div>
+                Khi nhập sai mật khẩu, gọi <code>opsForValue().increment("login:attempts:" + email)</code>. Lệnh đếm
+                trên RAM cực nhanh và an toàn tuyệt đối khi scale đa instance.
               </div>
 
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #F59E0B; border-radius:var(--radius-sm); padding:5px 8px;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #F59E0B; border-radius:var(--radius-sm); padding:5px 8px;">
                 <div style="font-weight:700; color:#D97706; margin-bottom:1px;">⏱️ Khóa Tự Động Với TTL 15 Phút:</div>
-                Ở lần sai đầu tiên, đặt <strong>TTL 15 phút</strong>. Sau 15 phút, Redis tự động hủy bộ đếm và tự mở khóa tài khoản mà không cần viết lệnh dọn rác thủ công.
+                Ở lần sai đầu tiên, đặt <strong>TTL 15 phút</strong>. Sau 15 phút, Redis tự động hủy bộ đếm và tự mở
+                khóa tài khoản mà không cần viết lệnh dọn rác thủ công.
               </div>
 
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-coral); border-radius:var(--radius-sm); padding:5px 8px;">
-                <div style="font-weight:700; color:var(--accent-coral); margin-bottom:1px;">🚫 Chặn Đứng Tại Cửa Ngõ (HTTP 429):</div>
-                Nếu số lần sai <strong>≥ 5 lần</strong>, hệ thống lập tức từ chối và trả về mã <strong>HTTP 429 Too Many Requests</strong>, bảo vệ database an toàn khỏi các đợt dò mật khẩu.
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-coral); border-radius:var(--radius-sm); padding:5px 8px;">
+                <div style="font-weight:700; color:var(--accent-coral); margin-bottom:1px;">🚫 Chặn Đứng Tại Cửa Ngõ
+                  (HTTP 429):</div>
+                Nếu số lần sai <strong>≥ 5 lần</strong>, hệ thống lập tức từ chối và trả về mã <strong>HTTP 429 Too Many
+                  Requests</strong>, bảo vệ database an toàn khỏi các đợt dò mật khẩu.
               </div>
             </div>
           </div>
         </div>
 
         <!-- Băng ngang dưới: Cơ chế chịu lỗi thông minh (Graceful Fallback) -->
-        <div class="card" style="padding:6px 12px; font-size:0.7rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+        <div class="card"
+          style="padding:6px 12px; font-size:0.7rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
           <div>
-            <strong style="color:var(--accent-teal);">💡 Tác Dụng An Toàn (Graceful Fallback):</strong> 
-            Dự án override <code>CacheErrorHandler</code>. Nếu Redis tạm thời mất kết nối hoặc quá tải, hệ thống <strong>không ném lỗi HTTP 500</strong> mà tự động ghi log cảnh báo và <strong>Fallback đọc trực tiếp từ PostgreSQL</strong>, đảm bảo người dùng vẫn đăng nhập và sử dụng hệ thống bình thường.
+            <strong style="color:var(--accent-teal);">💡 Tác Dụng An Toàn (Graceful Fallback):</strong>
+            Dự án override <code>CacheErrorHandler</code>. Nếu Redis tạm thời mất kết nối hoặc quá tải, hệ thống
+            <strong>không ném lỗi HTTP 500</strong> mà tự động ghi log cảnh báo và <strong>Fallback đọc trực tiếp từ
+              PostgreSQL</strong>, đảm bảo người dùng vẫn đăng nhập và sử dụng hệ thống bình thường.
           </div>
           <span class="pill pill-teal" style="font-size:0.62rem; white-space:nowrap;">Graceful Fallback</span>
         </div>
@@ -1971,109 +2248,82 @@
           <div>
             <span class="slide-category-tag">PHẦN 6 • GIAO TIẾP THỜI GIAN THỰC</span>
             <h2 class="slide-title">WebSocket &amp; STOMP: Khái Niệm, Bản Chất &amp; Kiến Trúc</h2>
-            <p class="slide-subtitle">Phân biệt kết nối hai chiều WebSocket, giao thức tin nhắn STOMP và kiến trúc hệ thống Chat Admin – User</p>
+            <p class="slide-subtitle">Phân biệt kết nối hai chiều WebSocket, giao thức tin nhắn STOMP và kiến trúc hệ
+              thống Chat Admin – User</p>
           </div>
         </div>
 
-        <!-- Khung Top: Phân Biệt WebSocket vs STOMP & Ví Dụ Minh Họa (Xin Chào Admin) -->
-        <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <!-- Khung Top: Phân Biệt WebSocket vs STOMP -->
+        <div
+          style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:10px 14px; margin-bottom:12px; box-shadow:var(--shadow-sm);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <span class="card-icon" style="font-size:0.85rem; width:24px; height:24px;">💬</span>
-              <span style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.04em;">
-                1. WEBSOCKET VÀ STOMP LÀ GÌ? VÍ DỤ: USER GỬI "XIN CHÀO ADMIN"
+              <span
+                style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.04em;">
+                1. Khái Niệm Cốt Lõi: WebSocket &amp; STOMP Là Gì?
               </span>
             </div>
             <span class="pill pill-teal" style="font-size:0.62rem;">Khái Niệm Cốt Lõi</span>
           </div>
 
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <div style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
-              <div style="font-weight:700; color:var(--accent-teal); margin-bottom:2px;">⚡ WebSocket — Kết Nối Hai Chiều Realtime:</div>
-              Cho phép Client và Server gửi dữ liệu qua lại trên <strong>một kết nối TCP duy nhất đã thiết lập</strong>, thay vì Client phải liên tục gửi HTTP request mới (Polling) để kiểm tra tin nhắn.
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div
+              style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.72rem; line-height:1.4;">
+              <div style="font-weight:700; color:var(--accent-teal); margin-bottom:3px;">⚡ WebSocket — Kết Nối Hai Chiều Realtime:</div>
+              Cho phép Client và Server trao đổi dữ liệu hai chiều liên tục trên <strong>một kết nối TCP duy nhất đã thiết lập</strong>, thay vì Client phải liên tục gửi HTTP request mới (Polling) gây lãng phí tài nguyên và chậm trễ.
             </div>
 
-            <div style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.7rem; line-height:1.35;">
-              <div style="font-weight:700; color:#0284C7; margin-bottom:2px;">📜 STOMP — Quy Ước Gửi Nhận Message:</div>
-              Giao thức messaging định nghĩa các frame và lệnh chuẩn (<code>CONNECT</code>, <code>SEND</code>, <code>SUBSCRIBE</code>, <code>MESSAGE</code>), giúp Client đăng ký nhận tin và gửi tin đến các destination rõ ràng.
+            <div
+              style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.72rem; line-height:1.4;">
+              <div style="font-weight:700; color:#0284C7; margin-bottom:3px;">📜 STOMP — Quy Ước Gửi Nhận Message:</div>
+              Giao thức messaging định nghĩa các frame và lệnh chuẩn (<code>CONNECT</code>, <code>SEND</code>, <code>SUBSCRIBE</code>, <code>MESSAGE</code>), giúp Client đăng ký nhận tin và gửi tin đến các destination rõ ràng, tương thích chuẩn mực với Spring Boot.
             </div>
-          </div>
-
-          <div style="background:#0F172A; border-radius:4px; padding:4px 8px; margin-top:6px; font-size:0.68rem; color:#E2E8F0; line-height:1.35; border:1px solid var(--border-light);">
-            <strong style="color:#FDE047;">Ví Dụ Minh Họa Khi User Gửi "Xin chào Admin":</strong> 
-            (1) <em>WebSocket</em> duy trì đường truyền hai chiều ➔ (2) <em>STOMP</em> xác định destination gửi đến ➔ (3) <em>Spring Boot</em> xử lý nội dung &amp; quyết định gửi đến Admin nào ➔ (4) <em>Server</em> đẩy tin nhắn đến Client Admin đang subscribe destination tương ứng.
           </div>
         </div>
 
-        <div class="grid-2" style="gap:12px; margin-bottom:10px;">
-          <!-- Cột 1: Kiến Trúc Tổng Thể Chat Admin - User -->
-          <div class="card highlight" style="padding:10px 12px;">
-            <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
-              <span><span class="card-icon">🏛️</span> 2. Kiến Trúc Tổng Thể Chat Admin – User</span>
-              <span class="pill pill-teal" style="font-size:0.63rem;">Mô Hình Dự Án</span>
-            </div>
-
-            <div style="display:flex; flex-direction:column; gap:4px; font-size:0.67rem; line-height:1.32;">
-              <div style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:3px 6px; border-radius:3px; border:1px solid var(--border-light);">
-                <strong>• Frontend (React / React Native):</strong> Hiển thị danh sách hội thoại, khung chat và tin nhắn mới tức thời cho cả User và Admin.
-              </div>
-              <div style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:3px 6px; border-radius:3px; border:1px solid var(--border-light);">
-                <strong>• WebSocket + STOMP:</strong> Duy trì kết nối socket liên tục và truyền tải các message hai chiều với độ trễ siêu thấp (&lt; 1ms).
-              </div>
-              <div style="background:var(--bg-canvas); border-left:3px solid #F59E0B; padding:3px 6px; border-radius:3px; border:1px solid var(--border-light);">
-                <strong>• Chat Service &amp; Spring Security:</strong> Kiểm tra quyền gửi tin, lấy danh tính từ phiên xác thực và xử lý nghiệp vụ lưu trữ.
-              </div>
-              <div style="background:var(--bg-canvas); border-left:3px solid #10B981; padding:3px 6px; border-radius:3px; border:1px solid var(--border-light);">
-                <strong>• Message Broker (Simple Broker) &amp; PostgreSQL:</strong> Broker phân phối tin nhắn đến đúng phòng; PostgreSQL lưu lịch sử chat để xem lại.
-              </div>
-            </div>
+        <!-- Khối Kiến Trúc Tổng Thể Chat Admin - User (Full Width - 4 Khối Thành Phần) -->
+        <div class="card highlight" style="padding:12px 14px; margin-bottom:10px;">
+          <div class="card-title" style="margin-bottom:8px; font-size:0.86rem; justify-content:space-between;">
+            <span><span class="card-icon">🏛️</span> 2. Kiến Trúc Tổng Thể Hệ Thống Chat Realtime Admin – User</span>
+            <span class="pill pill-teal" style="font-size:0.63rem;">Mô Hình Dự Án</span>
           </div>
 
-          <!-- Cột 2: Bảng Ý Nghĩa STOMP Destination -->
-          <div class="card highlight-coral" style="padding:10px 12px;">
-            <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
-              <span><span class="card-icon coral">🎯</span> 3. STOMP Destination: /app, /topic, /queue</span>
-              <span class="pill pill-coral" style="font-size:0.63rem;">Tiền Tố Routing</span>
+          <div class="grid-4" style="gap:10px;">
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid var(--accent-teal); padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.69rem; line-height:1.38;">
+              <div style="font-weight:700; color:var(--accent-teal); margin-bottom:3px; font-size:0.75rem;">📱 1. Client Giao Diện</div>
+              <strong>React &amp; React Native:</strong> Hiển thị danh sách hội thoại, khung chat và tin nhắn mới tức thời cho cả User và Admin mà không cần F5 tải lại trang.
             </div>
 
-            <table class="editorial-table" style="font-size:0.66rem; margin-bottom:5px;">
-              <thead>
-                <tr>
-                  <th style="padding:3px 5px; width:30%;">Destination</th>
-                  <th style="padding:3px 5px; width:70%;">Mục Đích Thường Dùng</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="padding:2px 5px;"><code>/app/chat.sendMessage</code></td>
-                  <td style="padding:2px 5px;">Client gửi message đến handler của ứng dụng (<code>@MessageMapping</code>)</td>
-                </tr>
-                <tr>
-                  <td style="padding:2px 5px;"><code>/topic/rooms.{id}</code></td>
-                  <td style="padding:2px 5px;">Phát message cho nhiều subscriber (phòng chat hoặc thông báo chung)</td>
-                </tr>
-                <tr>
-                  <td style="padding:2px 5px;"><code>/queue/...</code></td>
-                  <td style="padding:2px 5px;">Dùng cho luồng message có tính chất hàng đợi hoặc người nhận cụ thể</td>
-                </tr>
-                <tr>
-                  <td style="padding:2px 5px;"><code>/user/queue/...</code></td>
-                  <td style="padding:2px 5px;">Định tuyến tin nhắn riêng đến đúng người dùng đã xác thực (Principal)</td>
-                </tr>
-              </tbody>
-            </table>
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid #38BDF8; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.69rem; line-height:1.38;">
+              <div style="font-weight:700; color:#0284C7; margin-bottom:3px; font-size:0.75rem;">⚡ 2. WebSocket + STOMP</div>
+              <strong>Kết Nối TCP 2 Chiều:</strong> Mở và duy trì một đường truyền socket duy nhất liên tục giữa Client và Backend, truyền tải frame tin nhắn với độ trễ siêu thấp (&lt; 1ms).
+            </div>
 
-            <div style="font-size:0.66rem; color:var(--text-muted); line-height:1.3;">
-              <em>Gửi đúng đối tượng:</em> Dự án dùng destination theo hội thoại <code>/topic/rooms.{roomId}</code>. Backend bắt buộc xác thực quyền trước khi cho phép gửi và subscribe.
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid #F59E0B; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.69rem; line-height:1.38;">
+              <div style="font-weight:700; color:#D97706; margin-bottom:3px; font-size:0.75rem;">🛡️ 3. Chat Service &amp; Auth</div>
+              <strong>Bảo Mật &amp; Kiểm Quyền:</strong> Trích xuất danh tính từ <code>Principal</code> phiên đăng nhập JWT (chống giả mạo), kiểm tra quyền phòng chat trước khi lưu và phát tin.
+            </div>
+
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid #10B981; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.69rem; line-height:1.38;">
+              <div style="font-weight:700; color:#059669; margin-bottom:3px; font-size:0.75rem;">🗄️ 4. Broker &amp; Database</div>
+              <strong>Lưu Bền Vững &amp; Đẩy Realtime:</strong> In-Memory Simple Broker phân phối tin nhắn đến đúng phòng chat; PostgreSQL lưu lịch sử tin nhắn lâu dài.
             </div>
           </div>
         </div>
 
         <!-- Băng ngang dưới: Lưu ý quan trọng khi chọn STOMP -->
-        <div class="card" style="padding:6px 12px; font-size:0.7rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+        <div class="card"
+          style="padding:6px 12px; font-size:0.7rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
           <div>
-            <strong style="color:var(--accent-teal);">💡 Lưu Ý Quan Trọng:</strong> 
-            WebSocket có thể dùng trực tiếp mà không cần STOMP. Tuy nhiên, <strong>STOMP là lựa chọn chuẩn mực trên Spring Boot</strong> vì cung cấp sẵn mô hình Pub/Sub, destination routing và tích hợp mượt mà với Spring Security.
+            <strong style="color:var(--accent-teal);">💡 Lưu Ý Quan Trọng:</strong>
+            WebSocket có thể dùng trực tiếp mà không cần STOMP. Tuy nhiên, <strong>STOMP là lựa chọn chuẩn mực trên
+              Spring Boot</strong> vì cung cấp sẵn mô hình Pub/Sub, destination routing và tích hợp mượt mà với Spring
+            Security.
           </div>
           <span class="pill pill-teal" style="font-size:0.62rem; white-space:nowrap;">Spring + STOMP</span>
         </div>
@@ -2090,16 +2340,19 @@
           <div>
             <span class="slide-category-tag coral">PHẦN 6 • HIỆN THỰC HÓA TRONG DỰ ÁN</span>
             <h2 class="slide-title">Luồng Hoạt Động Khi User Nhắn Admin &amp; Áp Dụng Dự Án</h2>
-            <p class="slide-subtitle">Chi tiết 6 bước xử lý tin nhắn từ User đến Admin và 3 giải pháp thực tế: Chống mạo danh, Lưu DB & Tải lịch sử REST</p>
+            <p class="slide-subtitle">Chi tiết 6 bước xử lý tin nhắn từ User đến Admin và 3 giải pháp thực tế: Chống mạo
+              danh, Lưu DB & Tải lịch sử REST</p>
           </div>
         </div>
 
         <!-- Khung Top: Luồng 6 bước khi User gửi tin nhắn cho Admin (Ví dụ User 101 nhắn Admin 1) -->
-        <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
+        <div
+          style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:10px; box-shadow:var(--shadow-sm);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <span class="card-icon" style="font-size:0.85rem; width:24px; height:24px;">🔄</span>
-              <span style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.04em;">
+              <span
+                style="font-size:0.73rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); letter-spacing:0.04em;">
                 LUỒNG 6 BƯỚC: USER (ID: 101) GỬI TIN CHO ADMIN (ID: 1) TRONG HỘI THOẠI 5001
               </span>
             </div>
@@ -2107,27 +2360,36 @@
           </div>
 
           <div style="display:grid; grid-template-columns:repeat(6, 1fr); gap:6px;">
-            <div style="background:var(--bg-canvas); border-top:3px solid var(--accent-teal); padding:5px 6px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.65rem; line-height:1.3;">
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid var(--accent-teal); padding:5px 6px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.65rem; line-height:1.3;">
               <div style="font-weight:700; color:var(--accent-teal); margin-bottom:1px;">1. Kết Nối &amp; Auth</div>
-              Mở <code>/ws-chat</code>, gửi STOMP <code>CONNECT</code>. Server xác thực JWT và thiết lập phiên Principal.
+              Mở <code>/ws-chat</code>, gửi STOMP <code>CONNECT</code>. Server xác thực JWT và thiết lập phiên
+              Principal.
             </div>
-            <div style="background:var(--bg-canvas); border-top:3px solid #38BDF8; padding:5px 6px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.65rem; line-height:1.3;">
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid #38BDF8; padding:5px 6px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.65rem; line-height:1.3;">
               <div style="font-weight:700; color:#0284C7; margin-bottom:1px;">2. User Gửi Tin</div>
               Client gửi STOMP <code>SEND</code> đến <code>/app/chat.sendMessage</code> kèm nội dung và roomId 5001.
             </div>
-            <div style="background:var(--bg-canvas); border-top:3px solid #F59E0B; padding:5px 6px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.65rem; line-height:1.3;">
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid #F59E0B; padding:5px 6px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.65rem; line-height:1.3;">
               <div style="font-weight:700; color:#D97706; margin-bottom:1px;">3. Kiểm Tra Quyền</div>
-              Controller kiểm tra quyền tham gia; lấy <code>senderId</code> từ <code>Principal</code> đã xác thực (không tin client).
+              Controller kiểm tra quyền tham gia; lấy <code>senderId</code> từ <code>Principal</code> đã xác thực (không
+              tin client).
             </div>
-            <div style="background:var(--bg-canvas); border-top:3px solid #10B981; padding:5px 6px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.65rem; line-height:1.3;">
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid #10B981; padding:5px 6px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.65rem; line-height:1.3;">
               <div style="font-weight:700; color:#059669; margin-bottom:1px;">4. Lưu PostgreSQL</div>
-              Chat Service lưu nội dung, người gửi và thời gian vào bảng <code>chat_messages</code> để giữ lịch sử lâu dài.
+              Chat Service lưu nội dung, người gửi và thời gian vào bảng <code>chat_messages</code> để giữ lịch sử lâu
+              dài.
             </div>
-            <div style="background:var(--bg-canvas); border-top:3px solid #EC4899; padding:5px 6px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.65rem; line-height:1.3;">
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid #EC4899; padding:5px 6px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.65rem; line-height:1.3;">
               <div style="font-weight:700; color:#DB2777; margin-bottom:1px;">5. Đẩy Tin Đến Admin</div>
               Backend gửi message đến <code>/topic/rooms.5001</code> Admin đang subscribe; Admin thấy ngay không cần F5.
             </div>
-            <div style="background:var(--bg-canvas); border-top:3px solid #8B5CF6; padding:5px 6px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.65rem; line-height:1.3;">
+            <div
+              style="background:var(--bg-canvas); border-top:3px solid #8B5CF6; padding:5px 6px; border-radius:var(--radius-sm); border:1px solid var(--border-light); font-size:0.65rem; line-height:1.3;">
               <div style="font-weight:700; color:#7C3AED; margin-bottom:1px;">6. Admin Phản Hồi</div>
               Admin nhắn lại theo quy trình tương tự; User nhận tin tức thì qua kết nối WebSocket của mình.
             </div>
@@ -2143,19 +2405,25 @@
             </div>
 
             <div style="display:flex; flex-direction:column; gap:5px; font-size:0.7rem; line-height:1.35;">
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:var(--accent-teal);">• Nguyên tắc sống còn:</strong> 
-                Không nên lấy danh tính người gửi hoặc người nhận một cách mù quáng từ dữ liệu Client gửi lên JSON! Kẻ xấu có thể đổi ID để giả mạo người khác.
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:var(--accent-teal);">• Nguyên tắc sống còn:</strong>
+                Không nên lấy danh tính người gửi hoặc người nhận một cách mù quáng từ dữ liệu Client gửi lên JSON! Kẻ
+                xấu có thể đổi ID để giả mạo người khác.
               </div>
 
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:#0284C7;">• Xác thực tại CONNECT (ChannelInterceptor):</strong> 
-                Chặn frame <code>CONNECT</code> đầu tiên ➔ giải mã JWT Bearer ➔ gán <code>UserPrincipal</code> vào phiên kết nối WebSocket qua <code>accessor.setUser(auth)</code>.
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:#0284C7;">• Xác thực tại CONNECT (ChannelInterceptor):</strong>
+                Chặn frame <code>CONNECT</code> đầu tiên ➔ giải mã JWT Bearer ➔ gán <code>UserPrincipal</code> vào phiên
+                kết nối WebSocket qua <code>accessor.setUser(auth)</code>.
               </div>
 
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #10B981; border-radius:var(--radius-sm); padding:5px 8px;">
-                <strong style="color:#059669;">• Controller tiêm Principal tự động:</strong> 
-                Hàm <code>@MessageMapping</code> nhận <code>Principal</code> trực tiếp từ Spring. Client chỉ gửi <code>{roomId, content}</code>, hoàn toàn chặn đứng giả mạo danh tính!
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #10B981; border-radius:var(--radius-sm); padding:5px 8px;">
+                <strong style="color:#059669;">• Controller tiêm Principal tự động:</strong>
+                Hàm <code>@MessageMapping</code> nhận <code>Principal</code> trực tiếp từ Spring. Client chỉ gửi
+                <code>{roomId, content}</code>, hoàn toàn chặn đứng giả mạo danh tính!
               </div>
             </div>
           </div>
@@ -2168,29 +2436,40 @@
             </div>
 
             <div style="display:flex; flex-direction:column; gap:5px; font-size:0.7rem; line-height:1.35;">
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #38BDF8; border-radius:var(--radius-sm); padding:5px 8px;">
                 <div style="font-weight:700; color:#0284C7; margin-bottom:1px;">📂 REST API — Tải Lịch Sử Chat Cũ:</div>
-                Khi vừa mở khung chat, Client gọi <code>GET /api/v1/chat/rooms/{roomId}/messages</code> để tải toàn bộ tin nhắn trước đây từ PostgreSQL hiển thị lên màn hình.
+                Khi vừa mở khung chat, Client gọi <code>GET /api/v1/chat/rooms/{roomId}/messages</code> để tải toàn bộ
+                tin nhắn trước đây từ PostgreSQL hiển thị lên màn hình.
               </div>
 
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #F59E0B; border-radius:var(--radius-sm); padding:5px 8px;">
-                <div style="font-weight:700; color:#D97706; margin-bottom:1px;">🚀 WebSocket STOMP — Nhận Tin Tức Thời:</div>
-                Sau khi tải xong, ứng dụng kết nối socket để gửi và nhận tức thời các tin nhắn mới phát sinh (độ trễ &lt; 1ms qua <code>/topic/rooms.{id}</code>).
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid #F59E0B; border-radius:var(--radius-sm); padding:5px 8px;">
+                <div style="font-weight:700; color:#D97706; margin-bottom:1px;">🚀 WebSocket STOMP — Nhận Tin Tức Thời:
+                </div>
+                Sau khi tải xong, ứng dụng kết nối socket để gửi và nhận tức thời các tin nhắn mới phát sinh (độ trễ
+                &lt; 1ms qua <code>/topic/rooms.{id}</code>).
               </div>
 
-              <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-coral); border-radius:var(--radius-sm); padding:5px 8px;">
-                <div style="font-weight:700; color:var(--accent-coral); margin-bottom:1px;">💾 Lưu Bền Vững Trước Khi Phát:</div>
-                Chỉ sau khi Chat Service lưu vào PostgreSQL thành công, hệ thống mới phát sự kiện qua <code>SimpMessagingTemplate</code> để hiển thị chính thức.
+              <div
+                style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:3px solid var(--accent-coral); border-radius:var(--radius-sm); padding:5px 8px;">
+                <div style="font-weight:700; color:var(--accent-coral); margin-bottom:1px;">💾 Lưu Bền Vững Trước Khi
+                  Phát:</div>
+                Chỉ sau khi Chat Service lưu vào PostgreSQL thành công, hệ thống mới phát sự kiện qua
+                <code>SimpMessagingTemplate</code> để hiển thị chính thức.
               </div>
             </div>
           </div>
         </div>
 
         <!-- Băng ngang dưới: Lưu ý phân biệt quan trọng -->
-        <div class="card" style="padding:6px 12px; font-size:0.7rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+        <div class="card"
+          style="padding:6px 12px; font-size:0.7rem; line-height:1.35; display:flex; align-items:center; justify-content:space-between; gap:12px;">
           <div>
-            <strong style="color:var(--accent-teal);">💡 Điểm Cần Phân Biệt Khi Thuyết Trình:</strong> 
-            Gửi thành công qua WebSocket chỉ xác nhận tin đã tới Server và phân phối đến Broker, <strong>chưa đồng nghĩa người nhận đã đọc</strong>. Nếu cần trạng thái gửi (sent), đã nhận (delivered) và đã xem (read), hệ thống phải thiết kế thêm các sự kiện ACK tương ứng.
+            <strong style="color:var(--accent-teal);">💡 Điểm Cần Phân Biệt Khi Thuyết Trình:</strong>
+            Gửi thành công qua WebSocket chỉ xác nhận tin đã tới Server và phân phối đến Broker, <strong>chưa đồng nghĩa
+              người nhận đã đọc</strong>. Nếu cần trạng thái gửi (sent), đã nhận (delivered) và đã xem (read), hệ thống
+            phải thiết kế thêm các sự kiện ACK tương ứng.
           </div>
           <span class="pill pill-teal" style="font-size:0.62rem; white-space:nowrap;">Ghi Nhớ Thuyết Trình</span>
         </div>
@@ -2199,122 +2478,137 @@
 
 
     <!-- ==================================================================
-         SLIDE 14: KẾT NỐI MOBILE APP ĐẾN BACKEND & ĐÓNG GÓI APK
+         SLIDE 14: REACT NATIVE CLI: KHÁI NIỆM, LUỒNG & CÁCH ĐÓNG GÓI APK
          ================================================================== -->
-    <section class="slide" data-slide="14" data-title="Mobile: Kết Nối & Đóng Gói APK">
+    <section class="slide" data-slide="14" data-title="React Native CLI &amp; Đóng Gói APK">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
-            <span class="slide-category-tag">CHUYÊN ĐỀ MỞ RỘNG • REACT NATIVE CLI</span>
-            <h2 class="slide-title">Kết Nối Mobile Đến Backend &amp; Đóng Gói APK Độc Lập</h2>
-            <p class="slide-subtitle">Bản chất lý thuyết mạng nội bộ, cơ chế bảo mật Android và quy trình đóng gói ứng dụng độc lập</p>
+            <span class="slide-category-tag">CHUYÊN ĐỀ MỞ RỘNG • MOBILE ARCHITECTURE</span>
+            <h2 class="slide-title">React Native CLI: Bản Chất Kỹ Thuật, So Sánh Expo &amp; Đóng Gói APK</h2>
+            <p class="slide-subtitle">Bản chất Pure Native, khả năng can thiệp tầng sâu hệ điều hành và quy trình đóng gói Release APK</p>
           </div>
           <div style="display:flex; gap:8px;">
             <span class="pill pill-teal">React Native CLI</span>
-            <span class="pill pill-coral">Standalone APK</span>
+            <span class="pill pill-coral">Standalone Release APK</span>
           </div>
         </div>
 
-        <!-- 3 Cột Lý Thuyết & Quy Trình Dễ Đọc Thuyết Trình -->
-        <div class="grid-3" style="margin-bottom:12px;">
-          <!-- Khối 1: Bản chất mạng LAN & Cleartext -->
-          <div class="card highlight">
-            <div class="card-title">
-              <span class="card-icon">01</span> Mạng Nội Bộ (LAN) &amp; Bảo Mật
+        <!-- Khối 1: Grid-2 Đi Sâu Vào Bản Chất React Native CLI & So Sánh Expo (Trình Độ Intern) -->
+        <div class="grid-2" style="gap:12px; margin-bottom:10px;">
+          <!-- Card 1: React Native CLI Là Gì? -->
+          <div class="card highlight" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
+              <span><span class="card-icon">⚛️</span> 1. Bản Chất React Native CLI (Pure Native)</span>
+              <span class="pill pill-teal" style="font-size:0.63rem;">Kiến Trúc Cốt Lõi</span>
             </div>
-            <div style="display:flex; flex-direction:column; gap:7px; font-size:0.77rem; line-height:1.45;">
-              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-                <strong style="color:var(--accent-teal);">• Bản chất IP Localhost:</strong>
-                Trên thiết bị di động, <code>localhost</code> trỏ về chính con chip mạng của điện thoại (127.0.0.1). Muốn gọi vào Backend trên máy tính, bắt buộc phải dùng <strong>IPv4 LAN thực tế</strong> (<code>192.168.1.74:8080</code>) trong cùng mạng Wi-Fi.
+
+            <div style="display:flex; flex-direction:column; gap:5px; font-size:0.72rem; line-height:1.38;">
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:6px 9px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong>• Định nghĩa &amp; Bản chất:</strong> Framework mã nguồn mở của Meta. Ta viết code bằng JavaScript/React nhưng hệ thống biên dịch và render ra <strong>UI Native thật 100%</strong> của hệ điều hành (không phải nhúng trang web qua WebView).
               </div>
-              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-                <strong style="color:var(--accent-coral);">• Chính sách Cleartext Traffic:</strong>
-                Từ Android 9 (API 28), hệ thống mặc định chặn tất cả kết nối HTTP thường (chỉ cho phép HTTPS SSL). Ta cấu hình <code>usesCleartextTraffic="true"</code> trong AndroidManifest để cho phép HTTP nội bộ.
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid #38BDF8; padding:6px 9px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong>• Sở hữu trực tiếp mã nguồn Native:</strong> Khi tạo app bằng CLI, dự án sinh sẵn 2 thư mục gốc <code>android/</code> và <code>ios/</code>. Lập trình viên có toàn quyền mở bằng Android Studio hoặc Xcode để cấu hình sâu tầng hệ điều hành.
               </div>
-              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-                <strong style="color:var(--accent-navy);">• Mở cổng Tường lửa (Firewall):</strong>
-                Mở Inbound TCP cổng <code>8080</code> trên Windows Firewall của máy chủ, đảm bảo các gói tin từ điện thoại không bị hệ điều hành máy tính chặn lại.
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid #10B981; padding:6px 9px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong>• Cơ chế Native Bridge &amp; JSI:</strong> JavaScript giao tiếp với mã máy Native qua C++ Engine (Hermes), giúp gọi trực tiếp phần cứng thiết bị (Camera, Storage, Network Socket) với độ trễ tối thiểu.
               </div>
-            </div>
-            <div class="card-project-apply" style="margin-top:8px;">
-              <strong>Lời thoại trình bày:</strong> "Em thay localhost bằng IP LAN, bật usesCleartextTraffic vượt rào chặn HTTP của Android 9+ và mở firewall cổng 8080."
             </div>
           </div>
 
-          <!-- Khối 2: Bản chất đóng gói Offline Bundle & Gradle -->
-          <div class="card highlight-coral">
-            <div class="card-title">
-              <span class="card-icon coral">02</span> Đóng Gói Bundle &amp; Biên Dịch
+          <!-- Card 2: Vì Sao Chọn React Native CLI Thay Vì Expo? -->
+          <div class="card highlight-coral" style="padding:10px 12px;">
+            <div class="card-title" style="margin-bottom:6px; font-size:0.86rem; justify-content:space-between;">
+              <span><span class="card-icon coral">⚖️</span> 2. Vì Sao Chọn CLI Thay Vì Expo?</span>
+              <span class="pill pill-coral" style="font-size:0.63rem;">Lợi Thế Dự Án</span>
             </div>
-            <div style="display:flex; flex-direction:column; gap:7px; font-size:0.77rem; line-height:1.45;">
-              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-                <strong style="color:var(--accent-teal);">• Bản chất Metro Bundler:</strong>
-                Khi code, ứng dụng chạy nhờ tải động code qua Metro Server (cần cắm cáp USB). Để app chạy độc lập, ta phải nén offline toàn bộ JavaScript và tài nguyên nhúng cố định vào file APK.
-              </div>
-              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-                <strong style="color:var(--accent-coral);">• Lệnh đóng gói tĩnh:</strong>
-                Dùng lệnh <code>react-native bundle</code> ở chế độ Release (<code>--dev false</code>). Toàn bộ logic giao diện được gộp thành một file tĩnh duy nhất <code>index.android.bundle</code> đưa vào thư mục assets.
-              </div>
-              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-                <strong style="color:var(--accent-navy);">• Biên dịch APK bằng Gradle:</strong>
-                Chạy <code>./gradlew assembleRelease</code>. Gradle biên dịch mã nguồn Java/Native, liên kết assets và sinh ra file thành phẩm <code>app-release.apk</code> hoàn chỉnh.
-              </div>
-            </div>
-            <div class="card-project-apply coral" style="margin-top:8px;">
-              <strong>Lời thoại trình bày:</strong> "Em dùng react-native bundle nén toàn bộ code JS vào thư mục assets, sau đó dùng Gradle biên dịch ra file APK độc lập không cần Metro."
-            </div>
-          </div>
 
-          <!-- Khối 3: Phân phối & Vận hành mạng LAN -->
-          <div class="card highlight">
-            <div class="card-title">
-              <span class="card-icon">03</span> Phân Phối &amp; Vận Hành Mạng LAN
-            </div>
-            <div style="display:flex; flex-direction:column; gap:7px; font-size:0.77rem; line-height:1.45;">
-              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-                <strong style="color:var(--accent-teal);">• Phân phối file độc lập:</strong>
-                File <code>app-release.apk</code> là gói cài đặt trọn gói, có thể gửi trực tiếp qua Zalo, Google Drive hoặc chia sẻ mạng nội bộ cho bất kỳ ai mà không cần đưa mã nguồn.
+            <div style="display:flex; flex-direction:column; gap:5px; font-size:0.72rem; line-height:1.38;">
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid var(--accent-coral); padding:6px 9px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong>• Thoát khỏi "Hộp Kín" (Sandbox):</strong> Expo tiện lợi nhưng bị giới hạn trong sandbox, khó can thiệp sâu. Với CLI, ta trực tiếp sửa <code>AndroidManifest.xml</code> (bật <code>usesCleartextTraffic</code> gọi HTTP LAN, xin quyền thiết bị).
               </div>
-              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-                <strong style="color:var(--accent-coral);">• Cơ chế bảo mật cài đặt (Sideload):</strong>
-                Thiết bị nhận chỉ cần cấp quyền <em>"Cài đặt ứng dụng từ nguồn không xác định"</em> (Install unknown apps) là app được cài đặt thành biểu tượng độc lập trên màn hình.
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid #F59E0B; padding:6px 9px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong>• Toàn quyền tùy biến hệ thống Build:</strong> Chủ động kiểm soát file <code>build.gradle</code>: chỉ định phiên bản Android SDK, JDK (Java 17), tối ưu Proguard giảm dung lượng app và cấu hình Signing Key.
               </div>
-              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-                <strong style="color:var(--accent-navy);">• Nguyên lý vận hành Client-Server:</strong>
-                Các thiết bị khách chỉ cần bắt chung mạng Wi-Fi với máy tính host là có thể đăng nhập tài khoản, xác thực JWT và tương tác dữ liệu trực tiếp với Database.
+              <div
+                style="background:var(--bg-canvas); border-left:3px solid var(--accent-teal); padding:6px 9px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong>• Build Offline cục bộ (Local Build):</strong> Tự chạy build file APK trực tiếp bằng Gradle trên máy tính mà không phụ thuộc máy chủ đám mây của bên thứ 3 (như EAS Build của Expo), không tốn phí và bảo mật tuyệt đối.
               </div>
-            </div>
-            <div class="card-project-apply" style="margin-top:8px;">
-              <strong>Lời thoại trình bày:</strong> "Em gửi trực tiếp file APK cho các thành viên khác cài đặt; chỉ cần chung Wi-Fi là họ có thể sử dụng đầy đủ tính năng của hệ thống."
             </div>
           </div>
         </div>
 
-        <!-- Banner tóm tắt quy trình 4 bước -->
-        <div class="flowchart-wrapper" style="padding:10px 14px; margin-bottom:0;">
+        <!-- Khối 2: Cách Đóng Gói APK Độc Lập (2 Bước Cốt Lõi) -->
+        <div class="card" style="padding:10px 14px; margin-bottom:10px;">
+          <div class="card-title" style="margin-bottom:8px; font-size:0.86rem; justify-content:space-between;">
+            <span><span class="card-icon">📦</span> 3. Cách Đóng Gói File APK Độc Lập (2 Lệnh Cốt Lõi)</span>
+            <span class="pill pill-teal" style="font-size:0.63rem;">Quy Trình Chuẩn CLI</span>
+          </div>
+
+          <div class="grid-2" style="gap:12px;">
+            <!-- Bước 1: Bundle -->
+            <div
+              style="background:var(--bg-canvas); border:1px solid var(--border-light); border-top:3px solid var(--accent-teal); border-radius:var(--radius-sm); padding:8px 10px; font-size:0.71rem; line-height:1.4;">
+              <div style="font-weight:700; color:var(--accent-teal); margin-bottom:3px; font-size:0.77rem;">
+                ⚡ Bước 1: Nén tĩnh mã nguồn JS (react-native bundle)
+              </div>
+              <div style="color:var(--text-muted); margin-bottom:4px;">
+                Gom toàn bộ code React, components và assets thành một file tĩnh duy nhất <code>index.android.bundle</code> đưa vào thư mục <code>assets/</code> của Android:
+              </div>
+              <div style="font-family:'JetBrains Mono', monospace; font-size:0.63rem; background:#1E293B; color:#E2E8F0; padding:5px 8px; border-radius:4px;">
+                npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
+              </div>
+            </div>
+
+            <!-- Bước 2: Gradle -->
+            <div
+              style="background:var(--bg-canvas); border:1px solid var(--border-light); border-top:3px solid var(--accent-coral); border-radius:var(--radius-sm); padding:8px 10px; font-size:0.71rem; line-height:1.4;">
+              <div style="font-weight:700; color:var(--accent-coral); margin-bottom:3px; font-size:0.77rem;">
+                🔨 Bước 2: Biên dịch Native &amp; Xuất file APK (Gradle)
+              </div>
+              <div style="color:var(--text-muted); margin-bottom:4px;">
+                Android Gradle biên dịch mã nguồn Java/C++, tích hợp bundle JS tĩnh, ký số Release và sinh ra file cài đặt trọn gói:
+              </div>
+              <div style="font-family:'JetBrains Mono', monospace; font-size:0.63rem; background:#1E293B; color:#E2E8F0; padding:5px 8px; border-radius:4px; margin-bottom:4px;">
+                cd android &amp;&amp; ./gradlew assembleRelease
+              </div>
+              <div style="font-size:0.68rem; color:var(--accent-teal); font-weight:600;">
+                ➔ Thành phẩm: <code>android/app/build/outputs/apk/release/app-release.apk</code> (cài trực tiếp trên mọi thiết bị).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Banner tóm tắt luồng trực quan -->
+        <div class="flowchart-wrapper" style="padding:7px 12px; margin-bottom:0;">
           <div class="flow-steps" style="align-items:center;">
-            <div class="flow-step-box active" style="padding:6px 10px;">
+            <div class="flow-step-box active" style="padding:5px 10px;">
               <div class="flow-step-num">BƯỚC 1</div>
-              <div class="flow-step-name">Cấu Hình LAN &amp; Cleartext</div>
-              <div class="flow-step-desc">IP 192.168.x.x + Firewall 8080</div>
+              <div class="flow-step-name">Code React Native</div>
+              <div class="flow-step-desc">Mã nguồn JavaScript / React</div>
             </div>
             <div style="color:var(--accent-teal); font-weight:800; font-size:1.1rem;">➔</div>
-            <div class="flow-step-box coral" style="padding:6px 10px;">
+            <div class="flow-step-box active" style="padding:5px 10px;">
               <div class="flow-step-num">BƯỚC 2</div>
-              <div class="flow-step-name">react-native bundle</div>
-              <div class="flow-step-desc">Đóng gói tĩnh index.android.bundle</div>
+              <div class="flow-step-name">Can Thiệp Native</div>
+              <div class="flow-step-desc">Tùy biến Manifest &amp; Gradle</div>
             </div>
             <div style="color:var(--accent-coral); font-weight:800; font-size:1.1rem;">➔</div>
-            <div class="flow-step-box active" style="padding:6px 10px;">
+            <div class="flow-step-box coral" style="padding:5px 10px;">
               <div class="flow-step-num">BƯỚC 3</div>
-              <div class="flow-step-name">./gradlew assembleRelease</div>
-              <div class="flow-step-desc">Biên dịch app-release.apk</div>
+              <div class="flow-step-name">react-native bundle</div>
+              <div class="flow-step-desc">Nén tĩnh vào assets bundle</div>
             </div>
             <div style="color:var(--accent-teal); font-weight:800; font-size:1.1rem;">➔</div>
-            <div class="flow-step-box active" style="padding:6px 10px;">
+            <div class="flow-step-box active" style="padding:5px 10px;">
               <div class="flow-step-num">BƯỚC 4</div>
-              <div class="flow-step-name">Cài Đặt &amp; Chạy Mạng LAN</div>
-              <div class="flow-step-desc">Thiết bị khách dùng độc lập 100%</div>
+              <div class="flow-step-name">./gradlew assembleRelease</div>
+              <div class="flow-step-desc">Xuất xưởng file app-release.apk</div>
             </div>
           </div>
         </div>
@@ -2331,7 +2625,8 @@
           <div>
             <span class="slide-category-tag coral">KẾT QUẢ THỰC NGHIỆM • MOBILE STANDALONE</span>
             <h2 class="slide-title">Thành Quả Đạt Được &amp; Đánh Giá Thực Nghiệm</h2>
-            <p class="slide-subtitle">Ứng dụng hoạt động độc lập 100%, bảo mật JWT Stateless và tương tác dữ liệu mượt mà trong mạng LAN</p>
+            <p class="slide-subtitle">Ứng dụng hoạt động độc lập 100%, bảo mật JWT Stateless và tương tác dữ liệu mượt
+              mà trong mạng LAN</p>
           </div>
           <div style="display:flex; gap:8px;">
             <span class="pill pill-teal">Độc Lập 100%</span>
@@ -2360,7 +2655,8 @@
                 <tr>
                   <td><strong>Khả năng triển khai</strong></td>
                   <td>Chỉ chạy duy nhất trên máy lập trình viên</td>
-                  <td><span class="pill pill-teal">Mạng cục bộ (LAN)</span> Bất kỳ máy nào chung Wi-Fi đều dùng được</td>
+                  <td><span class="pill pill-teal">Mạng cục bộ (LAN)</span> Bất kỳ máy nào chung Wi-Fi đều dùng được
+                  </td>
                 </tr>
                 <tr>
                   <td><strong>Độ ổn định kết nối</strong></td>
@@ -2370,7 +2666,8 @@
                 <tr>
                   <td><strong>Hiệu quả kiểm thử</strong></td>
                   <td>1 người tự code tự test, thiếu tính khách quan</td>
-                  <td><span class="pill pill-teal">Kiểm thử đồng thời</span> Phân phối file APK cho cả nhóm cùng test</td>
+                  <td><span class="pill pill-teal">Kiểm thử đồng thời</span> Phân phối file APK cho cả nhóm cùng test
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -2382,7 +2679,9 @@
                   1. Lý thuyết Xác Thực Stateless (JWT Bearer):
                 </div>
                 <div style="font-size:0.73rem; color:var(--text-muted); line-height:1.4;">
-                  Sau khi đăng nhập tài khoản <code>admin</code>, token được lưu an toàn. <strong>Axios Interceptor</strong> tự động đính kèm <code>Authorization: Bearer</code> vào header của mọi request gọi đến Backend.
+                  Sau khi đăng nhập tài khoản <code>admin</code>, token được lưu an toàn. <strong>Axios
+                    Interceptor</strong> tự động đính kèm <code>Authorization: Bearer</code> vào header của mọi request
+                  gọi đến Backend.
                 </div>
               </div>
 
@@ -2391,7 +2690,8 @@
                   2. Đồng Bộ Dữ Liệu Qua REST API:
                 </div>
                 <div style="font-size:0.73rem; color:var(--text-muted); line-height:1.4;">
-                  Thao tác thêm, sửa, xóa việc cần làm (Todo) được gửi trực tiếp tới máy chủ qua IP LAN, đồng bộ dữ liệu tức thời và bền vững trong cơ sở dữ liệu PostgreSQL.
+                  Thao tác thêm, sửa, xóa việc cần làm (Todo) được gửi trực tiếp tới máy chủ qua IP LAN, đồng bộ dữ liệu
+                  tức thời và bền vững trong cơ sở dữ liệu PostgreSQL.
                 </div>
               </div>
 
@@ -2400,7 +2700,8 @@
                   3. Trợ Lý Gemini AI Thời Gian Thực:
                 </div>
                 <div style="font-size:0.73rem; color:var(--text-muted); line-height:1.4;">
-                  Tích hợp Chatbot AI hỏi đáp thông minh, máy khách gửi câu hỏi và nhận câu trả lời phân tích định dạng Markdown trực tiếp trên màn hình di động.
+                  Tích hợp Chatbot AI hỏi đáp thông minh, máy khách gửi câu hỏi và nhận câu trả lời phân tích định dạng
+                  Markdown trực tiếp trên màn hình di động.
                 </div>
               </div>
             </div>
@@ -2409,15 +2710,20 @@
           <!-- Right Column: Mockup & Ảnh Chụp Minh Họa Thực Tế -->
           <div>
             <!-- Switch Bar: Điện Thoại Thật vs Trình Giả Lập -->
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:4px 10px;">
-              <div style="font-size:0.72rem; font-weight:700; color:var(--text-main); display:flex; align-items:center; gap:5px;">
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:4px 10px;">
+              <div
+                style="font-size:0.72rem; font-weight:700; color:var(--text-main); display:flex; align-items:center; gap:5px;">
                 <span>📸</span> <span>CHẾ ĐỘ MINH CHỨNG:</span>
               </div>
-              <div style="display:inline-flex; background:var(--bg-surface); border:1px solid var(--border-light); border-radius:20px; padding:2px; gap:2px;">
-                <button id="btnRealDevice" onclick="switchDemoView('real')" style="padding:3px 10px; border-radius:16px; border:none; font-size:0.68rem; font-weight:700; cursor:pointer; background:var(--accent-teal); color:#FFF; transition:all 0.2s ease;">
+              <div
+                style="display:inline-flex; background:var(--bg-surface); border:1px solid var(--border-light); border-radius:20px; padding:2px; gap:2px;">
+                <button id="btnRealDevice" onclick="switchDemoView('real')"
+                  style="padding:3px 10px; border-radius:16px; border:none; font-size:0.68rem; font-weight:700; cursor:pointer; background:var(--accent-teal); color:#FFF; transition:all 0.2s ease;">
                   📱 Điện Thoại Thật (APK)
                 </button>
-                <button id="btnEmulator" onclick="switchDemoView('emu')" style="padding:3px 10px; border-radius:16px; border:none; font-size:0.68rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text-muted); transition:all 0.2s ease;">
+                <button id="btnEmulator" onclick="switchDemoView('emu')"
+                  style="padding:3px 10px; border-radius:16px; border:none; font-size:0.68rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text-muted); transition:all 0.2s ease;">
                   💻 Giả Lập
                 </button>
               </div>
@@ -2435,7 +2741,8 @@
                 <div class="phone-preview-img-box">
                   <img id="demoImg1" src="image copy 3.png" alt="Demo Todo List App">
                 </div>
-                <div id="demoDesc1" style="font-size:0.69rem; color:var(--text-muted); text-align:center; margin-top:5px; line-height:1.3;">
+                <div id="demoDesc1"
+                  style="font-size:0.69rem; color:var(--text-muted); text-align:center; margin-top:5px; line-height:1.3;">
                   Cài APK trực tiếp • Thao tác qua Wi-Fi nội bộ
                 </div>
               </div>
@@ -2451,7 +2758,8 @@
                 <div class="phone-preview-img-box">
                   <img id="demoImg2" src="image copy 2.png" alt="Demo Gemini AI Chat">
                 </div>
-                <div id="demoDesc2" style="font-size:0.69rem; color:var(--text-muted); text-align:center; margin-top:5px; line-height:1.3;">
+                <div id="demoDesc2"
+                  style="font-size:0.69rem; color:var(--text-muted); text-align:center; margin-top:5px; line-height:1.3;">
                   Hỏi đáp AI máy thật • Không cắm cáp hay Metro
                 </div>
               </div>
@@ -2462,68 +2770,82 @@
     </section>
 
     <!-- ==================================================================
-         SLIDE 16: TỔNG KẾT HỆ THỐNG & HỎI ĐÁP (Q&A)
+         SLIDE 16: KẾT THÚC BÁO CÁO & LẮNG NGHE GÓP Ý
          ================================================================== -->
-    <section class="slide" data-slide="16" data-title="Tổng Kết & Góp Ý">
-      <div class="slide-inner">
-        <div class="slide-header">
-          <div>
-            <span class="slide-category-tag">TỔNG KẾT BÁO CÁO</span>
-            <h2 class="slide-title">Tổng Kết Toàn Bộ Hệ Thống &amp; Lắng Nghe Góp Ý</h2>
-            <p class="slide-subtitle">Sự kết hợp hoàn chỉnh giữa các khối công nghệ phân tán, mobile app và bài học đạt được</p>
-          </div>
-        </div>
+    <section class="slide" data-slide="16" data-title="Lắng Nghe Góp Ý">
+      <div class="slide-inner"
+        style="display:flex; flex-direction:column; justify-content:center; align-items:center; min-height:82vh;">
 
-        <!-- System Architecture Summary Box -->
-        <div class="card highlight" style="margin-bottom:14px;">
-          <div style="font-size:0.77rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); margin-bottom:8px;">
-            Mô Hình Tổng Thể Các Khối Công Nghệ Phân Tán Đã Xây Dựng &amp; Tích Hợp
-          </div>
-          <div class="grid-4" style="font-size:0.77rem; gap:10px;">
-            <div style="background:var(--bg-canvas); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-              <strong style="color:var(--text-main);">1. Đóng gói Container:</strong><br>
-              Docker Compose quản lý 8 container, Multi-stage build giảm 62% dung lượng, Non-root user.
-            </div>
-            <div style="background:var(--bg-canvas); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-              <strong style="color:var(--accent-coral);">2. Gateway &amp; Microservices:</strong><br>
-              Tách 4 service độc lập, Database-per-Service, API Gateway (:8080) làm cửa ngõ định tuyến duy nhất.
-            </div>
-            <div style="background:var(--bg-canvas); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-              <strong style="color:var(--accent-teal);">3. Bộ Nhớ &amp; Phân Tán:</strong><br>
-              Redis phòng vệ Brute-force &amp; Cache hồ sơ; Kafka Outbox loại bỏ Dual-Write; STOMP Chat realtime.
-            </div>
-            <div style="background:var(--bg-canvas); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-              <strong style="color:var(--accent-navy);">4. Mobile Client APK:</strong><br>
-              React Native CLI đóng gói APK độc lập, kết nối LAN qua IP nội bộ, đồng bộ Todo &amp; AI Chatbot.
-            </div>
-          </div>
-        </div>
+        <div class="card highlight-coral"
+          style="width:100%; max-width:880px; text-align:center; padding:32px 36px; border-radius:var(--radius-lg); box-shadow:var(--shadow-card);">
 
-        <!-- 4 Takeaways & Q&A Box -->
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-title"><span class="card-icon">🎓</span> 3 Bài Học Lớn Em Đạt Được</div>
-            <div class="card-desc" style="display:flex; flex-direction:column; gap:6px;">
-              <div>1. <strong>Tư duy kiến trúc:</strong> Hiểu rõ sự khác biệt giữa Đồng bộ (REST), Bất đồng bộ (Kafka) và Realtime hai chiều (WebSocket).</div>
-              <div>2. <strong>Bảo mật theo chiều sâu:</strong> Không chỉ kiểm tra token ở cửa ngõ mà còn phân quyền RBAC và phòng vệ Brute-force tại RAM.</div>
-              <div>3. <strong>Vận hành thực chiến:</strong> Tự tin đóng gói Docker backend và xuất bản file APK độc lập chạy mượt mà trong mạng nội bộ.</div>
-            </div>
+          <div
+            style="display:inline-flex; align-items:center; justify-content:center; width:64px; height:64px; background:var(--accent-coral-light); border-radius:50%; margin-bottom:14px; font-size:2rem;">
+            💬
           </div>
 
-          <div class="card highlight-coral" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:24px;">
-            <div style="font-size:2rem; margin-bottom:4px;">💬</div>
-            <h3 style="font-size:1.4rem; font-weight:800; color:var(--text-main); margin-bottom:6px;">LẮNG NGHE GÓP Ý</h3>
-            <p style="font-size:0.83rem; color:var(--text-muted); max-width:380px; margin-bottom:12px;">
-              Em xin chân thành cảm ơn Thầy Cô và các anh/chị đã chú ý lắng nghe! Em rất mong nhận được những lời nhận xét, góp ý quý báu để em học hỏi và hoàn thiện hơn ạ.
+          <span class="slide-category-tag coral" style="margin-bottom:8px;">KẾT THÚC BÁO CÁO</span>
+          <h2
+            style="font-size:1.8rem; font-weight:800; color:var(--text-main); margin-bottom:12px; letter-spacing:-0.02em;">
+            Lời Cảm Ơn &amp; Lắng Nghe Nhận Xét, Góp Ý
+          </h2>
+
+          <div
+            style="background:var(--bg-canvas); border:1px solid var(--border-light); border-left:4px solid var(--accent-coral); border-radius:var(--radius-md); padding:16px 22px; margin:16px auto 20px; max-width:760px; text-align:left;">
+            <p style="font-size:0.92rem; color:var(--text-main); line-height:1.65; margin:0;">
+              <em>"Em xin chân thành cảm ơn anh/chị đã chú ý lắng nghe bài báo cáo của em!<br>
+                Vì em mới tìm hiểu và bước đầu áp dụng các công nghệ này vào dự án thực tế, chắc chắn góc nhìn và kiến
+                thức của em vẫn còn những thiếu sót. <strong>Em rất mong nhận được những lời nhận xét, chỉ ra điểm còn
+                  thiếu và góp ý quý báu từ các anh/chị để em học hỏi và hoàn thiện hơn ạ!</strong>"</em>
             </p>
-            <div style="display:inline-flex; gap:8px; flex-wrap:wrap; justify-content:center;">
-              <span class="pill pill-teal">Demo Postman</span>
-              <span class="pill pill-coral">Console Log Kafka</span>
-              <span class="pill pill-teal">Chat WebSocket Realtime</span>
-              <span class="pill pill-coral">Cài Đặt APK Trên Điện Thoại</span>
+          </div>
+
+          <!-- Các chủ đề mong muốn nhận góp ý sâu -->
+          <div
+            style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-bottom:20px; text-align:left;">
+            <div
+              style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px 14px;">
+              <div style="font-weight:700; color:var(--accent-teal); font-size:0.8rem; margin-bottom:4px;">
+                📐 Kiến Trúc &amp; Luồng Dữ Liệu
+              </div>
+              <div style="font-size:0.73rem; color:var(--text-muted); line-height:1.4;">
+                Góp ý về cách chia nhỏ Microservices, định tuyến Gateway và cơ chế Outbox Event.
+              </div>
+            </div>
+
+            <div
+              style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px 14px;">
+              <div style="font-weight:700; color:var(--accent-coral); font-size:0.8rem; margin-bottom:4px;">
+                🔒 Bảo Mật &amp; Tối Ưu Tải
+              </div>
+              <div style="font-size:0.73rem; color:var(--text-muted); line-height:1.4;">
+                Nhận xét về luồng phân quyền JWT RBAC, phòng vệ Brute-force và Fallback Redis.
+              </div>
+            </div>
+
+            <div
+              style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px 14px;">
+              <div style="font-weight:700; color:var(--accent-navy); font-size:0.8rem; margin-bottom:4px;">
+                ⚡ Realtime &amp; Vận Hành
+              </div>
+              <div style="font-size:0.73rem; color:var(--text-muted); line-height:1.4;">
+                Góp ý giải pháp WebSocket STOMP, kết nối mạng LAN và quy trình đóng gói APK.
+              </div>
             </div>
           </div>
+
+          <!-- Sẵn sàng demo minh chứng nếu được yêu cầu -->
+          <div style="display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:0.74rem; font-weight:700; color:var(--text-muted); margin-right:4px;">SẴN SÀNG MINH
+              CHỨNG:</span>
+            <span class="pill pill-teal">Demo Postman API</span>
+            <span class="pill pill-coral">Console Log Kafka</span>
+            <span class="pill pill-teal">Chat WebSocket Realtime</span>
+            <span class="pill pill-coral">Trải Nghiệm App APK Trên Máy Thật</span>
+          </div>
+
         </div>
+
       </div>
     </section>
 
@@ -2539,8 +2861,10 @@
     <button class="nav-btn" id="btnNext" title="Slide tiếp (→)">›</button>
     <div style="height:16px; width:1px; background:var(--border-light); margin:0 2px;"></div>
     <button class="nav-btn" id="btnToc" title="Mục lục (M)" style="font-size:0.75rem; font-weight:700;">M</button>
-    <button class="nav-btn" id="btnNotes" title="Ghi chú người nói (N)" style="font-size:0.75rem; font-weight:700;">N</button>
-    <button class="nav-btn" id="btnFullscreen" title="Toàn màn hình (F)" style="font-size:0.75rem; font-weight:700;">⛶</button>
+    <button class="nav-btn" id="btnNotes" title="Ghi chú người nói (N)"
+      style="font-size:0.75rem; font-weight:700;">N</button>
+    <button class="nav-btn" id="btnFullscreen" title="Toàn màn hình (F)"
+      style="font-size:0.75rem; font-weight:700;">⛶</button>
   </footer>
 
 
@@ -2552,7 +2876,8 @@
       <div class="speaker-drawer-title">
         <span>🎙️</span> Lời Thoại Thuyết Trình Gợi Ý (Intern)
       </div>
-      <button id="btnCloseNotes" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-dim);">✕</button>
+      <button id="btnCloseNotes"
+        style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-dim);">✕</button>
     </div>
     <div class="speaker-drawer-body" id="speakerNotesBody">
       <!-- Injected via JavaScript based on current slide -->
@@ -2565,9 +2890,11 @@
        ================================================================== -->
   <div class="toc-modal-overlay" id="tocModalOverlay">
     <div class="toc-modal">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:10px;">
+      <div
+        style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:10px;">
         <div style="font-size:1.05rem; font-weight:800; color:var(--text-main);">Mục Lục 17 Slide Báo Cáo</div>
-        <button id="btnCloseToc" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-dim);">✕</button>
+        <button id="btnCloseToc"
+          style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-dim);">✕</button>
       </div>
       <div class="toc-grid" id="tocGrid">
         <!-- Injected via JS -->
@@ -2580,11 +2907,11 @@
        JAVASCRIPT: SLIDE ENGINE & SPEAKER NOTES
        ================================================================== -->
   <script>
-        // 17 Complete Speaker Notes Tailored for 4th-Year Intern Level
+    // 17 Complete Speaker Notes Tailored for 4th-Year Intern Level
     const speakerNotes = [
       {
         title: "Slide 0: Trang Bìa",
-        script: "Kính chào Thầy Cô và các bạn. Hôm nay em xin phép trình bày bài seminar tổng kết các kiến thức nền tảng Backend cốt lõi và cách em đã trực tiếp áp dụng vào việc xây dựng hệ thống Microservices thực tế với Java Spring Boot 3, Docker, Kafka, Redis, WebSocket và ứng dụng Mobile React Native."
+        script: "Kính chào anh/chị. Hôm nay em xin phép trình bày bài seminar tổng kết các kiến thức nền tảng Backend cốt lõi và cách em đã trực tiếp áp dụng vào việc xây dựng hệ thống Microservices thực tế với Java Spring Boot 3, Docker, Kafka, Redis, WebSocket và ứng dụng Mobile React Native."
       },
       {
         title: "Slide 1: Mục Lục",
@@ -2632,23 +2959,23 @@
       },
       {
         title: "Slide 12: WebSocket & STOMP: Khái Niệm & Kiến Trúc",
-        script: "Kính thưa anh/chị, ở phần này em xin trình bày về WebSocket và STOMP trong bài toán xây dựng Chat Realtime giữa Admin và User. Để hiểu rõ, ta cần phân biệt: WebSocket là giao thức kết nối hai chiều liên tục giúp Client và Server trao đổi dữ liệu tức thời mà không cần liên tục gửi request HTTP Polling thăm dò; còn STOMP là giao thức messaging định nghĩa các lệnh CONNECT, SEND, SUBSCRIBE để tổ chức gửi nhận tin theo các destination rõ ràng. Ví dụ khi User gửi 'Xin chào Admin': WebSocket duy trì đường truyền, STOMP xác định destination gửi đến, Spring Boot tiếp nhận kiểm tra quyền, và Server đẩy tin nhắn đến Client Admin đang subscribe. Kiến trúc tổng thể gồm Frontend React hoặc Mobile kết nối qua WebSocket STOMP tới Backend Spring Boot; Chat Service kiểm tra quyền và lưu tin vào PostgreSQL, sau đó Simple Broker phân phối tin nhắn đến đúng người nhận. Dự án sử dụng destination /topic/rooms.{roomId} cho từng hội thoại, kết hợp xác thực chặt chẽ quyền truy cập trước khi cho phép gửi và subscribe."
+        script: "Kính thưa anh/chị, ở phần này em xin trình bày về WebSocket và STOMP trong bài toán xây dựng Chat Realtime giữa Admin và User. Để hiểu rõ, ta cần phân biệt: WebSocket là giao thức kết nối hai chiều liên tục giúp Client và Server trao đổi dữ liệu tức thời mà không cần liên tục gửi request HTTP Polling thăm dò; còn STOMP là giao thức messaging định nghĩa các lệnh CONNECT, SEND, SUBSCRIBE để tổ chức gửi nhận tin theo các destination rõ ràng. Kiến trúc tổng thể hệ thống gồm 4 thành phần chính: Giao diện Client (React/React Native), đường truyền kết nối socket 2 chiều WebSocket STOMP, Chat Service kiểm tra bảo mật quyền hạn từ Principal JWT, và Simple Broker kết hợp cơ sở dữ liệu PostgreSQL lưu trữ lịch sử tin nhắn lâu dài."
       },
       {
         title: "Slide 13: Luồng Hoạt Động Khi User Nhắn Admin & Áp Dụng Dự Án",
         script: "Tiếp theo là luồng hoạt động 6 bước khi User gửi tin nhắn cho Admin và cách em hiện thực hóa trong dự án: Giả sử User 101 nhắn cho Admin 1 trong hội thoại 5001. Bước 1, User kết nối socket và gửi frame CONNECT kèm token JWT để xác thực phiên. Bước 2, User gửi frame SEND đến /app/chat.sendMessage kèm nội dung và ID hội thoại. Bước 3, Controller tiếp nhận, kiểm tra tính hợp lệ và lấy danh tính người gửi từ Principal trong phiên đã xác thực. Bước 4, Chat Service lưu tin nhắn vào bảng chat_messages trong PostgreSQL; chỉ sau khi lưu thành công, hệ thống mới phát tin. Bước 5, Server dùng SimpMessagingTemplate phân phối tin nhắn đến destination /topic/rooms.5001 mà Admin đã subscribe để hiển thị ngay không cần F5. Bước 6, Admin phản hồi theo chiều ngược lại. Trong dự án, em đặc biệt chú trọng 2 điểm: Thứ nhất là chống mạo danh danh tính 100% bằng cách trích xuất senderId từ Principal thay vì lấy mù quáng từ client gửi lên. Thứ hai là kết hợp REST API để tải lịch sử chat cũ từ PostgreSQL khi mở app, và dùng WebSocket STOMP để truyền nhận tin nhắn mới tức thời với độ trễ dưới 1 mili-giây."
       },
       {
-        title: "Slide 14: Mobile App: Kết Nối LAN & Đóng Gói APK",
-        script: "Tiếp theo, em xin trình bày về phần Mobile App và quy trình đóng gói file APK bằng React Native CLI để gửi cho các máy khác cùng mạng cài đặt và sử dụng. Thách thức lớn nhất là làm sao để app chạy độc lập trên điện thoại thật mà không cần cắm cáp hay bật Metro Server. Em thực hiện qua 3 giai đoạn: Giai đoạn 1 là thông mạng LAN, thay localhost bằng IP thực tế của máy chủ Spring Boot, bật usesCleartextTraffic trong AndroidManifest để cho phép HTTP trên Android 9+ và mở cổng 8080 trên Windows Firewall. Giai đoạn 2 là đóng gói bằng React Native CLI: em dùng lệnh react-native bundle nén toàn bộ code JS vào assets của Android, rồi chạy ./gradlew assembleRelease để biên dịch ra file app-release.apk hoàn chỉnh. Giai đoạn 3 là phân phối file APK cho các máy khác trong cùng Wi-Fi cài đặt và sử dụng trực tiếp."
+        title: "Slide 14: React Native CLI & Đóng Gói APK",
+        script: "Kính thưa anh/chị, ở phần Mobile này em xin trình bày sâu hơn về bản chất của React Native CLI, lý do em chọn CLI thay vì Expo và quy trình đóng gói file APK độc lập: Đầu tiên về bản chất, React Native CLI là bộ công cụ thuần Native của Meta. Khi lập trình bằng JavaScript, ứng dụng không hề nhúng trang web qua WebView mà render trực tiếp thành các view Native thật của hệ điều hành qua engine Hermes, mang lại trải nghiệm mượt mà. Thứ hai, lý do em chọn React Native CLI thay vì Expo là vì CLI cho phép ta sở hữu hoàn toàn 2 thư mục gốc android và ios; từ đó ta có toàn quyền can thiệp vào AndroidManifest để cấp quyền mạng HTTP nội bộ, tùy biến build.gradle chọn phiên bản Java 17, và tự biên dịch offline trên máy tính mà không bị giới hạn trong sandbox của Expo hay phụ thuộc server build đám mây. Cuối cùng, quy trình đóng gói gồm 2 bước: Bước 1 dùng lệnh react-native bundle nén toàn bộ code JS vào file tĩnh index.android.bundle trong assets; và Bước 2 chạy ./gradlew assembleRelease để Gradle biên dịch ra file app-release.apk hoàn chỉnh chạy độc lập 100%."
       },
       {
         title: "Slide 15: Thành Quả Đạt Được & Demo Mobile",
-        script: "Đây là kết quả thực tế sau khi đóng gói. Ứng dụng đã hoàn toàn ngắt kết nối với dây cáp và Metro Server, chạy độc lập 100%. Bất kỳ ai kết nối chung mạng Wi-Fi đều có thể tải file APK về cài đặt bình thường. Như Thầy Cô thấy trên màn hình: bên trái là tính năng Quản lý công việc Todo List kết nối lưu trực tiếp vào cơ sở dữ liệu qua REST API; bên phải là tính năng Trợ lý AI Gemini trả lời thông minh thời gian thực. Toàn bộ quá trình đăng nhập lấy JWT Token, gọi API và hiển thị dữ liệu diễn ra hoàn toàn mượt mà, không gặp bất kỳ lỗi mạng nào."
+        script: "Đây là kết quả thực tế sau khi đóng gói. Ứng dụng đã hoàn toàn ngắt kết nối với dây cáp và Metro Server, chạy độc lập 100%. Bất kỳ ai kết nối chung mạng Wi-Fi đều có thể tải file APK về cài đặt bình thường. Như anh/chị thấy trên màn hình: bên trái là tính năng Quản lý công việc Todo List kết nối lưu trực tiếp vào cơ sở dữ liệu qua REST API; bên phải là tính năng Trợ lý AI Gemini trả lời thông minh thời gian thực. Toàn bộ quá trình đăng nhập lấy JWT Token, gọi API và hiển thị dữ liệu diễn ra hoàn toàn mượt mà, không gặp bất kỳ lỗi mạng nào."
       },
       {
-        title: "Slide 16: Tổng Kết Toàn Bộ Hệ Thống & Lắng Nghe Góp Ý",
-        script: "Em đã tổng hợp toàn bộ các khối kiến thức và công nghệ cốt lõi đã áp dụng trong hệ thống Microservices: từ Docker hóa, bảo mật Spring Security & JWT, kiến trúc hướng sự kiện Kafka Outbox, tăng tốc với Redis, chat realtime WebSocket, đến ứng dụng di động React Native đóng gói APK độc lập. Vì em mới bắt đầu tìm hiểu và áp dụng các công nghệ này vào dự án, nên chắc chắn góc nhìn và kiến thức của em vẫn còn những điểm chưa được hoàn thiện. Em rất mong nhận được những lời nhận xét, góp ý từ các anh/chị về cả phần kiến thức lẫn cách triển khai trong dự án để em có thể học hỏi và hoàn thiện hơn ạ!"
+        title: "Slide 16: Lời Cảm Ơn & Lắng Nghe Góp Ý",
+        script: "Em xin chân thành cảm ơn anh/chị đã chú ý lắng nghe bài báo cáo của em! Vì em mới tìm hiểu và bước đầu áp dụng các công nghệ này vào dự án thực tế, nên chắc chắn góc nhìn và kiến thức của em vẫn còn những thiếu sót. Em rất mong muốn nhận được những lời nhận xét và góp ý quý báu: Anh/chị có thấy phần kiến thức nào trong slide hay cách triển khai trong dự án của em còn thiếu sót hoặc chưa hợp lý không ạ? Nếu có, kính mong các anh/chị hãy chỉ ra và nhận xét để em học hỏi và hoàn thiện hơn ạ. Em xin chân thành cảm ơn!"
       }
     ];
 
@@ -2704,7 +3031,7 @@
       });
 
       // Jump to slide function
-      window.goToSlide = function(index) {
+      window.goToSlide = function (index) {
         if (index < 0 || index >= totalSlides) return;
         currentSlide = index;
         slides[index].scrollIntoView({ behavior: 'smooth' });
@@ -2712,7 +3039,7 @@
       };
 
       // Switch Mobile Demo View (Real Device vs Emulator)
-      window.switchDemoView = function(type) {
+      window.switchDemoView = function (type) {
         const btnReal = document.getElementById('btnRealDevice');
         const btnEmu = document.getElementById('btnEmulator');
         const img1 = document.getElementById('demoImg1');
@@ -2832,7 +3159,7 @@
       // TOC Modal
       function openToc() { tocModalOverlay.classList.add('open'); }
       function closeToc() { tocModalOverlay.classList.remove('open'); }
-      window.toggleToc = function() { tocModalOverlay.classList.toggle('open'); };
+      window.toggleToc = function () { tocModalOverlay.classList.toggle('open'); };
       if (btnToc) btnToc.addEventListener('click', toggleToc);
       if (btnCloseToc) btnCloseToc.addEventListener('click', closeToc);
       tocModalOverlay.addEventListener('click', (e) => {
@@ -2847,7 +3174,7 @@
       // Fullscreen
       function toggleFullscreen() {
         if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch(() => {});
+          document.documentElement.requestFullscreen().catch(() => { });
         } else {
           if (document.exitFullscreen) document.exitFullscreen();
         }
