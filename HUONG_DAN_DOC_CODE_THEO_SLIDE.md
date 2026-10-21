@@ -556,7 +556,88 @@ public ChatMessageResponse sendMessage(UUID senderId, SenderRole senderRole, Sen
 
 ---
 
+## 📱 CHUYÊN ĐỀ 7: MOBILE APP, KẾT NỐI LAN & ĐÓNG GÓI APK (SLIDE 14, 15)
+
+### 🎯 Mục tiêu chứng minh:
+- Đưa ứng dụng Mobile (React Native CLI) kết nối vào Backend Spring Boot qua mạng nội bộ LAN.
+- Đóng gói toàn bộ mã nguồn thành file `.apk` độc lập, ngắt hoàn toàn phụ thuộc vào Metro Bundler và dây cáp máy tính.
+- Phân phối file APK cho các thiết bị khách cùng mạng Wi-Fi cài đặt và trải nghiệm thực tế.
+
+---
+
+### 📂 Bước 1: Mở cấu hình Axios Base URL (Client Mobile)
+🗣️ **Lời thoại gợi ý:** *"Trên thiết bị di động thật, `localhost` trỏ về chính con chip mạng của điện thoại (127.0.0.1). Muốn gọi vào Backend trên máy tính, em bắt buộc phải cấu hình IP LAN thực tế của máy chủ Spring Boot, ví dụ `http://192.168.1.74:8080/api`."*
+
+```javascript
+// Cấu hình Axios Base URL kết nối Gateway qua IP LAN máy tính host
+const apiClient = axios.create({
+  baseURL: 'http://192.168.1.74:8080/api', // Dùng IPv4 mạng Wi-Fi nội bộ
+  timeout: 10000,
+});
+
+// Interceptor tự động gắn JWT Bearer Token vào header mỗi request
+apiClient.interceptors.request.use(async (config) => {
+  const token = await AsyncStorage.getItem('accessToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+```
+
+---
+
+### 📂 Bước 2: Vượt rào bảo mật Android trong `AndroidManifest.xml`
+🗣️ **Lời thoại gợi ý:** *"Từ Android 9 (API 28), hệ điều hành mặc định chặn tất cả kết nối HTTP thường để bắt buộc HTTPS. Vì chạy test nội bộ LAN qua HTTP, em cấu hình thuộc tính `android:usesCleartextTraffic=\"true\"` trong thẻ `<application>` để vượt qua rào cản này, đồng thời mở cổng Inbound 8080 trên Windows Firewall."*
+
+```xml
+<application
+  android:name=".MainApplication"
+  android:label="@string/app_name"
+  android:icon="@mipmap/ic_launcher"
+  android:roundIcon="@mipmap/ic_launcher_round"
+  android:allowBackup="false"
+  android:theme="@style/AppTheme"
+  android:usesCleartextTraffic="true"> <!-- Cho phép kết nối HTTP qua mạng LAN -->
+```
+
+---
+
+### 📂 Bước 3: Đóng gói Offline JavaScript Bundle
+🗣️ **Lời thoại gợi ý:** *"Bình thường khi code, app chạy được là nhờ tải động qua Metro Server. Để app chạy độc lập không cần bật máy tính dev, em dùng lệnh `react-native bundle` ở chế độ Release để gộp toàn bộ JavaScript và tài nguyên nhúng thành một file tĩnh duy nhất `index.android.bundle` đưa vào thư mục assets."*
+
+```bash
+# Lệnh nén toàn bộ code JS thành file tĩnh nhúng sẵn vào ứng dụng
+npx react-native bundle \
+  --platform android \
+  --dev false \
+  --entry-file index.js \
+  --bundle-output android/app/src/main/assets/index.android.bundle \
+  --assets-dest android/app/src/main/res
+```
+
+---
+
+### 📂 Bước 4: Biên dịch file APK hoàn chỉnh bằng Gradle
+🗣️ **Lời thoại gợi ý:** *"Sau khi đã có bundle tĩnh, em chạy `./gradlew assembleRelease` trong thư mục `android/`. Gradle sẽ liên kết mã native và sinh ra file thành phẩm `app-release.apk`. Em chỉ việc gửi file APK này sang máy khác cùng Wi-Fi là họ có thể cài đặt và sử dụng bình thường."*
+
+```bash
+cd android
+./gradlew assembleRelease
+# File thành phẩm xuất tại: android/app/build/outputs/apk/release/app-release.apk
+```
+
+---
+
+### 📂 Bước 5: Kiểm chứng tính năng thực tế trên điện thoại (Slide 15)
+🗣️ **Lời thoại gợi ý:** *"Như trên slide minh họa: Sau khi cài đặt file APK trên máy thật, người dùng mở app qua Wi-Fi nội bộ:
+1. Đăng nhập tài khoản lấy JWT Token lưu an toàn.
+2. Thao tác CRUD công việc (Todo List) đồng bộ tức thì với PostgreSQL qua REST API.
+3. Chat hỏi đáp với Trợ lý AI Gemini nhận kết quả định dạng Markdown thời gian thực mà không cần cắm cáp hay bật Metro Server."*
+
+---
+
 ## 🎯 BÍ QUYẾT KHI BÁO CÁO SEMINAR
-1. **Luôn đi từ bài toán thực tế trước:** Nêu lý do vì sao chọn giải pháp đó (VD: *Tại sao không dùng Polling? Vì nghẽn mạng! Tại sao dùng Outbox? Vì chống mất event khi Kafka rớt!*).
+1. **Luôn đi từ bài toán thực tế trước:** Nêu lý do vì sao chọn giải pháp đó (VD: *Tại sao không dùng Polling? Vì nghẽn mạng! Tại sao dùng Outbox? Vì chống mất event khi Kafka rớt! Tại sao phải đóng gói Bundle? Để app chạy độc lập không cần Metro!*).
 2. **Trỏ trực tiếp vào dòng code có comment:** Các file code trên đều đã được viết comment chi tiết, chỉ cần bấm vào đúng các file theo thứ tự là bạn có thể đọc vanh vách từng dòng.
-3. **Nhấn mạnh các giải pháp an toàn:** Luôn nhắc đến **Graceful Fallback** (Redis sập vẫn đọc được DB), **Chống mạo danh Principal** (không tin client), và **Transactional Outbox** (bảo toàn dữ liệu).
+3. **Nhấn mạnh các giải pháp an toàn:** Luôn nhắc đến **Graceful Fallback** (Redis sập vẫn đọc được DB), **Chống mạo danh Principal** (không tin client), **Transactional Outbox** (bảo toàn dữ liệu) và **usesCleartextTraffic + IP LAN** (kết nối di động ổn định).

@@ -449,6 +449,65 @@
       border: 1px solid var(--accent-coral-border);
     }
 
+    /* Phone Mockup & App Demo Previews */
+    .phone-preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    .phone-preview-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    .phone-preview-card:hover {
+      box-shadow: var(--shadow-card);
+      border-color: var(--accent-teal);
+    }
+    .phone-preview-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed var(--border-light);
+    }
+    .phone-preview-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .phone-preview-img-box {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #CBD5E1;
+      background: #0F172A;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.25);
+    }
+    .phone-preview-img-box img {
+      max-height: 335px;
+      width: auto;
+      max-width: 100%;
+      display: block;
+      object-fit: contain;
+    }
+
+
     /* ==========================================================================
        BOTTOM CONTROLLER & NAVIGATION BAR
        ========================================================================== */
@@ -718,7 +777,7 @@
               <div style="background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
                 <div>
                   <div style="font-size:0.8rem; font-weight:700; color:var(--accent-navy);">1. Cửa Ngõ & Điều Phối</div>
-                  <div style="font-size:0.72rem; color:var(--text-muted)">Spring Cloud Gateway (:8080) • Netty Reactive</div>
+                  <div style="font-size:0.72rem; color:var(--text-muted)">Spring Cloud Gateway (:8080) • Cổng vào duy nhất</div>
                 </div>
                 <span class="pill pill-teal">Single Entry</span>
               </div>
@@ -765,18 +824,18 @@
         <div class="slide-header">
           <div>
             <span class="slide-category-tag">LỘ TRÌNH BÁO CÁO</span>
-            <h2 class="slide-title">Mục Lục: 6 Chuyên Đề Kiến Thức & Ứng Dụng</h2>
-            <p class="slide-subtitle">Mạch tư duy liền mạch từ tầng hạ tầng đóng gói đến tương tác thời gian thực</p>
+            <h2 class="slide-title">Mục Lục: 7 Chuyên Đề Kiến Thức &amp; Ứng Dụng</h2>
+            <p class="slide-subtitle">Mạch tư duy liền mạch từ tầng hạ tầng đóng gói, backend phân tán đến mobile app độc lập</p>
           </div>
         </div>
 
         <div class="grid-4" style="margin-bottom:12px;">
           <div class="card highlight" onclick="goToSlide(2)" style="cursor:pointer">
-            <div class="card-title"><span class="card-icon">01</span> Docker & Container</div>
+            <div class="card-title"><span class="card-icon">01</span> Docker &amp; Container</div>
             <p class="card-desc">Khắc phục xung đột môi trường, Dockerfile Multi-stage build và Compose 8 container.</p>
           </div>
           <div class="card highlight" onclick="goToSlide(5)" style="cursor:pointer">
-            <div class="card-title"><span class="card-icon">02</span> Spring Security & JWT</div>
+            <div class="card-title"><span class="card-icon">02</span> Spring Security &amp; JWT</div>
             <p class="card-desc">Filter Chain, Access/Refresh Token, Token Rotation và phân quyền RBAC.</p>
           </div>
           <div class="card highlight" onclick="goToSlide(7)" style="cursor:pointer">
@@ -789,20 +848,24 @@
           </div>
         </div>
 
-        <div class="grid-2">
+        <div class="grid-3">
           <div class="card highlight-coral" onclick="goToSlide(10)" style="cursor:pointer">
             <div class="card-title"><span class="card-icon coral">05</span> Redis In-Memory</div>
             <p class="card-desc">Bộ nhớ đệm RAM micro-giây, chống Brute-force mật khẩu (TTL 900s) và Cache hồ sơ user.</p>
           </div>
           <div class="card highlight-coral" onclick="goToSlide(12)" style="cursor:pointer">
-            <div class="card-title"><span class="card-icon coral">06</span> WebSocket & STOMP Chat</div>
+            <div class="card-title"><span class="card-icon coral">06</span> WebSocket &amp; STOMP Chat</div>
             <p class="card-desc">Kết nối hai chiều Full-duplex thay thế Polling, chat Admin – User tức thời.</p>
+          </div>
+          <div class="card highlight" onclick="goToSlide(14)" style="cursor:pointer">
+            <div class="card-title"><span class="card-icon">07</span> Mobile App &amp; Đóng Gói APK</div>
+            <p class="card-desc">React Native CLI, kết nối mạng LAN, vượt rào Cleartext và đóng gói APK độc lập.</p>
           </div>
         </div>
 
         <div style="margin-top:14px; background:var(--bg-subtle); border-radius:var(--radius-sm); padding:10px 16px; display:flex; align-items:center; gap:12px; font-size:0.79rem; color:var(--text-main);">
           <span style="font-size:1.1rem;">💡</span>
-          <span><strong>Mạch kiến trúc liền mạch:</strong> <em>Đóng gói ứng dụng ➔ Bảo vệ danh tính ➔ Chia nhỏ dịch vụ ➔ Giao tiếp bất đồng bộ ➔ Tăng tốc & phòng thủ RAM ➔ Nhắn tin tức thời</em>.</span>
+          <span><strong>Mạch kiến trúc liền mạch:</strong> <em>Đóng gói ứng dụng ➔ Bảo vệ danh tính ➔ Chia nhỏ dịch vụ ➔ Giao tiếp bất đồng bộ ➔ Tăng tốc & phòng thủ RAM ➔ Nhắn tin tức thời ➔ Mở rộng Mobile App</em>.</span>
         </div>
       </div>
     </section>
@@ -2136,39 +2199,302 @@
 
 
     <!-- ==================================================================
-         SLIDE 14: TỔNG KẾT HỆ THỐNG & HỎI ĐÁP (Q&A)
+         SLIDE 14: KẾT NỐI MOBILE APP ĐẾN BACKEND & ĐÓNG GÓI APK
          ================================================================== -->
-    <section class="slide" data-slide="14" data-title="Tổng Kết & Q&A">
+    <section class="slide" data-slide="14" data-title="Mobile: Kết Nối & Đóng Gói APK">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag">CHUYÊN ĐỀ MỞ RỘNG • REACT NATIVE CLI</span>
+            <h2 class="slide-title">Kết Nối Mobile Đến Backend &amp; Đóng Gói APK Độc Lập</h2>
+            <p class="slide-subtitle">Bản chất lý thuyết mạng nội bộ, cơ chế bảo mật Android và quy trình đóng gói ứng dụng độc lập</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <span class="pill pill-teal">React Native CLI</span>
+            <span class="pill pill-coral">Standalone APK</span>
+          </div>
+        </div>
+
+        <!-- 3 Cột Lý Thuyết & Quy Trình Dễ Đọc Thuyết Trình -->
+        <div class="grid-3" style="margin-bottom:12px;">
+          <!-- Khối 1: Bản chất mạng LAN & Cleartext -->
+          <div class="card highlight">
+            <div class="card-title">
+              <span class="card-icon">01</span> Mạng Nội Bộ (LAN) &amp; Bảo Mật
+            </div>
+            <div style="display:flex; flex-direction:column; gap:7px; font-size:0.77rem; line-height:1.45;">
+              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-teal);">• Bản chất IP Localhost:</strong>
+                Trên thiết bị di động, <code>localhost</code> trỏ về chính con chip mạng của điện thoại (127.0.0.1). Muốn gọi vào Backend trên máy tính, bắt buộc phải dùng <strong>IPv4 LAN thực tế</strong> (<code>192.168.1.74:8080</code>) trong cùng mạng Wi-Fi.
+              </div>
+              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-coral);">• Chính sách Cleartext Traffic:</strong>
+                Từ Android 9 (API 28), hệ thống mặc định chặn tất cả kết nối HTTP thường (chỉ cho phép HTTPS SSL). Ta cấu hình <code>usesCleartextTraffic="true"</code> trong AndroidManifest để cho phép HTTP nội bộ.
+              </div>
+              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-navy);">• Mở cổng Tường lửa (Firewall):</strong>
+                Mở Inbound TCP cổng <code>8080</code> trên Windows Firewall của máy chủ, đảm bảo các gói tin từ điện thoại không bị hệ điều hành máy tính chặn lại.
+              </div>
+            </div>
+            <div class="card-project-apply" style="margin-top:8px;">
+              <strong>Lời thoại trình bày:</strong> "Em thay localhost bằng IP LAN, bật usesCleartextTraffic vượt rào chặn HTTP của Android 9+ và mở firewall cổng 8080."
+            </div>
+          </div>
+
+          <!-- Khối 2: Bản chất đóng gói Offline Bundle & Gradle -->
+          <div class="card highlight-coral">
+            <div class="card-title">
+              <span class="card-icon coral">02</span> Đóng Gói Bundle &amp; Biên Dịch
+            </div>
+            <div style="display:flex; flex-direction:column; gap:7px; font-size:0.77rem; line-height:1.45;">
+              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-teal);">• Bản chất Metro Bundler:</strong>
+                Khi code, ứng dụng chạy nhờ tải động code qua Metro Server (cần cắm cáp USB). Để app chạy độc lập, ta phải nén offline toàn bộ JavaScript và tài nguyên nhúng cố định vào file APK.
+              </div>
+              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-coral);">• Lệnh đóng gói tĩnh:</strong>
+                Dùng lệnh <code>react-native bundle</code> ở chế độ Release (<code>--dev false</code>). Toàn bộ logic giao diện được gộp thành một file tĩnh duy nhất <code>index.android.bundle</code> đưa vào thư mục assets.
+              </div>
+              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-navy);">• Biên dịch APK bằng Gradle:</strong>
+                Chạy <code>./gradlew assembleRelease</code>. Gradle biên dịch mã nguồn Java/Native, liên kết assets và sinh ra file thành phẩm <code>app-release.apk</code> hoàn chỉnh.
+              </div>
+            </div>
+            <div class="card-project-apply coral" style="margin-top:8px;">
+              <strong>Lời thoại trình bày:</strong> "Em dùng react-native bundle nén toàn bộ code JS vào thư mục assets, sau đó dùng Gradle biên dịch ra file APK độc lập không cần Metro."
+            </div>
+          </div>
+
+          <!-- Khối 3: Phân phối & Vận hành mạng LAN -->
+          <div class="card highlight">
+            <div class="card-title">
+              <span class="card-icon">03</span> Phân Phối &amp; Vận Hành Mạng LAN
+            </div>
+            <div style="display:flex; flex-direction:column; gap:7px; font-size:0.77rem; line-height:1.45;">
+              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-teal);">• Phân phối file độc lập:</strong>
+                File <code>app-release.apk</code> là gói cài đặt trọn gói, có thể gửi trực tiếp qua Zalo, Google Drive hoặc chia sẻ mạng nội bộ cho bất kỳ ai mà không cần đưa mã nguồn.
+              </div>
+              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-coral);">• Cơ chế bảo mật cài đặt (Sideload):</strong>
+                Thiết bị nhận chỉ cần cấp quyền <em>"Cài đặt ứng dụng từ nguồn không xác định"</em> (Install unknown apps) là app được cài đặt thành biểu tượng độc lập trên màn hình.
+              </div>
+              <div style="background:var(--bg-canvas); padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
+                <strong style="color:var(--accent-navy);">• Nguyên lý vận hành Client-Server:</strong>
+                Các thiết bị khách chỉ cần bắt chung mạng Wi-Fi với máy tính host là có thể đăng nhập tài khoản, xác thực JWT và tương tác dữ liệu trực tiếp với Database.
+              </div>
+            </div>
+            <div class="card-project-apply" style="margin-top:8px;">
+              <strong>Lời thoại trình bày:</strong> "Em gửi trực tiếp file APK cho các thành viên khác cài đặt; chỉ cần chung Wi-Fi là họ có thể sử dụng đầy đủ tính năng của hệ thống."
+            </div>
+          </div>
+        </div>
+
+        <!-- Banner tóm tắt quy trình 4 bước -->
+        <div class="flowchart-wrapper" style="padding:10px 14px; margin-bottom:0;">
+          <div class="flow-steps" style="align-items:center;">
+            <div class="flow-step-box active" style="padding:6px 10px;">
+              <div class="flow-step-num">BƯỚC 1</div>
+              <div class="flow-step-name">Cấu Hình LAN &amp; Cleartext</div>
+              <div class="flow-step-desc">IP 192.168.x.x + Firewall 8080</div>
+            </div>
+            <div style="color:var(--accent-teal); font-weight:800; font-size:1.1rem;">➔</div>
+            <div class="flow-step-box coral" style="padding:6px 10px;">
+              <div class="flow-step-num">BƯỚC 2</div>
+              <div class="flow-step-name">react-native bundle</div>
+              <div class="flow-step-desc">Đóng gói tĩnh index.android.bundle</div>
+            </div>
+            <div style="color:var(--accent-coral); font-weight:800; font-size:1.1rem;">➔</div>
+            <div class="flow-step-box active" style="padding:6px 10px;">
+              <div class="flow-step-num">BƯỚC 3</div>
+              <div class="flow-step-name">./gradlew assembleRelease</div>
+              <div class="flow-step-desc">Biên dịch app-release.apk</div>
+            </div>
+            <div style="color:var(--accent-teal); font-weight:800; font-size:1.1rem;">➔</div>
+            <div class="flow-step-box active" style="padding:6px 10px;">
+              <div class="flow-step-num">BƯỚC 4</div>
+              <div class="flow-step-name">Cài Đặt &amp; Chạy Mạng LAN</div>
+              <div class="flow-step-desc">Thiết bị khách dùng độc lập 100%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SLIDE 15: THÀNH QUẢ ĐẠT ĐƯỢC & DEMO MOBILE THỰC TẾ
+         ================================================================== -->
+    <section class="slide" data-slide="15" data-title="Mobile: Thành Quả & Demo">
+      <div class="slide-inner">
+        <div class="slide-header">
+          <div>
+            <span class="slide-category-tag coral">KẾT QUẢ THỰC NGHIỆM • MOBILE STANDALONE</span>
+            <h2 class="slide-title">Thành Quả Đạt Được &amp; Đánh Giá Thực Nghiệm</h2>
+            <p class="slide-subtitle">Ứng dụng hoạt động độc lập 100%, bảo mật JWT Stateless và tương tác dữ liệu mượt mà trong mạng LAN</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <span class="pill pill-teal">Độc Lập 100%</span>
+            <span class="pill pill-coral">Đầy Đủ Tính Năng</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1.15fr 0.85fr; gap:16px; align-items:start;">
+          <!-- Left Column: So sánh & Lý thuyết vận hành thực tế -->
+          <div>
+            <!-- Bảng So Sánh Trước & Sau (Súc tích, có lý luận kỹ thuật) -->
+            <table class="editorial-table" style="margin-bottom:10px;">
+              <thead>
+                <tr>
+                  <th style="width:24%;">Tiêu Chí Kỹ Thuật</th>
+                  <th style="width:38%;">Trước Khi Đóng Gói</th>
+                  <th style="width:38%; color:var(--accent-teal);">Sau Khi Đóng Gói APK</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Phụ thuộc phần cứng</strong></td>
+                  <td>Cắm cáp USB nối máy tính, bật Metro Server</td>
+                  <td><span class="pill pill-teal">Hoàn toàn không dây</span> Chạy độc lập như app CH Play</td>
+                </tr>
+                <tr>
+                  <td><strong>Khả năng triển khai</strong></td>
+                  <td>Chỉ chạy duy nhất trên máy lập trình viên</td>
+                  <td><span class="pill pill-teal">Mạng cục bộ (LAN)</span> Bất kỳ máy nào chung Wi-Fi đều dùng được</td>
+                </tr>
+                <tr>
+                  <td><strong>Độ ổn định kết nối</strong></td>
+                  <td>Dễ đứt kết nối cáp, chặn HTTP Android 9+</td>
+                  <td><span class="pill pill-teal">Bền vững</span> Tự phục hồi kết nối, xác thực JWT mượt mà</td>
+                </tr>
+                <tr>
+                  <td><strong>Hiệu quả kiểm thử</strong></td>
+                  <td>1 người tự code tự test, thiếu tính khách quan</td>
+                  <td><span class="pill pill-teal">Kiểm thử đồng thời</span> Phân phối file APK cho cả nhóm cùng test</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- 3 Khối Lý Thuyết Nghiệp Vụ Thực Tế -->
+            <div style="display:flex; flex-direction:column; gap:7px;">
+              <div class="card" style="padding:8px 11px; border-left:3px solid var(--accent-teal);">
+                <div style="font-size:0.79rem; font-weight:700; color:var(--text-main); margin-bottom:2px;">
+                  1. Lý thuyết Xác Thực Stateless (JWT Bearer):
+                </div>
+                <div style="font-size:0.73rem; color:var(--text-muted); line-height:1.4;">
+                  Sau khi đăng nhập tài khoản <code>admin</code>, token được lưu an toàn. <strong>Axios Interceptor</strong> tự động đính kèm <code>Authorization: Bearer</code> vào header của mọi request gọi đến Backend.
+                </div>
+              </div>
+
+              <div class="card" style="padding:8px 11px; border-left:3px solid var(--accent-coral);">
+                <div style="font-size:0.79rem; font-weight:700; color:var(--text-main); margin-bottom:2px;">
+                  2. Đồng Bộ Dữ Liệu Qua REST API:
+                </div>
+                <div style="font-size:0.73rem; color:var(--text-muted); line-height:1.4;">
+                  Thao tác thêm, sửa, xóa việc cần làm (Todo) được gửi trực tiếp tới máy chủ qua IP LAN, đồng bộ dữ liệu tức thời và bền vững trong cơ sở dữ liệu PostgreSQL.
+                </div>
+              </div>
+
+              <div class="card" style="padding:8px 11px; border-left:3px solid var(--accent-navy);">
+                <div style="font-size:0.79rem; font-weight:700; color:var(--text-main); margin-bottom:2px;">
+                  3. Trợ Lý Gemini AI Thời Gian Thực:
+                </div>
+                <div style="font-size:0.73rem; color:var(--text-muted); line-height:1.4;">
+                  Tích hợp Chatbot AI hỏi đáp thông minh, máy khách gửi câu hỏi và nhận câu trả lời phân tích định dạng Markdown trực tiếp trên màn hình di động.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Mockup & Ảnh Chụp Minh Họa Thực Tế -->
+          <div>
+            <!-- Switch Bar: Điện Thoại Thật vs Trình Giả Lập -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; background:var(--bg-canvas); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:4px 10px;">
+              <div style="font-size:0.72rem; font-weight:700; color:var(--text-main); display:flex; align-items:center; gap:5px;">
+                <span>📸</span> <span>CHẾ ĐỘ MINH CHỨNG:</span>
+              </div>
+              <div style="display:inline-flex; background:var(--bg-surface); border:1px solid var(--border-light); border-radius:20px; padding:2px; gap:2px;">
+                <button id="btnRealDevice" onclick="switchDemoView('real')" style="padding:3px 10px; border-radius:16px; border:none; font-size:0.68rem; font-weight:700; cursor:pointer; background:var(--accent-teal); color:#FFF; transition:all 0.2s ease;">
+                  📱 Điện Thoại Thật (APK)
+                </button>
+                <button id="btnEmulator" onclick="switchDemoView('emu')" style="padding:3px 10px; border-radius:16px; border:none; font-size:0.68rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text-muted); transition:all 0.2s ease;">
+                  💻 Giả Lập
+                </button>
+              </div>
+            </div>
+
+            <div class="phone-preview-grid">
+              <!-- Mockup 1: Todo List -->
+              <div class="phone-preview-card">
+                <div class="phone-preview-header">
+                  <div class="phone-preview-title" id="demoTitle1">
+                    <span>📋</span> Todo List (Máy Thật)
+                  </div>
+                  <span class="pill pill-teal" id="demoPill1" style="font-size:0.65rem;">📱 Máy Thật</span>
+                </div>
+                <div class="phone-preview-img-box">
+                  <img id="demoImg1" src="image copy 3.png" alt="Demo Todo List App">
+                </div>
+                <div id="demoDesc1" style="font-size:0.69rem; color:var(--text-muted); text-align:center; margin-top:5px; line-height:1.3;">
+                  Cài APK trực tiếp • Thao tác qua Wi-Fi nội bộ
+                </div>
+              </div>
+
+              <!-- Mockup 2: Gemini AI Chat -->
+              <div class="phone-preview-card">
+                <div class="phone-preview-header">
+                  <div class="phone-preview-title" id="demoTitle2">
+                    <span>🤖</span> Gemini AI (Máy Thật)
+                  </div>
+                  <span class="pill pill-coral" id="demoPill2" style="font-size:0.65rem;">📱 Máy Thật</span>
+                </div>
+                <div class="phone-preview-img-box">
+                  <img id="demoImg2" src="image copy 2.png" alt="Demo Gemini AI Chat">
+                </div>
+                <div id="demoDesc2" style="font-size:0.69rem; color:var(--text-muted); text-align:center; margin-top:5px; line-height:1.3;">
+                  Hỏi đáp AI máy thật • Không cắm cáp hay Metro
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         SLIDE 16: TỔNG KẾT HỆ THỐNG & HỎI ĐÁP (Q&A)
+         ================================================================== -->
+    <section class="slide" data-slide="16" data-title="Tổng Kết & Góp Ý">
       <div class="slide-inner">
         <div class="slide-header">
           <div>
             <span class="slide-category-tag">TỔNG KẾT BÁO CÁO</span>
-            <h2 class="slide-title">Tổng Kết Toàn Bộ Hệ Thống & Hỏi Đáp (Q&A)</h2>
-            <p class="slide-subtitle">Sự kết hợp hoàn chỉnh giữa các khối công nghệ phân tán và bài học đạt được</p>
+            <h2 class="slide-title">Tổng Kết Toàn Bộ Hệ Thống &amp; Lắng Nghe Góp Ý</h2>
+            <p class="slide-subtitle">Sự kết hợp hoàn chỉnh giữa các khối công nghệ phân tán, mobile app và bài học đạt được</p>
           </div>
         </div>
 
         <!-- System Architecture Summary Box -->
         <div class="card highlight" style="margin-bottom:14px;">
           <div style="font-size:0.77rem; font-weight:700; text-transform:uppercase; color:var(--accent-teal); margin-bottom:8px;">
-            Mô Hình Tổng Thể Các Khối Công Nghệ Phân Tán Đã Xây Dựng
+            Mô Hình Tổng Thể Các Khối Công Nghệ Phân Tán Đã Xây Dựng &amp; Tích Hợp
           </div>
           <div class="grid-4" style="font-size:0.77rem; gap:10px;">
             <div style="background:var(--bg-canvas); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-              <strong style="color:var(--text-main);">1. Đóng gói & Vận hành:</strong><br>
+              <strong style="color:var(--text-main);">1. Đóng gói Container:</strong><br>
               Docker Compose quản lý 8 container, Multi-stage build giảm 62% dung lượng, Non-root user.
             </div>
             <div style="background:var(--bg-canvas); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-              <strong style="color:var(--accent-coral);">2. Cửa ngõ Gateway:</strong><br>
-              Spring Cloud Gateway (:8080) Netty Reactive, Header Enrichment, gán X-Trace-Id và Global CORS.
+              <strong style="color:var(--accent-coral);">2. Gateway &amp; Microservices:</strong><br>
+              Tách 4 service độc lập, Database-per-Service, API Gateway (:8080) làm cửa ngõ định tuyến duy nhất.
             </div>
             <div style="background:var(--bg-canvas); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-              <strong style="color:var(--accent-teal);">3. Bảo vệ & Bộ nhớ RAM:</strong><br>
-              Spring Security JWT Stateless, Token Rotation, Redis phòng vệ Brute-force và Cache hồ sơ user.
+              <strong style="color:var(--accent-teal);">3. Bộ Nhớ &amp; Phân Tán:</strong><br>
+              Redis phòng vệ Brute-force &amp; Cache hồ sơ; Kafka Outbox loại bỏ Dual-Write; STOMP Chat realtime.
             </div>
             <div style="background:var(--bg-canvas); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-light);">
-              <strong style="color:var(--accent-navy);">4. Giao tiếp phân tán:</strong><br>
-              Kafka Outbox giải quyết Dual-Write (email chào mừng) và WebSocket STOMP chat realtime 2 chiều.
+              <strong style="color:var(--accent-navy);">4. Mobile Client APK:</strong><br>
+              React Native CLI đóng gói APK độc lập, kết nối LAN qua IP nội bộ, đồng bộ Todo &amp; AI Chatbot.
             </div>
           </div>
         </div>
@@ -2180,20 +2506,21 @@
             <div class="card-desc" style="display:flex; flex-direction:column; gap:6px;">
               <div>1. <strong>Tư duy kiến trúc:</strong> Hiểu rõ sự khác biệt giữa Đồng bộ (REST), Bất đồng bộ (Kafka) và Realtime hai chiều (WebSocket).</div>
               <div>2. <strong>Bảo mật theo chiều sâu:</strong> Không chỉ kiểm tra token ở cửa ngõ mà còn phân quyền RBAC và phòng vệ Brute-force tại RAM.</div>
-              <div>3. <strong>Tính bền vững hệ thống:</strong> Đảm bảo dữ liệu nhất quán bằng Transactional Outbox Pattern và khả năng chịu lỗi Graceful Degradation.</div>
+              <div>3. <strong>Vận hành thực chiến:</strong> Tự tin đóng gói Docker backend và xuất bản file APK độc lập chạy mượt mà trong mạng nội bộ.</div>
             </div>
           </div>
 
           <div class="card highlight-coral" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:24px;">
             <div style="font-size:2rem; margin-bottom:4px;">💬</div>
-            <h3 style="font-size:1.4rem; font-weight:800; color:var(--text-main); margin-bottom:6px;">HỎI VÀ ĐÁP (Q&A)</h3>
+            <h3 style="font-size:1.4rem; font-weight:800; color:var(--text-main); margin-bottom:6px;">LẮNG NGHE GÓP Ý</h3>
             <p style="font-size:0.83rem; color:var(--text-muted); max-width:380px; margin-bottom:12px;">
-              Em xin chân thành cảm ơn Thầy Cô và các bạn đã chú ý lắng nghe! Em rất mong nhận được những câu hỏi và đóng góp quý báu từ Thầy Cô.
+              Em xin chân thành cảm ơn Thầy Cô và các anh/chị đã chú ý lắng nghe! Em rất mong nhận được những lời nhận xét, góp ý quý báu để em học hỏi và hoàn thiện hơn ạ.
             </p>
-            <div style="display:inline-flex; gap:8px;">
+            <div style="display:inline-flex; gap:8px; flex-wrap:wrap; justify-content:center;">
               <span class="pill pill-teal">Demo Postman</span>
               <span class="pill pill-coral">Console Log Kafka</span>
               <span class="pill pill-teal">Chat WebSocket Realtime</span>
+              <span class="pill pill-coral">Cài Đặt APK Trên Điện Thoại</span>
             </div>
           </div>
         </div>
@@ -2208,7 +2535,7 @@
        ================================================================== -->
   <footer class="bottom-bar">
     <button class="nav-btn" id="btnPrev" title="Slide trước (←)">‹</button>
-    <div class="slide-counter" id="slideCounter">00 / 15</div>
+    <div class="slide-counter" id="slideCounter">00 / 16</div>
     <button class="nav-btn" id="btnNext" title="Slide tiếp (→)">›</button>
     <div style="height:16px; width:1px; background:var(--border-light); margin:0 2px;"></div>
     <button class="nav-btn" id="btnToc" title="Mục lục (M)" style="font-size:0.75rem; font-weight:700;">M</button>
@@ -2239,7 +2566,7 @@
   <div class="toc-modal-overlay" id="tocModalOverlay">
     <div class="toc-modal">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:10px;">
-        <div style="font-size:1.05rem; font-weight:800; color:var(--text-main);">Mục Lục 16 Slide Báo Cáo</div>
+        <div style="font-size:1.05rem; font-weight:800; color:var(--text-main);">Mục Lục 17 Slide Báo Cáo</div>
         <button id="btnCloseToc" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-dim);">✕</button>
       </div>
       <div class="toc-grid" id="tocGrid">
@@ -2253,15 +2580,15 @@
        JAVASCRIPT: SLIDE ENGINE & SPEAKER NOTES
        ================================================================== -->
   <script>
-    // 15 Complete Speaker Notes Tailored for 4th-Year Intern Level
+        // 17 Complete Speaker Notes Tailored for 4th-Year Intern Level
     const speakerNotes = [
       {
         title: "Slide 0: Trang Bìa",
-        script: "Kính chào Thầy Cô và các bạn. Hôm nay em xin phép trình bày bài seminar tổng kết các kiến thức nền tảng Backend cốt lõi và cách em đã trực tiếp áp dụng vào việc xây dựng hệ thống Microservices thực tế với Java Spring Boot 3, Docker, Kafka, Redis và WebSocket."
+        script: "Kính chào Thầy Cô và các bạn. Hôm nay em xin phép trình bày bài seminar tổng kết các kiến thức nền tảng Backend cốt lõi và cách em đã trực tiếp áp dụng vào việc xây dựng hệ thống Microservices thực tế với Java Spring Boot 3, Docker, Kafka, Redis, WebSocket và ứng dụng Mobile React Native."
       },
       {
         title: "Slide 1: Mục Lục",
-        script: "Nội dung bài nói gồm 6 chuyên đề được tổ chức theo mạch tư duy liền mạch: đi từ đóng gói môi trường với Docker, thiết lập bảo vệ ứng dụng với Spring Security, phân chia kiến trúc Microservices, giao tiếp bất đồng bộ chịu lỗi qua Kafka & Outbox, tăng tốc và phòng vệ bộ nhớ với Redis, đến giao tiếp thời gian thực với WebSocket & STOMP."
+        script: "Nội dung bài nói gồm 7 chuyên đề được tổ chức theo mạch tư duy liền mạch: đi từ đóng gói môi trường với Docker, thiết lập bảo vệ ứng dụng với Spring Security, phân chia kiến trúc Microservices, giao tiếp bất đồng bộ chịu lỗi qua Kafka & Outbox, tăng tốc và phòng vệ bộ nhớ với Redis, giao tiếp thời gian thực với WebSocket, và mở rộng kết nối với Mobile App độc lập."
       },
       {
         title: "Slide 2: Docker Là Gì?",
@@ -2312,8 +2639,16 @@
         script: "Tiếp theo là luồng hoạt động 6 bước khi User gửi tin nhắn cho Admin và cách em hiện thực hóa trong dự án: Giả sử User 101 nhắn cho Admin 1 trong hội thoại 5001. Bước 1, User kết nối socket và gửi frame CONNECT kèm token JWT để xác thực phiên. Bước 2, User gửi frame SEND đến /app/chat.sendMessage kèm nội dung và ID hội thoại. Bước 3, Controller tiếp nhận, kiểm tra tính hợp lệ và lấy danh tính người gửi từ Principal trong phiên đã xác thực. Bước 4, Chat Service lưu tin nhắn vào bảng chat_messages trong PostgreSQL; chỉ sau khi lưu thành công, hệ thống mới phát tin. Bước 5, Server dùng SimpMessagingTemplate phân phối tin nhắn đến destination /topic/rooms.5001 mà Admin đã subscribe để hiển thị ngay không cần F5. Bước 6, Admin phản hồi theo chiều ngược lại. Trong dự án, em đặc biệt chú trọng 2 điểm: Thứ nhất là chống mạo danh danh tính 100% bằng cách trích xuất senderId từ Principal thay vì lấy mù quáng từ client gửi lên. Thứ hai là kết hợp REST API để tải lịch sử chat cũ từ PostgreSQL khi mở app, và dùng WebSocket STOMP để truyền nhận tin nhắn mới tức thời với độ trễ dưới 1 mili-giây."
       },
       {
-        title: "Slide 14: Tổng Kết & Q&A",
-        script: "Em đã tổng hợp toàn bộ các khối kiến thức và công nghệ cốt lõi đã áp dụng trong hệ thống Microservices: từ Docker hóa, bảo mật Spring Security & JWT, kiến trúc hướng sự kiện Kafka Outbox, tăng tốc với Redis, đến chat realtime hai chiều với WebSocket. Qua dự án này, em đã rèn luyện được tư duy kiến trúc phân tán, bảo mật theo chiều sâu và đảm bảo tính nhất quán dữ liệu. Em xin chân thành cảm ơn Thầy Cô và mời Thầy Cô đặt câu hỏi cho em!"
+        title: "Slide 14: Mobile App: Kết Nối LAN & Đóng Gói APK",
+        script: "Tiếp theo, em xin trình bày về phần Mobile App và quy trình đóng gói file APK bằng React Native CLI để gửi cho các máy khác cùng mạng cài đặt và sử dụng. Thách thức lớn nhất là làm sao để app chạy độc lập trên điện thoại thật mà không cần cắm cáp hay bật Metro Server. Em thực hiện qua 3 giai đoạn: Giai đoạn 1 là thông mạng LAN, thay localhost bằng IP thực tế của máy chủ Spring Boot, bật usesCleartextTraffic trong AndroidManifest để cho phép HTTP trên Android 9+ và mở cổng 8080 trên Windows Firewall. Giai đoạn 2 là đóng gói bằng React Native CLI: em dùng lệnh react-native bundle nén toàn bộ code JS vào assets của Android, rồi chạy ./gradlew assembleRelease để biên dịch ra file app-release.apk hoàn chỉnh. Giai đoạn 3 là phân phối file APK cho các máy khác trong cùng Wi-Fi cài đặt và sử dụng trực tiếp."
+      },
+      {
+        title: "Slide 15: Thành Quả Đạt Được & Demo Mobile",
+        script: "Đây là kết quả thực tế sau khi đóng gói. Ứng dụng đã hoàn toàn ngắt kết nối với dây cáp và Metro Server, chạy độc lập 100%. Bất kỳ ai kết nối chung mạng Wi-Fi đều có thể tải file APK về cài đặt bình thường. Như Thầy Cô thấy trên màn hình: bên trái là tính năng Quản lý công việc Todo List kết nối lưu trực tiếp vào cơ sở dữ liệu qua REST API; bên phải là tính năng Trợ lý AI Gemini trả lời thông minh thời gian thực. Toàn bộ quá trình đăng nhập lấy JWT Token, gọi API và hiển thị dữ liệu diễn ra hoàn toàn mượt mà, không gặp bất kỳ lỗi mạng nào."
+      },
+      {
+        title: "Slide 16: Tổng Kết Toàn Bộ Hệ Thống & Lắng Nghe Góp Ý",
+        script: "Em đã tổng hợp toàn bộ các khối kiến thức và công nghệ cốt lõi đã áp dụng trong hệ thống Microservices: từ Docker hóa, bảo mật Spring Security & JWT, kiến trúc hướng sự kiện Kafka Outbox, tăng tốc với Redis, chat realtime WebSocket, đến ứng dụng di động React Native đóng gói APK độc lập. Vì em mới bắt đầu tìm hiểu và áp dụng các công nghệ này vào dự án, nên chắc chắn góc nhìn và kiến thức của em vẫn còn những điểm chưa được hoàn thiện. Em rất mong nhận được những lời nhận xét, góp ý từ các anh/chị về cả phần kiến thức lẫn cách triển khai trong dự án để em có thể học hỏi và hoàn thiện hơn ạ!"
       }
     ];
 
@@ -2374,6 +2709,62 @@
         currentSlide = index;
         slides[index].scrollIntoView({ behavior: 'smooth' });
         updateUI(index);
+      };
+
+      // Switch Mobile Demo View (Real Device vs Emulator)
+      window.switchDemoView = function(type) {
+        const btnReal = document.getElementById('btnRealDevice');
+        const btnEmu = document.getElementById('btnEmulator');
+        const img1 = document.getElementById('demoImg1');
+        const img2 = document.getElementById('demoImg2');
+        const title1 = document.getElementById('demoTitle1');
+        const title2 = document.getElementById('demoTitle2');
+        const pill1 = document.getElementById('demoPill1');
+        const pill2 = document.getElementById('demoPill2');
+        const desc1 = document.getElementById('demoDesc1');
+        const desc2 = document.getElementById('demoDesc2');
+
+        if (!btnReal || !btnEmu || !img1 || !img2) return;
+
+        if (type === 'real') {
+          btnReal.style.background = 'var(--accent-teal)';
+          btnReal.style.color = '#FFF';
+          btnReal.style.fontWeight = '700';
+          btnEmu.style.background = 'transparent';
+          btnEmu.style.color = 'var(--text-muted)';
+          btnEmu.style.fontWeight = '600';
+
+          img1.src = 'image copy 3.png';
+          title1.innerHTML = '<span>📋</span> Todo List (Máy Thật)';
+          pill1.textContent = '📱 Máy Thật';
+          pill1.className = 'pill pill-teal';
+          desc1.textContent = 'Cài APK trực tiếp • Thao tác qua Wi-Fi nội bộ';
+
+          img2.src = 'image copy 2.png';
+          title2.innerHTML = '<span>🤖</span> Gemini AI (Máy Thật)';
+          pill2.textContent = '📱 Máy Thật';
+          pill2.className = 'pill pill-coral';
+          desc2.textContent = 'Hỏi đáp AI máy thật • Không cắm cáp hay Metro';
+        } else {
+          btnEmu.style.background = 'var(--accent-teal)';
+          btnEmu.style.color = '#FFF';
+          btnEmu.style.fontWeight = '700';
+          btnReal.style.background = 'transparent';
+          btnReal.style.color = 'var(--text-muted)';
+          btnReal.style.fontWeight = '600';
+
+          img1.src = 'image copy.png';
+          title1.innerHTML = '<span>📋</span> Quản Lý Công Việc';
+          pill1.textContent = '💻 Giả Lập';
+          pill1.className = 'pill pill-teal';
+          desc1.textContent = 'Đăng nhập admin • Đồng bộ dữ liệu PostgreSQL qua IP LAN';
+
+          img2.src = 'image.png';
+          title2.innerHTML = '<span>🤖</span> Trợ Lý Gemini AI';
+          pill2.textContent = '💻 Giả Lập';
+          pill2.className = 'pill pill-coral';
+          desc2.textContent = 'Hỏi đáp thông minh • Định dạng Markdown thời gian thực';
+        }
       };
 
       function updateUI(index) {
